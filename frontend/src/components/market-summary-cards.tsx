@@ -4,6 +4,7 @@ import React from 'react';
 import { MarketSummary, StockItem } from '@/lib/schemas';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { CompanyLogo } from '@/components/company-logo';
 import { formatCurrency, formatPercent } from '@/lib/utils';
 
 interface MarketSummaryCardsProps {
@@ -42,7 +43,7 @@ export function MarketSummaryCards({
         <Card className="border-zinc-300 bg-white">
           <CardHeader className="pb-1">
             <CardTitle className="text-xs font-medium uppercase tracking-wider text-zinc-500">
-              Total de Ativos na B3
+              Ações dos Setores Essenciais
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -53,7 +54,7 @@ export function MarketSummaryCards({
               {summary.totalStocks}
             </div>
             <p className="mt-1 text-xs text-zinc-600">
-              {summary.passedCutCount} aprovadas nos filtros de corte (Liq &gt; R$ 1M e Dív/EBITDA &lt; 3x)
+              {summary.passedCutCount} aprovadas no corte (Liq &gt; R$ 1M e Dív/EBITDA &lt; 3x)
             </p>
           </CardContent>
         </Card>
@@ -112,7 +113,7 @@ export function MarketSummaryCards({
               </span>
             </div>
             <p className="mt-1 text-xs text-zinc-600">
-              Ponderação: 35% Margem, 25% DY, 20% Rentab., 20% Técnico
+              Setores: Elétrica, Bancos, Seguros, Commodities, Telecom, Saneamento
             </p>
           </CardContent>
         </Card>
@@ -171,13 +172,21 @@ export function MarketSummaryCards({
                   key={stock.ticker}
                   type="button"
                   onClick={() => onSelectStock(stock)}
-                  className="flex flex-col items-start justify-between rounded border border-zinc-200 bg-zinc-50 p-2 text-left hover:border-zinc-400 hover:bg-zinc-100"
+                  className="flex flex-col items-start justify-between rounded border border-zinc-200 bg-zinc-50 p-2 text-left hover:border-zinc-400 hover:bg-zinc-100 transition-colors"
                 >
-                  <div className="flex w-full items-center justify-between">
-                    <span className="font-bold text-xs text-zinc-900">
-                      {stock.ticker}
-                    </span>
-                    <Badge variant="default" className="px-1.5 py-0 text-[10px]">
+                  <div className="flex w-full items-center justify-between gap-1">
+                    <div className="flex items-center gap-1.5 min-w-0">
+                      <CompanyLogo
+                        ticker={stock.ticker}
+                        logoUrl={stock.logoUrl}
+                        companyName={stock.companyName}
+                        size="sm"
+                      />
+                      <span className="font-bold text-xs text-zinc-900 truncate">
+                        {stock.ticker}
+                      </span>
+                    </div>
+                    <Badge variant="default" className="px-1.5 py-0 text-[10px] shrink-0">
                       {stock.scoreTotal.toFixed(0)}
                     </Badge>
                   </div>
