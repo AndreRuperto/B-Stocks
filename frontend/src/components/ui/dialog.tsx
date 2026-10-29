@@ -16,7 +16,7 @@ const DialogOverlay = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Overlay
     ref={ref}
-    className={cn('fixed inset-0 z-50 bg-zinc-950/60', className)}
+    className={cn('fixed inset-0 z-50 bg-black/75 backdrop-blur-sm', className)}
     {...props}
   />
 ));
@@ -31,13 +31,13 @@ const DialogContent = React.forwardRef<
     <DialogPrimitive.Content
       ref={ref}
       className={cn(
-        'fixed left-[50%] top-[50%] z-50 grid w-full max-w-4xl translate-x-[-50%] translate-y-[-50%] gap-4 border border-zinc-300 bg-white p-6 rounded-md max-h-[92vh] overflow-y-auto',
+        'fixed left-[50%] top-[50%] z-50 grid w-full max-w-4xl translate-x-[-50%] translate-y-[-50%] gap-4 border border-zinc-800 bg-zinc-900 text-zinc-100 p-6 rounded-xl max-h-[92vh] overflow-y-auto shadow-2xl transition-all',
         className,
       )}
       {...props}
     >
       {children}
-      <DialogPrimitive.Close className="absolute right-4 top-4 rounded-sm border border-zinc-200 p-1 text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 focus:outline-none">
+      <DialogPrimitive.Close className="absolute right-4 top-4 rounded-md border border-zinc-700 bg-zinc-800 p-1 text-zinc-300 hover:bg-zinc-700 hover:text-zinc-100 focus:outline-none transition-colors">
         <X className="h-4 w-4" />
         <span className="sr-only">Fechar</span>
       </DialogPrimitive.Close>
@@ -64,7 +64,7 @@ const DialogTitle = React.forwardRef<
   <DialogPrimitive.Title
     ref={ref}
     className={cn(
-      'text-lg font-bold leading-none tracking-tight text-zinc-900',
+      'text-lg font-bold leading-none tracking-tight text-zinc-100',
       className,
     )}
     {...props}
@@ -78,7 +78,7 @@ const DialogDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Description
     ref={ref}
-    className={cn('text-sm text-zinc-500', className)}
+    className={cn('text-xs text-zinc-400', className)}
     {...props}
   />
 ));
@@ -88,11 +88,10 @@ export {
   Dialog,
   DialogPortal,
   DialogOverlay,
-  DialogClose,
   DialogTrigger,
+  DialogClose,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogDescription,
 };
-

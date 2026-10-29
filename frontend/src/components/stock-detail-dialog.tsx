@@ -109,7 +109,7 @@ export function StockDetailDialog({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent data-testid="stock-detail-modal">
-        <DialogHeader className="border-b border-zinc-200 pb-4">
+        <DialogHeader className="border-b border-zinc-800 pb-4">
           <div className="flex flex-wrap items-center justify-between gap-3 pr-6">
             <div className="flex items-center gap-3">
               <CompanyLogo
@@ -120,26 +120,26 @@ export function StockDetailDialog({
               />
               <div>
                 <div className="flex flex-wrap items-center gap-2">
-                  <DialogTitle className="text-xl font-bold text-zinc-900">
+                  <DialogTitle className="text-xl font-bold text-zinc-100">
                     {detailedStock.ticker} — {detailedStock.companyName}
                   </DialogTitle>
-                  <Badge variant="default">
+                  <Badge variant="default" className="font-semibold">
                     Score {detailedStock.scoreTotal.toFixed(1)} / 100
                   </Badge>
                   <Badge variant="secondary">
                     {detailedStock.thematicCategory}
                   </Badge>
                 </div>
-                <DialogDescription className="mt-1 text-xs text-zinc-600">
-                  Setor: {detailedStock.sector} | Subsetor: {detailedStock.subsector}
+                <DialogDescription className="mt-1 text-xs text-zinc-400">
+                  Setor: {detailedStock.sector} | Subsetor: {detailedStock.subsector} | Segmento: {detailedStock.segment}
                 </DialogDescription>
               </div>
             </div>
             <div className="text-right">
-              <div className="text-xs uppercase text-zinc-500">Cotação Atual</div>
+              <div className="text-xs uppercase tracking-wider text-zinc-400">Cotação Atual</div>
               <div
                 data-testid="modal-stock-price"
-                className="text-xl font-bold text-zinc-900 tabular-nums"
+                className="text-xl font-bold text-zinc-100 tabular-nums"
               >
                 {formatCurrency(detailedStock.price)}
               </div>
@@ -162,35 +162,35 @@ export function StockDetailDialog({
 
           <TabsContent value="overview" className="space-y-4">
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-              <Card className="border-zinc-300 bg-zinc-50">
+              <Card className="border-zinc-800 bg-zinc-950/60">
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-bold text-zinc-900">
+                  <CardTitle className="text-sm font-bold text-zinc-100">
                     A. Preço Teto de Dividendos (Décio Bazin)
                   </CardTitle>
-                  <p className="text-xs text-zinc-600">
+                  <p className="text-xs text-zinc-400">
                     Fórmula: Média Anual de Proventos ÷ 0,06 (DY mínimo de 6% a.a.)
                   </p>
                 </CardHeader>
                 <CardContent className="space-y-2 text-xs">
-                  <div className="flex justify-between border-b border-zinc-200 py-1">
-                    <span className="text-zinc-600">Dividendo Médio Anual Estimado:</span>
-                    <span className="font-semibold text-zinc-900 tabular-nums">
+                  <div className="flex justify-between border-b border-zinc-800 py-1.5">
+                    <span className="text-zinc-400">Dividendo Médio Anual Estimado:</span>
+                    <span className="font-semibold text-zinc-100 tabular-nums">
                       {formatCurrency(detailedStock.avgDividends5y)} / ação
                     </span>
                   </div>
-                  <div className="flex justify-between border-b border-zinc-200 py-1">
-                    <span className="text-zinc-600">Preço Teto Bazin (6%):</span>
+                  <div className="flex justify-between border-b border-zinc-800 py-1.5">
+                    <span className="text-zinc-400">Preço Teto Bazin (6%):</span>
                     <span
                       data-testid="modal-bazin-ceiling"
-                      className="font-bold text-zinc-900 tabular-nums"
+                      className="font-bold text-zinc-100 tabular-nums"
                     >
                       {detailedStock.bazinCeilingPrice > 0
                         ? formatCurrency(detailedStock.bazinCeilingPrice)
                         : 'N/A'}
                     </span>
                   </div>
-                  <div className="flex justify-between py-1">
-                    <span className="text-zinc-600">Margem de Segurança Bazin:</span>
+                  <div className="flex justify-between py-1.5">
+                    <span className="text-zinc-400">Margem de Segurança Bazin:</span>
                     <Badge
                       variant={
                         detailedStock.bazinMargin >= 0 ? 'positive' : 'negative'
@@ -199,7 +199,7 @@ export function StockDetailDialog({
                       {formatPercent(detailedStock.bazinMargin, true)}
                     </Badge>
                   </div>
-                  <p className="pt-1 text-[11px] font-medium text-zinc-700">
+                  <p className="pt-1 text-[11px] font-medium text-zinc-400">
                     {detailedStock.bazinMargin >= 0
                       ? 'Veredito Bazin: Preço Atual abaixo do Preço Teto (Margem positiva para dividendos).'
                       : 'Veredito Bazin: Preço Atual acima do Preço Teto (Ação cara para renda passiva de 6%).'}
@@ -207,35 +207,35 @@ export function StockDetailDialog({
                 </CardContent>
               </Card>
 
-              <Card className="border-zinc-300 bg-zinc-50">
+              <Card className="border-zinc-800 bg-zinc-950/60">
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-bold text-zinc-900">
+                  <CardTitle className="text-sm font-bold text-zinc-100">
                     B. Preço Justo de Benjamin Graham
                   </CardTitle>
-                  <p className="text-xs text-zinc-600">
+                  <p className="text-xs text-zinc-400">
                     Fórmula: √(22,5 × LPA × VPA) — P/L máx 15 e P/VP máx 1,5
                   </p>
                 </CardHeader>
                 <CardContent className="space-y-2 text-xs">
-                  <div className="flex justify-between border-b border-zinc-200 py-1">
-                    <span className="text-zinc-600">LPA (Lucro por Ação) / VPA:</span>
-                    <span className="font-semibold text-zinc-900 tabular-nums">
+                  <div className="flex justify-between border-b border-zinc-800 py-1.5">
+                    <span className="text-zinc-400">LPA (Lucro por Ação) / VPA:</span>
+                    <span className="font-semibold text-zinc-100 tabular-nums">
                       {formatCurrency(detailedStock.lpa)} / {formatCurrency(detailedStock.vpa)}
                     </span>
                   </div>
-                  <div className="flex justify-between border-b border-zinc-200 py-1">
-                    <span className="text-zinc-600">Preço Justo Intrínseco:</span>
+                  <div className="flex justify-between border-b border-zinc-800 py-1.5">
+                    <span className="text-zinc-400">Preço Justo Intrínseco:</span>
                     <span
                       data-testid="modal-graham-fair"
-                      className="font-bold text-zinc-900 tabular-nums"
+                      className="font-bold text-zinc-100 tabular-nums"
                     >
                       {detailedStock.grahamFairPrice > 0
                         ? formatCurrency(detailedStock.grahamFairPrice)
                         : 'N/A (LPA/VPA negativo)'}
                     </span>
                   </div>
-                  <div className="flex justify-between py-1">
-                    <span className="text-zinc-600">Margem de Segurança Graham:</span>
+                  <div className="flex justify-between py-1.5">
+                    <span className="text-zinc-400">Margem de Segurança Graham:</span>
                     <Badge
                       variant={
                         detailedStock.grahamMargin >= 0 ? 'positive' : 'negative'
@@ -244,7 +244,7 @@ export function StockDetailDialog({
                       {formatPercent(detailedStock.grahamMargin, true)}
                     </Badge>
                   </div>
-                  <p className="pt-1 text-[11px] font-medium text-zinc-700">
+                  <p className="pt-1 text-[11px] font-medium text-zinc-400">
                     {detailedStock.grahamMargin >= 0
                       ? 'Veredito Graham: Empresa descontada frente aos seus lucros e patrimônio.'
                       : 'Veredito Graham: Múltiplos acima do limite clássico de Graham.'}
@@ -253,9 +253,9 @@ export function StockDetailDialog({
               </Card>
             </div>
 
-            <Card className="border-zinc-300 bg-white">
+            <Card className="border-zinc-800 bg-zinc-950/60">
               <CardHeader className="pb-2">
-                <CardTitle className="text-xs font-bold uppercase tracking-wider text-zinc-700">
+                <CardTitle className="text-xs font-bold uppercase tracking-wider text-zinc-300">
                   Simulador Interativo de Preço Teto (Décio Bazin)
                 </CardTitle>
               </CardHeader>
@@ -264,7 +264,7 @@ export function StockDetailDialog({
                   <div className="flex items-center gap-2">
                     <label
                       htmlFor="bazin-yield-input"
-                      className="text-xs font-medium text-zinc-700"
+                      className="text-xs font-medium text-zinc-300"
                     >
                       Yield Mínimo Desejado (% a.a.):
                     </label>
@@ -277,7 +277,7 @@ export function StockDetailDialog({
                       step={0.5}
                       value={customYield}
                       onChange={(e) => setCustomYield(e.target.value)}
-                      className="w-24"
+                      className="w-24 text-zinc-100"
                     />
                     <div className="flex gap-1">
                       {['6', '8', '10'].map((preset) => (
@@ -295,16 +295,16 @@ export function StockDetailDialog({
                   </div>
                   <div className="flex items-center gap-4 text-xs">
                     <div>
-                      <span className="text-zinc-500">Teto Simulado ({effectiveYieldPercent}%): </span>
+                      <span className="text-zinc-400">Teto Simulado ({effectiveYieldPercent}%): </span>
                       <span
                         data-testid="simulated-bazin-price"
-                        className="font-bold text-zinc-900 tabular-nums"
+                        className="font-bold text-zinc-100 tabular-nums"
                       >
                         {formatCurrency(simulatedBazinCeiling)}
                       </span>
                     </div>
                     <div>
-                      <span className="text-zinc-500">Margem Simulada: </span>
+                      <span className="text-zinc-400">Margem Simulada: </span>
                       <Badge
                         variant={simulatedBazinMargin >= 0 ? 'positive' : 'negative'}
                       >
@@ -317,27 +317,27 @@ export function StockDetailDialog({
             </Card>
 
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-              <div className="rounded border border-zinc-200 bg-zinc-50 p-3">
-                <div className="text-[11px] text-zinc-500">P/L &amp; P/VP</div>
-                <div className="mt-1 text-sm font-bold text-zinc-900 tabular-nums">
+              <div className="rounded-lg border border-zinc-800 bg-zinc-950/80 p-3">
+                <div className="text-[11px] text-zinc-400">P/L &amp; P/VP</div>
+                <div className="mt-1 text-sm font-bold text-zinc-100 tabular-nums">
                   {detailedStock.pl.toFixed(2)}x / {detailedStock.pvp.toFixed(2)}x
                 </div>
               </div>
-              <div className="rounded border border-zinc-200 bg-zinc-50 p-3">
-                <div className="text-[11px] text-zinc-500">ROE &amp; ROIC</div>
-                <div className="mt-1 text-sm font-bold text-zinc-900 tabular-nums">
+              <div className="rounded-lg border border-zinc-800 bg-zinc-950/80 p-3">
+                <div className="text-[11px] text-zinc-400">ROE &amp; ROIC</div>
+                <div className="mt-1 text-sm font-bold text-zinc-100 tabular-nums">
                   {formatPercent(detailedStock.roe)} / {formatPercent(detailedStock.roic)}
                 </div>
               </div>
-              <div className="rounded border border-zinc-200 bg-zinc-50 p-3">
-                <div className="text-[11px] text-zinc-500">Margem Líquida / EBIT</div>
-                <div className="mt-1 text-sm font-bold text-zinc-900 tabular-nums">
+              <div className="rounded-lg border border-zinc-800 bg-zinc-950/80 p-3">
+                <div className="text-[11px] text-zinc-400">Margem Líquida / EBIT</div>
+                <div className="mt-1 text-sm font-bold text-zinc-100 tabular-nums">
                   {formatPercent(detailedStock.netMargin)} / {formatPercent(detailedStock.ebitMargin)}
                 </div>
               </div>
-              <div className="rounded border border-zinc-200 bg-zinc-50 p-3">
-                <div className="text-[11px] text-zinc-500">Liquidez Diária / Dív.EBITDA</div>
-                <div className="mt-1 text-sm font-bold text-zinc-900 tabular-nums">
+              <div className="rounded-lg border border-zinc-800 bg-zinc-950/80 p-3">
+                <div className="text-[11px] text-zinc-400">Liquidez Diária / Dív.EBITDA</div>
+                <div className="mt-1 text-sm font-bold text-zinc-100 tabular-nums">
                   {formatCompactCurrency(detailedStock.dailyLiquidity)} ({detailedStock.netDebtToEbitda.toFixed(2)}x)
                 </div>
               </div>
@@ -346,32 +346,32 @@ export function StockDetailDialog({
 
           <TabsContent value="technical" className="space-y-4">
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-              <Card className="border-zinc-300 bg-zinc-50">
+              <Card className="border-zinc-800 bg-zinc-950/60">
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-bold text-zinc-900">
+                  <CardTitle className="text-sm font-bold text-zinc-100">
                     C. Tendência Técnica (Médias Móveis e IFR/RSI)
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2 text-xs">
-                  <div className="flex justify-between border-b border-zinc-200 py-1.5">
-                    <span className="text-zinc-600">Status de Tendência:</span>
+                  <div className="flex justify-between border-b border-zinc-800 py-1.5">
+                    <span className="text-zinc-400">Status de Tendência:</span>
                     <Badge variant="default">{detailedStock.technicalTrend}</Badge>
                   </div>
-                  <div className="flex justify-between border-b border-zinc-200 py-1.5">
-                    <span className="text-zinc-600">Média Móvel Simples 50 (SMA 50):</span>
-                    <span className="font-bold text-zinc-900 tabular-nums">
+                  <div className="flex justify-between border-b border-zinc-800 py-1.5">
+                    <span className="text-zinc-400">Média Móvel Simples 50 (SMA 50):</span>
+                    <span className="font-bold text-zinc-100 tabular-nums">
                       {formatCurrency(detailedStock.sma50)}
                     </span>
                   </div>
-                  <div className="flex justify-between border-b border-zinc-200 py-1.5">
-                    <span className="text-zinc-600">Média Móvel Simples 200 (SMA 200):</span>
-                    <span className="font-bold text-zinc-900 tabular-nums">
+                  <div className="flex justify-between border-b border-zinc-800 py-1.5">
+                    <span className="text-zinc-400">Média Móvel Simples 200 (SMA 200):</span>
+                    <span className="font-bold text-zinc-100 tabular-nums">
                       {formatCurrency(detailedStock.sma200)}
                     </span>
                   </div>
                   <div className="flex justify-between py-1.5">
-                    <span className="text-zinc-600">IFR / RSI (14 períodos):</span>
-                    <span className="font-bold text-zinc-900 tabular-nums">
+                    <span className="text-zinc-400">IFR / RSI (14 períodos):</span>
+                    <span className="font-bold text-zinc-100 tabular-nums">
                       {detailedStock.rsi14.toFixed(2)} (
                       {detailedStock.rsi14 > 70
                         ? 'Sobrecomprado > 70'
@@ -384,48 +384,48 @@ export function StockDetailDialog({
                 </CardContent>
               </Card>
 
-              <Card className="border-zinc-300 bg-zinc-50">
+              <Card className="border-zinc-800 bg-zinc-950/60">
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-bold text-zinc-900">
+                  <CardTitle className="text-sm font-bold text-zinc-100">
                     D. Composição do Score Único ({detailedStock.scoreTotal.toFixed(1)} / 100)
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2 text-xs">
-                  <div className="flex justify-between border-b border-zinc-200 py-1">
-                    <span className="text-zinc-600">
+                  <div className="flex justify-between border-b border-zinc-800 py-1.5">
+                    <span className="text-zinc-400">
                       1. Margem de Segurança (Peso 35%):
                     </span>
-                    <span className="font-bold text-zinc-900 tabular-nums">
+                    <span className="font-bold text-zinc-100 tabular-nums">
                       {detailedStock.scoreValuation.toFixed(2)} / 35,00
                     </span>
                   </div>
-                  <div className="flex justify-between border-b border-zinc-200 py-1">
-                    <span className="text-zinc-600">
+                  <div className="flex justify-between border-b border-zinc-800 py-1.5">
+                    <span className="text-zinc-400">
                       2. Histórico de Dividendos (Peso 25%):
                     </span>
-                    <span className="font-bold text-zinc-900 tabular-nums">
+                    <span className="font-bold text-zinc-100 tabular-nums">
                       {detailedStock.scoreDividends.toFixed(2)} / 25,00
                     </span>
                   </div>
-                  <div className="flex justify-between border-b border-zinc-200 py-1">
-                    <span className="text-zinc-600">
+                  <div className="flex justify-between border-b border-zinc-800 py-1.5">
+                    <span className="text-zinc-400">
                       3. Rentabilidade ROE &amp; Margem (Peso 20%):
                     </span>
-                    <span className="font-bold text-zinc-900 tabular-nums">
+                    <span className="font-bold text-zinc-100 tabular-nums">
                       {detailedStock.scoreProfitability.toFixed(2)} / 20,00
                     </span>
                   </div>
-                  <div className="flex justify-between border-b border-zinc-200 py-1">
-                    <span className="text-zinc-600">
+                  <div className="flex justify-between border-b border-zinc-800 py-1.5">
+                    <span className="text-zinc-400">
                       4. Momento Técnico SMA &amp; RSI (Peso 20%):
                     </span>
-                    <span className="font-bold text-zinc-900 tabular-nums">
+                    <span className="font-bold text-zinc-100 tabular-nums">
                       {detailedStock.scoreTechnical.toFixed(2)} / 20,00
                     </span>
                   </div>
                   <div className="flex justify-between pt-1">
-                    <span className="text-zinc-600">Filtro de Corte:</span>
-                    <span className="font-semibold text-zinc-900">
+                    <span className="text-zinc-400">Filtro de Corte:</span>
+                    <span className="font-semibold text-zinc-200">
                       {detailedStock.cutFilterReason}
                     </span>
                   </div>
@@ -435,14 +435,14 @@ export function StockDetailDialog({
           </TabsContent>
 
           <TabsContent value="thesis" className="space-y-4">
-            <Card className="border-zinc-300 bg-zinc-50">
-              <CardHeader className="border-b border-zinc-200 pb-3">
+            <Card className="border-zinc-800 bg-zinc-950/60">
+              <CardHeader className="border-b border-zinc-800 pb-3">
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <div>
-                    <CardTitle className="text-sm font-bold text-zinc-900">
+                    <CardTitle className="text-sm font-bold text-zinc-100">
                       Resumo Narrativo de Tese &amp; Classificação Temática
                     </CardTitle>
-                    <p className="text-xs text-zinc-600">
+                    <p className="text-xs text-zinc-400">
                       Motor: {thesis?.provider || 'Calculando...'}
                     </p>
                   </div>
@@ -453,35 +453,35 @@ export function StockDetailDialog({
               </CardHeader>
               <CardContent className="space-y-3 pt-4 text-xs leading-relaxed">
                 {loadingThesis ? (
-                  <div className="py-6 text-center text-zinc-600">
+                  <div className="py-6 text-center text-zinc-400">
                     Processando múltiplos e gerando resumo narrativo...
                   </div>
                 ) : thesis ? (
                   <div className="space-y-3" data-testid="thesis-content">
-                    <div className="rounded border border-zinc-200 bg-white p-3">
-                      <div className="font-bold uppercase tracking-wider text-zinc-800">
+                    <div className="rounded-lg border border-zinc-800 bg-zinc-900 p-3.5">
+                      <div className="font-bold uppercase tracking-wider text-zinc-300">
                         • Pontos Fortes
                       </div>
-                      <p className="mt-1 text-zinc-700">{thesis.strengths}</p>
+                      <p className="mt-1 text-zinc-300 leading-relaxed">{thesis.strengths}</p>
                     </div>
-                    <div className="rounded border border-zinc-200 bg-white p-3">
-                      <div className="font-bold uppercase tracking-wider text-zinc-800">
+                    <div className="rounded-lg border border-zinc-800 bg-zinc-900 p-3.5">
+                      <div className="font-bold uppercase tracking-wider text-zinc-300">
                         • Riscos Mapeados
                       </div>
-                      <p className="mt-1 text-zinc-700">{thesis.risks}</p>
+                      <p className="mt-1 text-zinc-300 leading-relaxed">{thesis.risks}</p>
                     </div>
-                    <div className="rounded border border-zinc-200 bg-white p-3">
-                      <div className="font-bold uppercase tracking-wider text-zinc-800">
+                    <div className="rounded-lg border border-zinc-800 bg-zinc-900 p-3.5">
+                      <div className="font-bold uppercase tracking-wider text-zinc-300">
                         • Veredito de Longo Prazo
                       </div>
-                      <p className="mt-1 font-medium text-zinc-900">
+                      <p className="mt-1 font-semibold text-zinc-100 leading-relaxed">
                         {thesis.verdict}
                       </p>
                     </div>
                   </div>
                 ) : null}
 
-                <div className="flex flex-col gap-2 border-t border-zinc-200 pt-3 sm:flex-row sm:items-center">
+                <div className="flex flex-col gap-2 border-t border-zinc-800 pt-3 sm:flex-row sm:items-center">
                   <Input
                     type="password"
                     placeholder="Chave opcional Gemini API (Free Tier) para reprocessar..."
