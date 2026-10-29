@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('Stock Detail Modal, Bazin Simulator and AI Thesis', () => {
-  test('opens stock analysis modal, recalculates Bazin ceiling and renders AI thesis', async ({
+  test('opens stock analysis modal, verifies company logo, recalculates Bazin ceiling and renders AI thesis', async ({
     page,
   }) => {
     await page.goto('/');
@@ -15,6 +15,9 @@ test.describe('Stock Detail Modal, Bazin Simulator and AI Thesis', () => {
     const modal = page.getByTestId('stock-detail-modal');
     await expect(modal).toBeVisible();
     await expect(modal).toContainText('PETR4');
+
+    const modalLogo = modal.getByTestId('company-logo-PETR4');
+    await expect(modalLogo).toBeVisible();
 
     const initialSimPrice = await page
       .getByTestId('simulated-bazin-price')
