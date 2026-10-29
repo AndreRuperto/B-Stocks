@@ -14,11 +14,17 @@ model Stock {
   logoUrl            String        @default("")
   sector             String
   subsector          String
+  segment            String        @default("Tradicional B3")
   price              Float
+  marketCap          Float         @default(0)
+  equity             Float         @default(0)
+  revenue            Float         @default(0)
+  netIncome          Float         @default(0)
   pl                 Float
   pvp                Float
   psr                Float
   dy                 Float
+  dy5y               Float         @default(0)
   lpa                Float
   vpa                Float
   roe                Float
@@ -30,6 +36,10 @@ model Stock {
   dailyLiquidity     Float
   revenueGrowth5y    Float
   avgDividends5y     Float
+  change24h          Float         @default(0)
+  change30d          Float         @default(0)
+  change12m          Float         @default(0)
+  change5y           Float         @default(0)
   bazinCeilingPrice  Float
   bazinMargin        Float
   grahamFairPrice    Float
