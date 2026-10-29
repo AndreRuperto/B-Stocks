@@ -17,6 +17,7 @@ export const StockItemSchema = z.object({
   id: z.string(),
   ticker: z.string(),
   companyName: z.string(),
+  logoUrl: z.string().optional().default(''),
   sector: z.string(),
   subsector: z.string(),
   price: z.number(),
