@@ -173,6 +173,93 @@ const ALL_COLUMNS_MAP: Record<ColumnKey, ColumnDef> = {
   },
 };
 
+const INDICATOR_TOOLTIPS: Partial<Record<ColumnKey, { title: string; desc: string }>> = {
+  grahamFairPrice: {
+    title: 'Preço Justo de Graham',
+    desc: 'Indica até quanto vale pagar pela ação, de acordo com a fórmula de Benjamin Graham: √(22,5 × LPA × VPA).',
+  },
+  grahamMargin: {
+    title: 'Upside de Graham',
+    desc: 'Potencial de valorização e margem de segurança entre o preço atual da ação e o valor justo de Graham.',
+  },
+  pl: {
+    title: 'P/L (Preço sobre Lucro)',
+    desc: 'Mostra quantos anos de lucro a empresa precisaria gerar para "pagar" o valor atual da ação.',
+  },
+  pvp: {
+    title: 'P/VP (Preço sobre Valor Patrimonial)',
+    desc: 'Indica se a ação é negociada com ágio ou desconto em relação ao patrimônio líquido contábil por ação.',
+  },
+  bazinCeilingPrice: {
+    title: 'Preço-teto de Bazin',
+    desc: 'Preço máximo a pagar para garantir um Dividend Yield mínimo desejado de 6% ao ano, segundo Décio Bazin.',
+  },
+  bazinMargin: {
+    title: 'Upside de Bazin',
+    desc: 'Margem percentual de desconto ou prêmio da cotação atual em relação ao Preço-teto de Bazin.',
+  },
+  dy: {
+    title: 'Dividend Yield (DY)',
+    desc: 'Rendimento gerado em proventos e dividendos pagos aos acionistas em relação à cotação atual nos últimos 12 meses.',
+  },
+  dy5y: {
+    title: 'DY Médio 5 anos',
+    desc: 'Média histórica anual do Dividend Yield distribuído pela companhia nos últimos 5 anos.',
+  },
+  netMargin: {
+    title: 'Margem Líquida',
+    desc: 'Percentual de cada R$ 1 de faturamento líquido que se converte em lucro líquido para a empresa.',
+  },
+  scoreTotal: {
+    title: 'Pontuação Buy And Hold',
+    desc: 'Score quantitativo ponderado de 0 a 100 avaliando valuation, dividendos, rentabilidade e momento estrutural.',
+  },
+  roe: {
+    title: 'ROE (Retorno sobre Patrimônio)',
+    desc: 'Mede a eficiência da empresa em gerar lucros com seus próprios recursos patrimoniais.',
+  },
+  marketCap: {
+    title: 'Valor de Mercado',
+    desc: 'Valor total da companhia calculado multiplicando o total de ações emitidas pelo preço atual de mercado.',
+  },
+  dailyLiquidity: {
+    title: 'Liquidez Diária',
+    desc: 'Volume financeiro médio diário negociado no mercado. Acima de R$ 1 milhão garante facilidade de compra e venda.',
+  },
+  revenue: {
+    title: 'Receita Líquida',
+    desc: 'Receita operacional líquida acumulada nos últimos 12 meses reportados pela companhia.',
+  },
+  netIncome: {
+    title: 'Lucro Líquido',
+    desc: 'Resultado líquido final acumulado nos últimos 12 meses após impostos e despesas financeiras.',
+  },
+  equity: {
+    title: 'Patrimônio Líquido',
+    desc: 'Valor contábil total pertencente aos acionistas (ativos totais menos passivos exigíveis).',
+  },
+  grossDebtToEquity: {
+    title: 'Dívida Bruta / Patrimônio',
+    desc: 'Nível de endividamento da companhia frente ao patrimônio líquido. Quanto menor, mais segura a estrutura de capital.',
+  },
+  change24h: {
+    title: 'Variação 24h',
+    desc: 'Oscilação percentual do preço da ação nas últimas 24 horas de negociação na B3.',
+  },
+  change30d: {
+    title: 'Variação 30d',
+    desc: 'Oscilação percentual acumulada do preço da ação no período dos últimos 30 dias.',
+  },
+  change12m: {
+    title: 'Variação 12m',
+    desc: 'Oscilação percentual acumulada do preço da ação no período dos últimos 12 meses.',
+  },
+  change5y: {
+    title: 'Variação 5 Anos',
+    desc: 'Oscilação percentual acumulada do preço da ação nos últimos 5 anos.',
+  },
+};
+
 const ADVANCED_PRO_COLUMNS: ColumnKey[] = [
   'scoreTotal',
   'bazinCeilingPrice',
@@ -346,6 +433,7 @@ export function StocksRankingTable({
   onSelectStock,
 }: StocksRankingTableProps) {
   const [customizeOpen, setCustomizeOpen] = useState<boolean>(false);
+  const [activeTooltip, setActiveTooltip] = useState<ColumnKey | null>(null);
   const [customColumns, setCustomColumns] = useState<ColumnKey[]>(
     PRESET_CONFIG[filters.rankingPreset].columns,
   );
@@ -361,6 +449,18 @@ export function StocksRankingTable({
     ];
     setCustomColumns(presetCols);
   }, [filters.rankingPreset]);
+
+  useEffect(() => {
+    const handleGlobalClick = () => {
+      setActiveTooltip(null);
+    };
+    if (activeTooltip) {
+      window.addEventListener('click', handleGlobalClick);
+      return () => {
+        window.removeEventListener('click', handleGlobalClick);
+      };
+    }
+  }, [activeTooltip]);
 
   const handleRankingPresetChange = (preset: RankingPreset) => {
     const cfg = PRESET_CONFIG[preset];
@@ -449,12 +549,12 @@ export function StocksRankingTable({
 
   const renderSortIcon = (field: SortField) => {
     if (filters.sortBy !== field) {
-      return <ArrowUpDown className="ml-1 h-3 w-3 text-zinc-400" />;
+      return <ArrowUpDown className="ml-1 h-3 w-3 text-zinc-500" />;
     }
     return filters.sortOrder === 'desc' ? (
-      <ArrowDown className="ml-1 h-3 w-3 text-zinc-900" />
+      <ArrowDown className="ml-1 h-3 w-3 text-zinc-200" />
     ) : (
-      <ArrowUp className="ml-1 h-3 w-3 text-zinc-900" />
+      <ArrowUp className="ml-1 h-3 w-3 text-zinc-200" />
     );
   };
 
@@ -462,37 +562,37 @@ export function StocksRankingTable({
     switch (colKey) {
       case 'marketCap':
         return (
-          <span className="font-semibold text-zinc-900 tabular-nums">
+          <span className="font-semibold text-zinc-200 tabular-nums">
             {formatCompactCurrency(stock.marketCap)}
           </span>
         );
       case 'pl':
         return (
-          <span className="font-medium text-zinc-900 tabular-nums">
+          <span className="font-medium text-zinc-200 tabular-nums">
             {stock.pl.toFixed(2)}x
           </span>
         );
       case 'pvp':
         return (
-          <span className="font-medium text-zinc-900 tabular-nums">
+          <span className="font-medium text-zinc-200 tabular-nums">
             {stock.pvp.toFixed(2)}x
           </span>
         );
       case 'dy':
         return (
-          <span className="font-semibold text-zinc-900 tabular-nums">
+          <span className="font-semibold text-zinc-200 tabular-nums">
             {formatPercent(stock.dy)}
           </span>
         );
       case 'dy5y':
         return (
-          <span className="font-medium text-zinc-800 tabular-nums">
+          <span className="font-medium text-zinc-300 tabular-nums">
             {formatPercent(stock.dy5y)}
           </span>
         );
       case 'netMargin':
         return (
-          <span className="font-medium text-zinc-900 tabular-nums">
+          <span className="font-medium text-zinc-200 tabular-nums">
             {formatPercent(stock.netMargin)}
           </span>
         );
@@ -503,22 +603,22 @@ export function StocksRankingTable({
           </Badge>
         );
       case 'subsector':
-        return <span className="text-xs text-zinc-700">{stock.subsector}</span>;
+        return <span className="text-xs text-zinc-400">{stock.subsector}</span>;
       case 'segment':
         return (
-          <Badge variant="outline" className="text-[11px] text-zinc-700">
+          <Badge variant="outline" className="text-[11px] text-zinc-300 border-zinc-700">
             {stock.segment}
           </Badge>
         );
       case 'price':
         return (
-          <span className="font-semibold text-zinc-900 tabular-nums">
+          <span className="font-semibold text-zinc-200 tabular-nums">
             {formatCurrency(stock.price)}
           </span>
         );
       case 'grahamFairPrice':
         return (
-          <span className="font-medium text-zinc-900 tabular-nums">
+          <span className="font-medium text-zinc-200 tabular-nums">
             {stock.grahamFairPrice > 0
               ? formatCurrency(stock.grahamFairPrice)
               : 'N/A'}
@@ -533,11 +633,11 @@ export function StocksRankingTable({
             {formatPercent(stock.grahamMargin, true)}
           </Badge>
         ) : (
-          <span className="text-xs text-zinc-400">N/A</span>
+          <span className="text-xs text-zinc-500">N/A</span>
         );
       case 'bazinCeilingPrice':
         return (
-          <span className="font-medium text-zinc-900 tabular-nums">
+          <span className="font-medium text-zinc-200 tabular-nums">
             {stock.bazinCeilingPrice > 0
               ? formatCurrency(stock.bazinCeilingPrice)
               : 'N/A'}
@@ -552,7 +652,7 @@ export function StocksRankingTable({
             {formatPercent(stock.bazinMargin, true)}
           </Badge>
         ) : (
-          <span className="text-xs text-zinc-400">Sem DY</span>
+          <span className="text-xs text-zinc-500">Sem DY</span>
         );
       case 'scoreTotal':
         return (
@@ -568,13 +668,13 @@ export function StocksRankingTable({
         );
       case 'dailyLiquidity':
         return (
-          <span className="font-semibold text-zinc-900 tabular-nums">
+          <span className="font-semibold text-zinc-200 tabular-nums">
             {formatCompactCurrency(stock.dailyLiquidity)}
           </span>
         );
       case 'revenue':
         return (
-          <span className="font-semibold text-zinc-900 tabular-nums">
+          <span className="font-semibold text-zinc-200 tabular-nums">
             {formatCompactCurrency(stock.revenue)}
           </span>
         );
@@ -582,7 +682,7 @@ export function StocksRankingTable({
         return (
           <span
             className={`font-semibold tabular-nums ${
-              stock.netIncome >= 0 ? 'text-zinc-900' : 'text-red-700'
+              stock.netIncome >= 0 ? 'text-zinc-200' : 'text-red-400'
             }`}
           >
             {formatCompactCurrency(stock.netIncome)}
@@ -590,19 +690,19 @@ export function StocksRankingTable({
         );
       case 'equity':
         return (
-          <span className="font-medium text-zinc-900 tabular-nums">
+          <span className="font-medium text-zinc-200 tabular-nums">
             {formatCompactCurrency(stock.equity)}
           </span>
         );
       case 'grossDebtToEquity':
         return (
-          <span className="font-medium text-zinc-800 tabular-nums">
+          <span className="font-medium text-zinc-300 tabular-nums">
             {stock.grossDebtToEquity.toFixed(2)}x
           </span>
         );
       case 'roe':
         return (
-          <span className="font-medium text-zinc-900 tabular-nums">
+          <span className="font-medium text-zinc-200 tabular-nums">
             {formatPercent(stock.roe)}
           </span>
         );
@@ -648,20 +748,20 @@ export function StocksRankingTable({
   };
 
   return (
-    <Card className="border-zinc-300 bg-white">
-      <CardHeader className="border-b border-zinc-200 pb-4">
+    <Card className="border-zinc-800 bg-zinc-900 rounded-xl shadow-sm">
+      <CardHeader className="border-b border-zinc-800 pb-4">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div>
-            <CardTitle className="text-base font-bold text-zinc-900">
+            <CardTitle className="text-base font-bold text-zinc-100">
               Ranking de Ações da B3
             </CardTitle>
-            <p className="mt-1 text-xs text-zinc-600">
+            <p className="mt-1 text-xs text-zinc-400">
               Exibindo {items.length} de {total} empresas listadas na B3
             </p>
           </div>
 
           <div className="flex flex-wrap items-center gap-2.5">
-            <div className="flex items-center gap-2 rounded-md border border-zinc-300 bg-zinc-50 px-3 py-1.5">
+            <div className="flex items-center gap-2 rounded-lg border border-zinc-800 bg-zinc-950 px-3 py-1.5">
               <Switch
                 data-testid="cut-filter-switch"
                 checked={filters.onlyPassedCut}
@@ -669,7 +769,7 @@ export function StocksRankingTable({
                   onUpdateFilters({ onlyPassedCut: checked, page: 1 })
                 }
               />
-              <span className="text-xs font-medium text-zinc-800">
+              <span className="text-xs font-medium text-zinc-300">
                 Filtro de Corte (Liq &gt; R$ 1M e Dív/EBITDA &lt; 3,0)
               </span>
             </div>
@@ -680,6 +780,7 @@ export function StocksRankingTable({
               size="sm"
               data-testid="customize-button"
               onClick={() => setCustomizeOpen((prev) => !prev)}
+              className="rounded-lg"
             >
               <SlidersHorizontal className="mr-1.5 h-3.5 w-3.5" />
               Customizar
@@ -689,7 +790,7 @@ export function StocksRankingTable({
 
         <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
           <div className="relative sm:col-span-2">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-zinc-400" />
+            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-zinc-500" />
             <Input
               data-testid="search-input"
               placeholder="Buscar por ticker (ex: PETR4, BBAS3, TAEE11) ou empresa..."
@@ -697,7 +798,7 @@ export function StocksRankingTable({
               onChange={(e) =>
                 onUpdateFilters({ search: e.target.value, page: 1 })
               }
-              className="pl-9"
+              className="pl-9 bg-zinc-950 border-zinc-800 text-zinc-100 placeholder:text-zinc-500 rounded-lg"
             />
           </div>
 
@@ -708,10 +809,10 @@ export function StocksRankingTable({
               onChange={(e) =>
                 handleRankingPresetChange(e.target.value as RankingPreset)
               }
-              className="flex h-9 w-full rounded-md border border-zinc-300 bg-white px-3 py-1 text-xs font-medium text-zinc-900 focus:outline-none focus:ring-1 focus:ring-zinc-600"
+              className="flex h-9 w-full rounded-lg border border-zinc-800 bg-zinc-950 px-3 py-1 text-xs font-medium text-zinc-200 focus:outline-none focus:ring-1 focus:ring-zinc-600"
             >
               {(Object.keys(PRESET_CONFIG) as RankingPreset[]).map((key) => (
-                <option key={key} value={key}>
+                <option key={key} value={key} className="bg-zinc-900 text-zinc-100">
                   Ranking por: {PRESET_CONFIG[key].label}
                 </option>
               ))}
@@ -723,7 +824,7 @@ export function StocksRankingTable({
               type="button"
               variant="outline"
               size="sm"
-              className="h-9 flex-1"
+              className="h-9 flex-1 rounded-lg border-zinc-800 bg-zinc-950 text-zinc-300 hover:bg-zinc-800 hover:text-zinc-100"
               onClick={() =>
                 onUpdateFilters({
                   sortOrder: filters.sortOrder === 'desc' ? 'asc' : 'desc',
@@ -747,20 +848,20 @@ export function StocksRankingTable({
               onChange={(e) =>
                 onUpdateFilters({ limit: Number(e.target.value), page: 1 })
               }
-              className="flex h-9 rounded-md border border-zinc-300 bg-white px-2 py-1 text-xs font-medium text-zinc-900 focus:outline-none"
+              className="flex h-9 rounded-lg border border-zinc-800 bg-zinc-950 px-2 py-1 text-xs font-medium text-zinc-200 focus:outline-none"
             >
-              <option value={25}>25 / pág</option>
-              <option value={50}>50 / pág</option>
-              <option value={100}>100 / pág</option>
-              <option value={200}>200 / pág</option>
+              <option value={25} className="bg-zinc-900 text-zinc-100">25 / pág</option>
+              <option value={50} className="bg-zinc-900 text-zinc-100">50 / pág</option>
+              <option value={100} className="bg-zinc-900 text-zinc-100">100 / pág</option>
+              <option value={200} className="bg-zinc-900 text-zinc-100">200 / pág</option>
             </select>
           </div>
         </div>
 
         {(filters.rankingPreset === 'maiores_altas' ||
           filters.rankingPreset === 'maiores_baixas') && (
-          <div className="mt-3 flex items-center gap-2 rounded border border-zinc-200 bg-zinc-50 px-3 py-2">
-            <span className="text-xs font-semibold text-zinc-700">
+          <div className="mt-3 flex items-center gap-2 rounded-lg border border-zinc-800 bg-zinc-950 px-3 py-2">
+            <span className="text-xs font-semibold text-zinc-300">
               Período da Variação:
             </span>
             {(['24h', '30d', '12m'] as const).map((period) => (
@@ -771,7 +872,7 @@ export function StocksRankingTable({
                 variant={
                   filters.variationPeriod === period ? 'default' : 'outline'
                 }
-                className="h-7 px-2.5 text-xs"
+                className="h-7 px-2.5 text-xs rounded-lg"
                 data-testid={`variation-period-${period}`}
                 onClick={() => handleVariationPeriodChange(period)}
               >
@@ -787,19 +888,19 @@ export function StocksRankingTable({
 
         <div
           aria-label="Botões Rápidos de Ordenação da Lista"
-          className="mt-3 flex flex-wrap items-center gap-1.5 border-t border-zinc-200 pt-3"
+          className="mt-3 flex flex-wrap items-center gap-1.5 border-t border-zinc-800 pt-3"
         >
-          <span className="mr-1 text-[11px] font-semibold uppercase tracking-wider text-zinc-500">
+          <span className="mr-1 text-[11px] font-semibold uppercase tracking-wider text-zinc-400">
             Ordenar Colunas:
           </span>
           <button
             type="button"
             data-testid="header-sort-btn-ticker"
             onClick={() => handleColumnSort('ticker')}
-            className={`inline-flex items-center rounded border px-2.5 py-1 text-xs font-medium ${
+            className={`inline-flex items-center rounded-lg border px-2.5 py-1 text-xs font-medium transition-colors ${
               filters.sortBy === 'ticker'
-                ? 'border-zinc-900 bg-zinc-900 text-white'
-                : 'border-zinc-300 bg-white text-zinc-800 hover:bg-zinc-100'
+                ? 'border-zinc-500 bg-zinc-800 text-zinc-100 shadow-sm'
+                : 'border-zinc-800 bg-zinc-950 text-zinc-300 hover:bg-zinc-800 hover:text-zinc-100'
             }`}
           >
             Ativos
@@ -813,10 +914,10 @@ export function StocksRankingTable({
                 type="button"
                 data-testid={`header-sort-btn-${col.key}`}
                 onClick={() => handleColumnSort(col.sortField)}
-                className={`inline-flex items-center rounded border px-2.5 py-1 text-xs font-medium ${
+                className={`inline-flex items-center rounded-lg border px-2.5 py-1 text-xs font-medium transition-colors ${
                   isSorted
-                    ? 'border-zinc-900 bg-zinc-900 text-white'
-                    : 'border-zinc-300 bg-white text-zinc-800 hover:bg-zinc-100'
+                    ? 'border-zinc-500 bg-zinc-800 text-zinc-100 shadow-sm'
+                    : 'border-zinc-800 bg-zinc-950 text-zinc-300 hover:bg-zinc-800 hover:text-zinc-100'
                 }`}
               >
                 {isPrimary ? `(${col.label})` : col.label}
@@ -828,15 +929,15 @@ export function StocksRankingTable({
         {customizeOpen && (
           <div
             data-testid="customize-panel"
-            className="mt-3 rounded-md border border-zinc-300 bg-zinc-50 p-4"
+            className="mt-3 rounded-xl border border-zinc-800 bg-zinc-950 p-4"
           >
             <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
               <div>
-                <h4 className="mb-2.5 text-xs font-bold uppercase tracking-wider text-zinc-900">
+                <h4 className="mb-2.5 text-xs font-bold uppercase tracking-wider text-zinc-200">
                   Configurações
                 </h4>
                 <div className="space-y-2.5">
-                  <label className="flex cursor-pointer items-center gap-2 text-xs font-medium text-zinc-800">
+                  <label className="flex cursor-pointer items-center gap-2 text-xs font-medium text-zinc-300 hover:text-zinc-100">
                     <input
                       type="checkbox"
                       data-testid="config-small-caps"
@@ -847,11 +948,11 @@ export function StocksRankingTable({
                           page: 1,
                         })
                       }
-                      className="h-4 w-4 rounded border-zinc-300 text-zinc-900"
+                      className="h-4 w-4 rounded border-zinc-700 bg-zinc-800 text-zinc-100 accent-zinc-500"
                     />
                     Apenas Small Caps
                   </label>
-                  <label className="flex cursor-pointer items-center gap-2 text-xs font-medium text-zinc-800">
+                  <label className="flex cursor-pointer items-center gap-2 text-xs font-medium text-zinc-300 hover:text-zinc-100">
                     <input
                       type="checkbox"
                       data-testid="config-one-per-company"
@@ -862,7 +963,7 @@ export function StocksRankingTable({
                           page: 1,
                         })
                       }
-                      className="h-4 w-4 rounded border-zinc-300 text-zinc-900"
+                      className="h-4 w-4 rounded border-zinc-700 bg-zinc-800 text-zinc-100 accent-zinc-500"
                     />
                     Uma Ação por empresa
                   </label>
@@ -871,7 +972,7 @@ export function StocksRankingTable({
 
               <div>
                 <div className="mb-2.5 flex items-center gap-2">
-                  <h4 className="text-xs font-bold uppercase tracking-wider text-zinc-900">
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-zinc-200">
                     Dados Avançados — Coluna PRO
                   </h4>
                   <Badge variant="default" className="px-1.5 py-0 text-[10px]">
@@ -885,14 +986,14 @@ export function StocksRankingTable({
                     return (
                       <label
                         key={colKey}
-                        className="flex cursor-pointer items-center gap-2 text-xs font-medium text-zinc-800"
+                        className="flex cursor-pointer items-center gap-2 text-xs font-medium text-zinc-300 hover:text-zinc-100"
                       >
                         <input
                           type="checkbox"
                           data-testid={`custom-col-${colKey}`}
                           checked={checked}
                           onChange={() => handleToggleCustomColumn(colKey)}
-                          className="h-4 w-4 rounded border-zinc-300 text-zinc-900"
+                          className="h-4 w-4 rounded border-zinc-700 bg-zinc-800 text-zinc-100 accent-zinc-500"
                         />
                         <span>{col.label}</span>
                         <Badge
@@ -908,7 +1009,7 @@ export function StocksRankingTable({
               </div>
 
               <div>
-                <h4 className="mb-2.5 text-xs font-bold uppercase tracking-wider text-zinc-900">
+                <h4 className="mb-2.5 text-xs font-bold uppercase tracking-wider text-zinc-200">
                   Dados Gerais
                 </h4>
                 <div className="grid grid-cols-2 gap-2">
@@ -919,7 +1020,7 @@ export function StocksRankingTable({
                     return (
                       <label
                         key={colKey}
-                        className="flex cursor-pointer items-center gap-2 text-xs font-medium text-zinc-800"
+                        className="flex cursor-pointer items-center gap-2 text-xs font-medium text-zinc-300 hover:text-zinc-100"
                       >
                         <input
                           type="checkbox"
@@ -927,7 +1028,7 @@ export function StocksRankingTable({
                           checked={checked}
                           disabled={isLocked}
                           onChange={() => handleToggleCustomColumn(colKey)}
-                          className="h-4 w-4 rounded border-zinc-300 text-zinc-900"
+                          className="h-4 w-4 rounded border-zinc-700 bg-zinc-800 text-zinc-100 accent-zinc-500"
                         />
                         <span>{col.label}</span>
                       </label>
@@ -943,13 +1044,13 @@ export function StocksRankingTable({
       <CardContent className="p-0">
         <Table>
           <TableHeader>
-            <TableRow>
-              <TableHead className="w-12">#</TableHead>
+            <TableRow className="border-zinc-800 hover:bg-zinc-900 bg-zinc-950/60">
+              <TableHead className="w-12 text-zinc-400">#</TableHead>
               <TableHead>
                 <button
                   type="button"
                   onClick={() => handleColumnSort('ticker')}
-                  className="inline-flex items-center font-bold text-zinc-900 hover:underline"
+                  className="inline-flex items-center font-bold text-zinc-200 hover:text-zinc-100"
                 >
                   Ativos
                   {renderSortIcon('ticker')}
@@ -957,26 +1058,73 @@ export function StocksRankingTable({
               </TableHead>
               {activeColumns.map((col) => {
                 const isPrimary = col.key === primaryColKey;
+                const info = INDICATOR_TOOLTIPS[col.key];
                 return (
-                  <TableHead key={col.key}>
-                    <button
-                      type="button"
-                      onClick={() => handleColumnSort(col.sortField)}
-                      className="inline-flex items-center text-left font-bold text-zinc-900 hover:underline"
-                    >
-                      {isPrimary ? `(${col.label})` : col.label}
-                      {renderSortIcon(col.sortField)}
-                    </button>
+                  <TableHead key={col.key} className="text-zinc-300">
+                    <div className="inline-flex items-center gap-1">
+                      <button
+                        type="button"
+                        onClick={() => handleColumnSort(col.sortField)}
+                        className="inline-flex items-center text-left font-bold text-zinc-200 hover:text-zinc-100"
+                      >
+                        {isPrimary ? `(${col.label})` : col.label}
+                        {renderSortIcon(col.sortField)}
+                      </button>
+                      {info && (
+                        <div className="relative inline-flex items-center">
+                          <button
+                            type="button"
+                            data-testid={`info-btn-${col.key}`}
+                            title={`${info.title}: ${info.desc}`}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setActiveTooltip((prev) =>
+                                prev === col.key ? null : col.key,
+                              );
+                            }}
+                            className="inline-flex h-4 w-4 items-center justify-center rounded-full border border-zinc-700 bg-zinc-800 text-[10px] font-bold text-zinc-400 hover:border-zinc-500 hover:text-zinc-100 focus:outline-none"
+                            aria-label={`Informações sobre ${info.title}`}
+                          >
+                            ?
+                          </button>
+                          {activeTooltip === col.key && (
+                            <div
+                              data-testid={`tooltip-content-${col.key}`}
+                              className="absolute left-1/2 top-full z-50 mt-1.5 w-64 -translate-x-1/2 rounded-lg border border-zinc-700 bg-zinc-900 p-2.5 text-xs text-zinc-200 shadow-xl"
+                            >
+                              <div className="flex items-center justify-between border-b border-zinc-800 pb-1">
+                                <span className="font-bold text-zinc-100">
+                                  {info.title}
+                                </span>
+                                <button
+                                  type="button"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setActiveTooltip(null);
+                                  }}
+                                  className="text-[10px] text-zinc-400 hover:text-zinc-200"
+                                >
+                                  ✕
+                                </button>
+                              </div>
+                              <p className="mt-1.5 leading-relaxed text-zinc-300">
+                                {info.desc}
+                              </p>
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
                   </TableHead>
                 );
               })}
-              <TableHead className="text-right">Ação</TableHead>
+              <TableHead className="text-right text-zinc-300">Ação</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {loading ? (
               Array.from({ length: 8 }).map((_, idx) => (
-                <TableRow key={idx}>
+                <TableRow key={idx} className="border-zinc-800">
                   <TableCell
                     colSpan={activeColumns.length + 3}
                     className="h-12 text-center text-xs text-zinc-500"
@@ -986,10 +1134,10 @@ export function StocksRankingTable({
                 </TableRow>
               ))
             ) : items.length === 0 ? (
-              <TableRow>
+              <TableRow className="border-zinc-800">
                 <TableCell
                   colSpan={activeColumns.length + 3}
-                  className="h-24 text-center text-sm text-zinc-600"
+                  className="h-24 text-center text-sm text-zinc-400"
                 >
                   Nenhuma ação encontrada para os filtros selecionados.
                 </TableCell>
@@ -1001,7 +1149,7 @@ export function StocksRankingTable({
                   <TableRow
                     key={stock.ticker}
                     data-testid={`stock-row-${stock.ticker}`}
-                    className="cursor-pointer"
+                    className="cursor-pointer border-zinc-800/80 hover:bg-zinc-850"
                     onClick={() => onSelectStock(stock)}
                   >
                     <TableCell className="text-xs font-medium text-zinc-500">
@@ -1017,19 +1165,19 @@ export function StocksRankingTable({
                         />
                         <div className="flex flex-col">
                           <div className="flex items-center gap-1.5">
-                            <span className="font-bold text-sm text-zinc-900">
+                            <span className="font-bold text-sm text-zinc-100">
                               {stock.ticker}
                             </span>
                             {!stock.passesCutFilter && (
                               <Badge
                                 variant="outline"
-                                className="px-1 py-0 text-[10px] text-zinc-500"
+                                className="px-1 py-0 text-[10px] text-zinc-400 border-zinc-700"
                               >
                                 Alerta Corte
                               </Badge>
                             )}
                           </div>
-                          <span className="text-xs text-zinc-600 truncate max-w-[170px]">
+                          <span className="text-xs text-zinc-400 truncate max-w-[170px]">
                             {stock.companyName}
                           </span>
                         </div>
@@ -1046,6 +1194,7 @@ export function StocksRankingTable({
                         size="sm"
                         variant="outline"
                         data-testid={`analyze-btn-${stock.ticker}`}
+                        className="rounded-lg border-zinc-800 bg-zinc-950 text-zinc-300 hover:bg-zinc-800 hover:text-zinc-100"
                         onClick={(e) => {
                           e.stopPropagation();
                           onSelectStock(stock);
@@ -1061,10 +1210,10 @@ export function StocksRankingTable({
           </TableBody>
         </Table>
 
-        <div className="flex flex-col items-center justify-between gap-3 border-t border-zinc-200 px-4 py-3 sm:flex-row">
-          <div className="text-xs text-zinc-600">
-            Página <span className="font-bold text-zinc-900">{page}</span> de{' '}
-            <span className="font-bold text-zinc-900">{totalPages}</span> ({total}{' '}
+        <div className="flex flex-col items-center justify-between gap-3 border-t border-zinc-800 px-4 py-3 sm:flex-row">
+          <div className="text-xs text-zinc-400">
+            Página <span className="font-bold text-zinc-100">{page}</span> de{' '}
+            <span className="font-bold text-zinc-100">{totalPages}</span> ({total}{' '}
             ações encontradas)
           </div>
           <div className="flex items-center gap-2">
@@ -1073,6 +1222,7 @@ export function StocksRankingTable({
               variant="outline"
               size="sm"
               disabled={page <= 1}
+              className="rounded-lg border-zinc-800 bg-zinc-950 text-zinc-300 hover:bg-zinc-800 hover:text-zinc-100 disabled:opacity-40"
               onClick={() => onUpdateFilters({ page: Math.max(1, page - 1) })}
             >
               <ChevronLeft className="mr-1 h-4 w-4" /> Anterior
@@ -1082,6 +1232,7 @@ export function StocksRankingTable({
               variant="outline"
               size="sm"
               disabled={page >= totalPages}
+              className="rounded-lg border-zinc-800 bg-zinc-950 text-zinc-300 hover:bg-zinc-800 hover:text-zinc-100 disabled:opacity-40"
               onClick={() =>
                 onUpdateFilters({ page: Math.min(totalPages, page + 1) })
               }
