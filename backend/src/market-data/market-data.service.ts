@@ -8,7 +8,6 @@ import {
 import {
   B3CompanyMeta,
   FALLBACK_B3_STOCKS,
-  normalizeTargetSector,
   resolveB3CompanyMeta,
 } from './b3-catalog';
 
@@ -99,16 +98,8 @@ export class MarketDataService {
       const catalogMeta = resolveB3CompanyMeta(ticker);
       const extMeta = externalMetaMap.get(ticker);
 
-      const targetSector =
-        catalogMeta.isAllowed
-          ? catalogMeta.sector
-          : extMeta?.sector
-            ? normalizeTargetSector(extMeta.sector, extMeta.subsector)
-            : null;
-
-      if (!targetSector) {
-        return;
-      }
+      const sector = extMeta?.sector || catalogMeta.sector || 'Outros Setores B3';
+      const subsector = extMeta?.subsector || catalogMeta.subsector || 'Mercado de Capitais B3';
 
       const price = this.parseBrazilianNumber($(cells[1]).text());
       if (price <= 0) return;
@@ -138,7 +129,7 @@ export class MarketDataService {
         pEbit,
         evEbit,
         grossDebtToEquity,
-        targetSector,
+        sector,
       );
 
       const closes = this.buildSyntheticCloses(
@@ -153,7 +144,7 @@ export class MarketDataService {
         ticker,
         companyName,
         logoUrl,
-        sector: targetSector,
+        sector,
         subsector,
         price,
         pl: Math.max(-500, Math.min(500, pl)),
