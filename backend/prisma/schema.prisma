@@ -1,0 +1,79 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Stock {
+  id                 String        @id @default(uuid())
+  ticker             String        @unique
+  companyName        String
+  sector             String
+  subsector          String
+  price              Float
+  pl                 Float
+  pvp                Float
+  psr                Float
+  dy                 Float
+  lpa                Float
+  vpa                Float
+  roe                Float
+  roic               Float
+  netMargin          Float
+  ebitMargin         Float
+  netDebtToEbitda    Float
+  grossDebtToEquity  Float
+  dailyLiquidity     Float
+  revenueGrowth5y    Float
+  avgDividends5y     Float
+  bazinCeilingPrice  Float
+  bazinMargin        Float
+  grahamFairPrice    Float
+  grahamMargin       Float
+  sma50              Float
+  sma200             Float
+  rsi14              Float
+  technicalTrend     String
+  passesCutFilter    Boolean
+  cutFilterReason    String
+  scoreTotal         Float
+  scoreValuation     Float
+  scoreDividends     Float
+  scoreProfitability Float
+  scoreTechnical     Float
+  thematicCategory   String
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+  theses             StockThesis[]
+
+  @@index([scoreTotal])
+  @@index([passesCutFilter])
+  @@index([thematicCategory])
+  @@index([sector])
+}
+
+model StockThesis {
+  id               String   @id @default(uuid())
+  stockId          String
+  stock            Stock    @relation(fields: [stockId], references: [id], onDelete: Cascade)
+  strengths        String
+  risks            String
+  verdict          String
+  businessCategory String
+  provider         String
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([stockId])
+}
+
+model SyncLog {
+  id          String   @id @default(uuid())
+  totalSynced Int
+  source      String
+  status      String
+  createdAt   DateTime @default(now())
+}
