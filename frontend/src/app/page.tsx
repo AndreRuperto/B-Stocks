@@ -86,11 +86,11 @@ export default function HomePage() {
               <h1 className="text-xl font-bold tracking-tight text-zinc-900">
                 B-STOCKS
               </h1>
-              <Badge variant="default">B3 Quant &amp; Valuation</Badge>
+              <Badge variant="default">B3 Setores Essenciais</Badge>
               <Badge variant="secondary">100% Gratuito</Badge>
             </div>
             <p className="mt-1 text-xs text-zinc-600">
-              Análise determinística da B3: Preço Teto Décio Bazin, Preço Justo Benjamin Graham, SMA 50/200, IFR e Tese IA.
+              Análise determinística da B3 (Elétrica, Bancos, Seguradoras, Commodities, Telecom e Saneamento) com Bazin, Graham, SMA 50/200, IFR e Tese IA.
             </p>
           </div>
 
@@ -163,4 +163,3 @@ export default function HomePage() {
     </div>
   );
 }
-
