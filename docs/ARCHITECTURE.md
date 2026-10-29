@@ -2,19 +2,19 @@
 
 ## 1. Visão Geral
 
-O **B-Stocks** foi projetado com separação estrita entre coleta/normalização de dados da B3, motor matemático determinístico, síntese assistida por IA sob demanda e apresentação visual sólida.
+O **B-Stocks** foi projetado com separação estrita entre coleta/normalização de dados da B3, motor matemático determinístico, síntese assistida por IA sob demanda e apresentação visual sólida com logotipos das empresas.
 
 ```mermaid
 flowchart TD
     subgraph Sources["Fontes de Dados Gratuitas (B3)"]
-        Fundamentus["Fundamentus (Scraping em Lote - 960+ Ações)"]
-        Brapi["Brapi.dev (Metadados e Setores)"]
+        Fundamentus["Fundamentus (Scraping em Lote dos 6 Setores)"]
+        Brapi["Brapi.dev (Metadados, Setores e Logotipos SVG)"]
         Yahoo["Yahoo Finance v8 API (Série Histórica OHLCV e Dividendos)"]
         Gemini["Google Gemini 2.0 Flash API (Tier Gratuito)"]
     end
 
     subgraph Backend["Backend NestJS (TypeScript)"]
-        MarketData["MarketDataService (Axios + Cheerio + Zod)"]
+        MarketData["MarketDataService (Filtro dos 6 Setores + Ingestão de Logos)"]
         Valuation["ValuationService (Bazin, Graham, SMA 50/200, RSI 14, Score 0-100)"]
         AiService["AiService (Tese em 3 Pontos + Fallback Determinístico)"]
         StocksService["StocksService (Orquestração e Filtros)"]
@@ -22,14 +22,14 @@ flowchart TD
     end
 
     subgraph Database["PostgreSQL 18 (b-stocks)"]
-        StockTable[("Tabela Stock (962 Ativos)")]
+        StockTable[("Tabela Stock (Elétrica, Bancos, Seguros, Commodities, Telecom, Saneamento)")]
         ThesisTable[("Tabela StockThesis")]
         SyncLogTable[("Tabela SyncLog")]
     end
 
     subgraph Frontend["Frontend Next.js 14 (React + Shadcn UI + Tailwind)"]
         Dashboard["Dashboard de Resumo Quantitativo"]
-        RankingTable["Tabela Completa da B3 com Filtros Zod"]
+        RankingTable["Tabela com Ícones das Empresas e Filtros Zod"]
         Modal["Modal de Análise, Simulador Bazin e Tese IA"]
     end
 
@@ -45,21 +45,20 @@ flowchart TD
 
 ---
 
-## 2. Módulos do Backend (`/backend/src`)
+## 2. Setores Filtrados no Sistema
 
-| Módulo | Arquivos Principais | Responsabilidade |
-| :--- | :--- | :--- |
-| `PrismaModule` | `prisma.service.ts`, `prisma.module.ts` | Gerencia o pool de conexões com o PostgreSQL (`b-stocks`). |
-| `ValuationModule` | `valuation.service.ts` | Motor matemático determinístico puro sem efeitos colaterais. |
-| `MarketDataModule` | `market-data.service.ts`, `b3-catalog.ts` | Extrai todas as empresas da B3 do Fundamentus, cruza metadados com a Brapi e consulta histórico no Yahoo Finance. |
-| `AiModule` | `ai.service.ts` | Gera resumos narrativos em 3 pontos (Pontos Fortes, Riscos e Veredito) validados por Zod via Gemini API ou motor determinístico. |
-| `StocksModule` | `stocks.controller.ts`, `stocks.service.ts` | Expõe os endpoints REST e gerencia paginação, filtros de corte, busca textual e sincronização. |
+O sistema restringe o universo de análise aos 6 setores mais consistentes para geração de valor e renda passiva:
+1. **Energia Elétrica:** Empresas de geração, transmissão e distribuição (ex: `TAEE11`, `TRPL4`, `EGIE3`, `CPFE3`, `CMIG4`).
+2. **Bancos:** Instituições bancárias e holdings financeiras (ex: `BBAS3`, `ITUB4`, `BBDC4`, `SANB11`, `ITSA4`).
+3. **Seguradoras:** Companhias de seguros, previdência e corretagem (ex: `BBSE3`, `CXSE3`, `PSSA3`).
+4. **Commodities:** Petróleo, Mineração, Siderurgia, Papel & Celulose e Agronegócio (ex: `PETR4`, `VALE3`, `PRIO3`, `GGBR4`, `SUZB3`, `KLBN11`).
+5. **Telecomunicações:** Provedoras de infraestrutura e serviços de telecomunicação (ex: `VIVT3`, `TIMS3`).
+6. **Saneamento:** Empresas de saneamento básico, água e tratamento de resíduos (ex: `SBSP3`, `SAPR11`, `CSMG3`).
 
 ---
 
-## 3. Princípios de Design e Segurança
+## 3. Pipeline de Identificação Visual (Logotipos)
 
-1. **Validação Estrita com Zod:** Tanto os dados brutos extraídos das fontes externas (`RawMarketStockSchema`) quanto os parâmetros de busca (`StockFilterQuerySchema`) e o retorno estruturado da IA (`AiThesisResponseSchema`) passam por schemas Zod.
-2. **Proteção de Credenciais:** Arquivos `.env` são bloqueados pelo `.gitignore` desde o primeiro commit. Nenhuma senha ou chave de API é armazenada no repositório.
-3. **Interface Sólida e Neutra:** O frontend utiliza exclusivamente cores neutras sólidas (`zinc-50` a `zinc-900`), bordas de `1px` e tipografia tabular (`tabular-nums`), sem uso de gradientes ou sombras decorativas.
-
+- Cada ativo armazena um campo `logoUrl` persistido no banco de dados.
+- O componente `CompanyLogo` busca o SVG vetorial oficial do ativo (`https://icons.brapi.dev/icons/${ticker}.svg`).
+- Caso a imagem não esteja disponível ou ocorra falha de rede, um avatar monograma sólido com as iniciais do ticker é renderizado imediatamente em estilo neutro (`zinc-100`/`zinc-800`), sem layout shift.
