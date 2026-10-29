@@ -21,6 +21,7 @@ export type TechnicalTrend = z.infer<typeof TechnicalTrendEnum>;
 export const RawMarketStockSchema = z.object({
   ticker: z.string().min(4).max(10).transform((val) => val.toUpperCase().trim()),
   companyName: z.string().min(1),
+  logoUrl: z.string().optional().default(''),
   sector: z.string().min(1),
   subsector: z.string().min(1),
   price: z.number().nonnegative(),
