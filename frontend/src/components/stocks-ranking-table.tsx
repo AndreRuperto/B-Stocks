@@ -1,7 +1,12 @@
 'use client';
 
-import React from 'react';
-import { FilterParams, StockItem } from '@/lib/schemas';
+import React, { useEffect, useState } from 'react';
+import {
+  FilterParams,
+  RankingPreset,
+  SortField,
+  StockItem,
+} from '@/lib/schemas';
 import {
   Table,
   TableBody,
@@ -24,9 +29,11 @@ import {
 import {
   ArrowDown,
   ArrowUp,
+  ArrowUpDown,
   ChevronLeft,
   ChevronRight,
   Search,
+  SlidersHorizontal,
 } from 'lucide-react';
 
 interface StocksRankingTableProps {
@@ -41,17 +48,392 @@ interface StocksRankingTableProps {
   onSelectStock: (stock: StockItem) => void;
 }
 
+export type ColumnKey =
+  | 'marketCap'
+  | 'pl'
+  | 'pvp'
+  | 'dy'
+  | 'dy5y'
+  | 'netMargin'
+  | 'sector'
+  | 'subsector'
+  | 'segment'
+  | 'price'
+  | 'grahamFairPrice'
+  | 'grahamMargin'
+  | 'bazinCeilingPrice'
+  | 'bazinMargin'
+  | 'scoreTotal'
+  | 'dailyLiquidity'
+  | 'revenue'
+  | 'netIncome'
+  | 'equity'
+  | 'grossDebtToEquity'
+  | 'roe'
+  | 'change24h'
+  | 'change30d'
+  | 'change12m'
+  | 'change5y';
+
+interface ColumnDef {
+  key: ColumnKey;
+  label: string;
+  sortField: SortField;
+  isPro?: boolean;
+}
+
+const ALL_COLUMNS_MAP: Record<ColumnKey, ColumnDef> = {
+  marketCap: {
+    key: 'marketCap',
+    label: 'Valor de Mercado',
+    sortField: 'marketCap',
+  },
+  pl: { key: 'pl', label: 'P/L', sortField: 'pl' },
+  pvp: { key: 'pvp', label: 'P/VP', sortField: 'pvp' },
+  dy: { key: 'dy', label: 'Dividend Yield', sortField: 'dy' },
+  dy5y: { key: 'dy5y', label: 'DY Médio 5 anos', sortField: 'dy5y' },
+  netMargin: {
+    key: 'netMargin',
+    label: 'Margem Líquida',
+    sortField: 'netMargin',
+  },
+  sector: { key: 'sector', label: 'Setor', sortField: 'sector' },
+  subsector: { key: 'subsector', label: 'Subsetor', sortField: 'subsector' },
+  segment: { key: 'segment', label: 'Segmento', sortField: 'segment' },
+  price: { key: 'price', label: 'Preço Atual', sortField: 'price' },
+  grahamFairPrice: {
+    key: 'grahamFairPrice',
+    label: 'Preço Justo de Graham',
+    sortField: 'grahamFairPrice',
+    isPro: true,
+  },
+  grahamMargin: {
+    key: 'grahamMargin',
+    label: 'Upside de Graham',
+    sortField: 'grahamMargin',
+  },
+  bazinCeilingPrice: {
+    key: 'bazinCeilingPrice',
+    label: 'Preço-teto de Bazin',
+    sortField: 'bazinCeilingPrice',
+    isPro: true,
+  },
+  bazinMargin: {
+    key: 'bazinMargin',
+    label: 'Upside de Bazin',
+    sortField: 'bazinMargin',
+  },
+  scoreTotal: {
+    key: 'scoreTotal',
+    label: 'Pontuação Buy And Hold',
+    sortField: 'scoreTotal',
+    isPro: true,
+  },
+  dailyLiquidity: {
+    key: 'dailyLiquidity',
+    label: 'Liquidez Diária',
+    sortField: 'dailyLiquidity',
+  },
+  revenue: { key: 'revenue', label: 'Maiores Receitas', sortField: 'revenue' },
+  netIncome: {
+    key: 'netIncome',
+    label: 'Maiores Lucros',
+    sortField: 'netIncome',
+  },
+  equity: {
+    key: 'equity',
+    label: 'Patrimônio Líquido',
+    sortField: 'equity',
+  },
+  grossDebtToEquity: {
+    key: 'grossDebtToEquity',
+    label: 'Dívida Bruta / Patrimônio',
+    sortField: 'grossDebtToEquity',
+  },
+  roe: { key: 'roe', label: 'ROE', sortField: 'roe' },
+  change24h: {
+    key: 'change24h',
+    label: 'Variação 24h',
+    sortField: 'change24h',
+  },
+  change30d: {
+    key: 'change30d',
+    label: 'Variação 30d',
+    sortField: 'change30d',
+  },
+  change12m: {
+    key: 'change12m',
+    label: 'Variação 12m',
+    sortField: 'change12m',
+  },
+  change5y: {
+    key: 'change5y',
+    label: 'Variação 5 Anos',
+    sortField: 'change5y',
+  },
+};
+
+const ADVANCED_PRO_COLUMNS: ColumnKey[] = [
+  'scoreTotal',
+  'bazinCeilingPrice',
+  'grahamFairPrice',
+];
+
+const GENERAL_DATA_COLUMNS: ColumnKey[] = [
+  'pl',
+  'pvp',
+  'dy',
+  'dy5y',
+  'change5y',
+  'change12m',
+  'price',
+  'roe',
+  'netMargin',
+  'marketCap',
+  'equity',
+  'grossDebtToEquity',
+  'sector',
+  'subsector',
+  'segment',
+];
+
+const PRESET_CONFIG: Record<
+  RankingPreset,
+  {
+    label: string;
+    primaryColumn: ColumnKey;
+    defaultSortBy: SortField;
+    defaultSortOrder: 'asc' | 'desc';
+    columns: ColumnKey[];
+  }
+> = {
+  valor_mercado: {
+    label: '1. Valor de Mercado',
+    primaryColumn: 'marketCap',
+    defaultSortBy: 'marketCap',
+    defaultSortOrder: 'desc',
+    columns: ['marketCap', 'pl', 'pvp', 'dy', 'netMargin', 'sector'],
+  },
+  dy: {
+    label: '2. DY (Dividend Yield + DY Médio 5 Anos)',
+    primaryColumn: 'dy',
+    defaultSortBy: 'dy',
+    defaultSortOrder: 'desc',
+    columns: ['dy', 'dy5y', 'pl', 'pvp', 'netMargin', 'sector'],
+  },
+  graham: {
+    label: '3. Mais Baratas Graham',
+    primaryColumn: 'grahamMargin',
+    defaultSortBy: 'grahamMargin',
+    defaultSortOrder: 'desc',
+    columns: [
+      'grahamMargin',
+      'price',
+      'grahamFairPrice',
+      'pl',
+      'pvp',
+      'change5y',
+      'sector',
+    ],
+  },
+  margem_liquida: {
+    label: '4. Margem Líquida',
+    primaryColumn: 'netMargin',
+    defaultSortBy: 'netMargin',
+    defaultSortOrder: 'desc',
+    columns: ['netMargin', 'marketCap', 'pl', 'pvp', 'dy', 'sector'],
+  },
+  buy_and_hold: {
+    label: '5. Buy and Hold',
+    primaryColumn: 'scoreTotal',
+    defaultSortBy: 'scoreTotal',
+    defaultSortOrder: 'desc',
+    columns: [
+      'scoreTotal',
+      'pl',
+      'pvp',
+      'dy',
+      'grahamFairPrice',
+      'grahamMargin',
+      'marketCap',
+      'sector',
+    ],
+  },
+  mais_queridas: {
+    label: '6. Mais Queridas (Top 100 Mais Compradas)',
+    primaryColumn: 'dailyLiquidity',
+    defaultSortBy: 'dailyLiquidity',
+    defaultSortOrder: 'desc',
+    columns: [
+      'dailyLiquidity',
+      'marketCap',
+      'pl',
+      'pvp',
+      'dy',
+      'netMargin',
+      'sector',
+    ],
+  },
+  bazin: {
+    label: '7. Mais Baratas Bazin',
+    primaryColumn: 'bazinMargin',
+    defaultSortBy: 'bazinMargin',
+    defaultSortOrder: 'desc',
+    columns: [
+      'bazinMargin',
+      'price',
+      'bazinCeilingPrice',
+      'pl',
+      'pvp',
+      'change5y',
+      'sector',
+    ],
+  },
+  maiores_receitas: {
+    label: '8. Maiores Receitas',
+    primaryColumn: 'revenue',
+    defaultSortBy: 'revenue',
+    defaultSortOrder: 'desc',
+    columns: ['revenue', 'marketCap', 'pl', 'pvp', 'netMargin', 'sector'],
+  },
+  maiores_lucros: {
+    label: '9. Maiores Lucros',
+    primaryColumn: 'netIncome',
+    defaultSortBy: 'netIncome',
+    defaultSortOrder: 'desc',
+    columns: ['netIncome', 'marketCap', 'pl', 'pvp', 'netMargin', 'sector'],
+  },
+  maiores_altas: {
+    label: '10. Maiores Altas (24hrs, 30 dias e 12 meses)',
+    primaryColumn: 'change24h',
+    defaultSortBy: 'change24h',
+    defaultSortOrder: 'desc',
+    columns: [
+      'change24h',
+      'change30d',
+      'change12m',
+      'price',
+      'pl',
+      'pvp',
+      'sector',
+    ],
+  },
+  maiores_baixas: {
+    label: '11. Maiores Baixas (24hrs, 30 dias e 12 meses)',
+    primaryColumn: 'change24h',
+    defaultSortBy: 'change24h',
+    defaultSortOrder: 'asc',
+    columns: [
+      'change24h',
+      'change30d',
+      'change12m',
+      'price',
+      'pl',
+      'pvp',
+      'sector',
+    ],
+  },
+};
+
 export function StocksRankingTable({
   items,
   total,
   page,
   totalPages,
-  sectors,
   filters,
   loading,
   onUpdateFilters,
   onSelectStock,
 }: StocksRankingTableProps) {
+  const [customizeOpen, setCustomizeOpen] = useState<boolean>(false);
+  const [customColumns, setCustomColumns] = useState<ColumnKey[]>(
+    PRESET_CONFIG[filters.rankingPreset].columns,
+  );
+
+  useEffect(() => {
+    const presetCols = PRESET_CONFIG[filters.rankingPreset]?.columns || [
+      'marketCap',
+      'pl',
+      'pvp',
+      'dy',
+      'netMargin',
+      'sector',
+    ];
+    setCustomColumns(presetCols);
+  }, [filters.rankingPreset]);
+
+  const handleRankingPresetChange = (preset: RankingPreset) => {
+    const cfg = PRESET_CONFIG[preset];
+    let nextSortBy = cfg.defaultSortBy;
+    if (preset === 'maiores_altas' || preset === 'maiores_baixas') {
+      nextSortBy =
+        filters.variationPeriod === '30d'
+          ? 'change30d'
+          : filters.variationPeriod === '12m'
+            ? 'change12m'
+            : 'change24h';
+    }
+    onUpdateFilters({
+      rankingPreset: preset,
+      onlyTop100Popular: preset === 'mais_queridas',
+      sortBy: nextSortBy,
+      sortOrder: cfg.defaultSortOrder,
+      page: 1,
+    });
+  };
+
+  const handleVariationPeriodChange = (period: '24h' | '30d' | '12m') => {
+    const sortByField: SortField =
+      period === '30d'
+        ? 'change30d'
+        : period === '12m'
+          ? 'change12m'
+          : 'change24h';
+    onUpdateFilters({
+      variationPeriod: period,
+      sortBy: sortByField,
+      sortOrder: filters.rankingPreset === 'maiores_baixas' ? 'asc' : 'desc',
+      page: 1,
+    });
+  };
+
+  const handleColumnSort = (field: SortField) => {
+    if (filters.sortBy === field) {
+      onUpdateFilters({
+        sortOrder: filters.sortOrder === 'desc' ? 'asc' : 'desc',
+        page: 1,
+      });
+    } else {
+      onUpdateFilters({
+        sortBy: field,
+        sortOrder: field === 'ticker' || field === 'sector' ? 'asc' : 'desc',
+        page: 1,
+      });
+    }
+  };
+
+  const handleToggleCustomColumn = (colKey: ColumnKey) => {
+    if (colKey === 'pl' || colKey === 'pvp') {
+      return;
+    }
+    setCustomColumns((prev) => {
+      if (prev.includes(colKey)) {
+        return prev.filter((k) => k !== colKey);
+      }
+      return [...prev, colKey];
+    });
+  };
+
+  const activeColumns: ColumnDef[] = (() => {
+    const ensured = new Set<ColumnKey>(customColumns);
+    ensured.add('pl');
+    ensured.add('pvp');
+    return Array.from(ensured).map((key) => ALL_COLUMNS_MAP[key]);
+  })();
+
+  const primaryColKey =
+    PRESET_CONFIG[filters.rankingPreset]?.primaryColumn || 'marketCap';
+
   const getScoreBadgeVariant = (score: number, passes: boolean) => {
     if (!passes) return 'secondary';
     if (score >= 70) return 'positive';
@@ -63,6 +445,206 @@ export function StocksRankingTable({
     if (margin >= 10) return 'positive';
     if (margin >= 0) return 'warning';
     return 'negative';
+  };
+
+  const renderSortIcon = (field: SortField) => {
+    if (filters.sortBy !== field) {
+      return <ArrowUpDown className="ml-1 h-3 w-3 text-zinc-400" />;
+    }
+    return filters.sortOrder === 'desc' ? (
+      <ArrowDown className="ml-1 h-3 w-3 text-zinc-900" />
+    ) : (
+      <ArrowUp className="ml-1 h-3 w-3 text-zinc-900" />
+    );
+  };
+
+  const renderCellValue = (stock: StockItem, colKey: ColumnKey) => {
+    switch (colKey) {
+      case 'marketCap':
+        return (
+          <span className="font-semibold text-zinc-900 tabular-nums">
+            {formatCompactCurrency(stock.marketCap)}
+          </span>
+        );
+      case 'pl':
+        return (
+          <span className="font-medium text-zinc-900 tabular-nums">
+            {stock.pl.toFixed(2)}x
+          </span>
+        );
+      case 'pvp':
+        return (
+          <span className="font-medium text-zinc-900 tabular-nums">
+            {stock.pvp.toFixed(2)}x
+          </span>
+        );
+      case 'dy':
+        return (
+          <span className="font-semibold text-zinc-900 tabular-nums">
+            {formatPercent(stock.dy)}
+          </span>
+        );
+      case 'dy5y':
+        return (
+          <span className="font-medium text-zinc-800 tabular-nums">
+            {formatPercent(stock.dy5y)}
+          </span>
+        );
+      case 'netMargin':
+        return (
+          <span className="font-medium text-zinc-900 tabular-nums">
+            {formatPercent(stock.netMargin)}
+          </span>
+        );
+      case 'sector':
+        return (
+          <Badge variant="secondary" className="text-[11px] font-medium">
+            {stock.sector}
+          </Badge>
+        );
+      case 'subsector':
+        return <span className="text-xs text-zinc-700">{stock.subsector}</span>;
+      case 'segment':
+        return (
+          <Badge variant="outline" className="text-[11px] text-zinc-700">
+            {stock.segment}
+          </Badge>
+        );
+      case 'price':
+        return (
+          <span className="font-semibold text-zinc-900 tabular-nums">
+            {formatCurrency(stock.price)}
+          </span>
+        );
+      case 'grahamFairPrice':
+        return (
+          <span className="font-medium text-zinc-900 tabular-nums">
+            {stock.grahamFairPrice > 0
+              ? formatCurrency(stock.grahamFairPrice)
+              : 'N/A'}
+          </span>
+        );
+      case 'grahamMargin':
+        return stock.grahamFairPrice > 0 ? (
+          <Badge
+            variant={getMarginBadgeVariant(stock.grahamMargin)}
+            className="px-1.5 py-0.5 text-xs tabular-nums"
+          >
+            {formatPercent(stock.grahamMargin, true)}
+          </Badge>
+        ) : (
+          <span className="text-xs text-zinc-400">N/A</span>
+        );
+      case 'bazinCeilingPrice':
+        return (
+          <span className="font-medium text-zinc-900 tabular-nums">
+            {stock.bazinCeilingPrice > 0
+              ? formatCurrency(stock.bazinCeilingPrice)
+              : 'N/A'}
+          </span>
+        );
+      case 'bazinMargin':
+        return stock.bazinCeilingPrice > 0 ? (
+          <Badge
+            variant={getMarginBadgeVariant(stock.bazinMargin)}
+            className="px-1.5 py-0.5 text-xs tabular-nums"
+          >
+            {formatPercent(stock.bazinMargin, true)}
+          </Badge>
+        ) : (
+          <span className="text-xs text-zinc-400">Sem DY</span>
+        );
+      case 'scoreTotal':
+        return (
+          <Badge
+            variant={getScoreBadgeVariant(
+              stock.scoreTotal,
+              stock.passesCutFilter,
+            )}
+            className="text-xs font-bold tabular-nums"
+          >
+            {stock.scoreTotal.toFixed(1)} / 100
+          </Badge>
+        );
+      case 'dailyLiquidity':
+        return (
+          <span className="font-semibold text-zinc-900 tabular-nums">
+            {formatCompactCurrency(stock.dailyLiquidity)}
+          </span>
+        );
+      case 'revenue':
+        return (
+          <span className="font-semibold text-zinc-900 tabular-nums">
+            {formatCompactCurrency(stock.revenue)}
+          </span>
+        );
+      case 'netIncome':
+        return (
+          <span
+            className={`font-semibold tabular-nums ${
+              stock.netIncome >= 0 ? 'text-zinc-900' : 'text-red-700'
+            }`}
+          >
+            {formatCompactCurrency(stock.netIncome)}
+          </span>
+        );
+      case 'equity':
+        return (
+          <span className="font-medium text-zinc-900 tabular-nums">
+            {formatCompactCurrency(stock.equity)}
+          </span>
+        );
+      case 'grossDebtToEquity':
+        return (
+          <span className="font-medium text-zinc-800 tabular-nums">
+            {stock.grossDebtToEquity.toFixed(2)}x
+          </span>
+        );
+      case 'roe':
+        return (
+          <span className="font-medium text-zinc-900 tabular-nums">
+            {formatPercent(stock.roe)}
+          </span>
+        );
+      case 'change24h':
+        return (
+          <Badge
+            variant={getMarginBadgeVariant(stock.change24h)}
+            className="px-1.5 py-0.5 text-xs tabular-nums"
+          >
+            {formatPercent(stock.change24h, true)}
+          </Badge>
+        );
+      case 'change30d':
+        return (
+          <Badge
+            variant={getMarginBadgeVariant(stock.change30d)}
+            className="px-1.5 py-0.5 text-xs tabular-nums"
+          >
+            {formatPercent(stock.change30d, true)}
+          </Badge>
+        );
+      case 'change12m':
+        return (
+          <Badge
+            variant={getMarginBadgeVariant(stock.change12m)}
+            className="px-1.5 py-0.5 text-xs tabular-nums"
+          >
+            {formatPercent(stock.change12m, true)}
+          </Badge>
+        );
+      case 'change5y':
+        return (
+          <Badge
+            variant={getMarginBadgeVariant(stock.change5y)}
+            className="px-1.5 py-0.5 text-xs tabular-nums"
+          >
+            {formatPercent(stock.change5y, true)}
+          </Badge>
+        );
+      default:
+        return null;
+    }
   };
 
   return (
@@ -78,7 +660,7 @@ export function StocksRankingTable({
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3">
+          <div className="flex flex-wrap items-center gap-2.5">
             <div className="flex items-center gap-2 rounded-md border border-zinc-300 bg-zinc-50 px-3 py-1.5">
               <Switch
                 data-testid="cut-filter-switch"
@@ -91,11 +673,22 @@ export function StocksRankingTable({
                 Filtro de Corte (Liq &gt; R$ 1M e Dív/EBITDA &lt; 3,0)
               </span>
             </div>
+
+            <Button
+              type="button"
+              variant={customizeOpen ? 'default' : 'outline'}
+              size="sm"
+              data-testid="customize-button"
+              onClick={() => setCustomizeOpen((prev) => !prev)}
+            >
+              <SlidersHorizontal className="mr-1.5 h-3.5 w-3.5" />
+              Customizar
+            </Button>
           </div>
         </div>
 
-        <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-5">
-          <div className="relative lg:col-span-2">
+        <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="relative sm:col-span-2">
             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-zinc-400" />
             <Input
               data-testid="search-input"
@@ -110,44 +703,18 @@ export function StocksRankingTable({
 
           <div>
             <select
-              data-testid="sector-select"
-              value={filters.sector}
+              data-testid="sort-select"
+              value={filters.rankingPreset}
               onChange={(e) =>
-                onUpdateFilters({ sector: e.target.value, page: 1 })
+                handleRankingPresetChange(e.target.value as RankingPreset)
               }
               className="flex h-9 w-full rounded-md border border-zinc-300 bg-white px-3 py-1 text-xs font-medium text-zinc-900 focus:outline-none focus:ring-1 focus:ring-zinc-600"
             >
-              <option value="ALL">Todos os Setores da B3</option>
-              {sectors.map((sec) => (
-                <option key={sec} value={sec}>
-                  {sec}
+              {(Object.keys(PRESET_CONFIG) as RankingPreset[]).map((key) => (
+                <option key={key} value={key}>
+                  Ranking por: {PRESET_CONFIG[key].label}
                 </option>
               ))}
-            </select>
-          </div>
-
-          <div>
-            <select
-              data-testid="sort-select"
-              value={filters.sortBy}
-              onChange={(e) =>
-                onUpdateFilters({
-                  sortBy: e.target.value as FilterParams['sortBy'],
-                  page: 1,
-                })
-              }
-              className="flex h-9 w-full rounded-md border border-zinc-300 bg-white px-3 py-1 text-xs font-medium text-zinc-900 focus:outline-none focus:ring-1 focus:ring-zinc-600"
-            >
-              <option value="scoreTotal">Ordenar por: Score Geral (0-100)</option>
-              <option value="bazinMargin">Ordenar por: Margem Décio Bazin</option>
-              <option value="grahamMargin">Ordenar por: Margem Benjamin Graham</option>
-              <option value="dy">Ordenar por: Dividend Yield (DY)</option>
-              <option value="roe">Ordenar por: ROE (%)</option>
-              <option value="dailyLiquidity">Ordenar por: Liquidez Diária</option>
-              <option value="pl">Ordenar por: P/L</option>
-              <option value="pvp">Ordenar por: P/VP</option>
-              <option value="price">Ordenar por: Cotação (R$)</option>
-              <option value="ticker">Ordenar por: Ticker (A-Z)</option>
             </select>
           </div>
 
@@ -189,6 +756,188 @@ export function StocksRankingTable({
             </select>
           </div>
         </div>
+
+        {(filters.rankingPreset === 'maiores_altas' ||
+          filters.rankingPreset === 'maiores_baixas') && (
+          <div className="mt-3 flex items-center gap-2 rounded border border-zinc-200 bg-zinc-50 px-3 py-2">
+            <span className="text-xs font-semibold text-zinc-700">
+              Período da Variação:
+            </span>
+            {(['24h', '30d', '12m'] as const).map((period) => (
+              <Button
+                key={period}
+                type="button"
+                size="sm"
+                variant={
+                  filters.variationPeriod === period ? 'default' : 'outline'
+                }
+                className="h-7 px-2.5 text-xs"
+                data-testid={`variation-period-${period}`}
+                onClick={() => handleVariationPeriodChange(period)}
+              >
+                {period === '24h'
+                  ? '24 Horas'
+                  : period === '30d'
+                    ? '30 Dias'
+                    : '12 Meses'}
+              </Button>
+            ))}
+          </div>
+        )}
+
+        <div
+          aria-label="Botões Rápidos de Ordenação da Lista"
+          className="mt-3 flex flex-wrap items-center gap-1.5 border-t border-zinc-200 pt-3"
+        >
+          <span className="mr-1 text-[11px] font-semibold uppercase tracking-wider text-zinc-500">
+            Ordenar Colunas:
+          </span>
+          <button
+            type="button"
+            data-testid="header-sort-btn-ticker"
+            onClick={() => handleColumnSort('ticker')}
+            className={`inline-flex items-center rounded border px-2.5 py-1 text-xs font-medium ${
+              filters.sortBy === 'ticker'
+                ? 'border-zinc-900 bg-zinc-900 text-white'
+                : 'border-zinc-300 bg-white text-zinc-800 hover:bg-zinc-100'
+            }`}
+          >
+            Ativos
+          </button>
+          {activeColumns.map((col) => {
+            const isPrimary = col.key === primaryColKey;
+            const isSorted = filters.sortBy === col.sortField;
+            return (
+              <button
+                key={col.key}
+                type="button"
+                data-testid={`header-sort-btn-${col.key}`}
+                onClick={() => handleColumnSort(col.sortField)}
+                className={`inline-flex items-center rounded border px-2.5 py-1 text-xs font-medium ${
+                  isSorted
+                    ? 'border-zinc-900 bg-zinc-900 text-white'
+                    : 'border-zinc-300 bg-white text-zinc-800 hover:bg-zinc-100'
+                }`}
+              >
+                {isPrimary ? `(${col.label})` : col.label}
+              </button>
+            );
+          })}
+        </div>
+
+        {customizeOpen && (
+          <div
+            data-testid="customize-panel"
+            className="mt-3 rounded-md border border-zinc-300 bg-zinc-50 p-4"
+          >
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+              <div>
+                <h4 className="mb-2.5 text-xs font-bold uppercase tracking-wider text-zinc-900">
+                  Configurações
+                </h4>
+                <div className="space-y-2.5">
+                  <label className="flex cursor-pointer items-center gap-2 text-xs font-medium text-zinc-800">
+                    <input
+                      type="checkbox"
+                      data-testid="config-small-caps"
+                      checked={filters.onlySmallCaps}
+                      onChange={(e) =>
+                        onUpdateFilters({
+                          onlySmallCaps: e.target.checked,
+                          page: 1,
+                        })
+                      }
+                      className="h-4 w-4 rounded border-zinc-300 text-zinc-900"
+                    />
+                    Apenas Small Caps
+                  </label>
+                  <label className="flex cursor-pointer items-center gap-2 text-xs font-medium text-zinc-800">
+                    <input
+                      type="checkbox"
+                      data-testid="config-one-per-company"
+                      checked={filters.oneStockPerCompany}
+                      onChange={(e) =>
+                        onUpdateFilters({
+                          oneStockPerCompany: e.target.checked,
+                          page: 1,
+                        })
+                      }
+                      className="h-4 w-4 rounded border-zinc-300 text-zinc-900"
+                    />
+                    Uma Ação por empresa
+                  </label>
+                </div>
+              </div>
+
+              <div>
+                <div className="mb-2.5 flex items-center gap-2">
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-zinc-900">
+                    Dados Avançados — Coluna PRO
+                  </h4>
+                  <Badge variant="default" className="px-1.5 py-0 text-[10px]">
+                    PRO
+                  </Badge>
+                </div>
+                <div className="space-y-2">
+                  {ADVANCED_PRO_COLUMNS.map((colKey) => {
+                    const col = ALL_COLUMNS_MAP[colKey];
+                    const checked = customColumns.includes(colKey);
+                    return (
+                      <label
+                        key={colKey}
+                        className="flex cursor-pointer items-center gap-2 text-xs font-medium text-zinc-800"
+                      >
+                        <input
+                          type="checkbox"
+                          data-testid={`custom-col-${colKey}`}
+                          checked={checked}
+                          onChange={() => handleToggleCustomColumn(colKey)}
+                          className="h-4 w-4 rounded border-zinc-300 text-zinc-900"
+                        />
+                        <span>{col.label}</span>
+                        <Badge
+                          variant="secondary"
+                          className="px-1 py-0 text-[9px]"
+                        >
+                          PRO
+                        </Badge>
+                      </label>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div>
+                <h4 className="mb-2.5 text-xs font-bold uppercase tracking-wider text-zinc-900">
+                  Dados Gerais
+                </h4>
+                <div className="grid grid-cols-2 gap-2">
+                  {GENERAL_DATA_COLUMNS.map((colKey) => {
+                    const col = ALL_COLUMNS_MAP[colKey];
+                    const isLocked = colKey === 'pl' || colKey === 'pvp';
+                    const checked = isLocked || customColumns.includes(colKey);
+                    return (
+                      <label
+                        key={colKey}
+                        className="flex cursor-pointer items-center gap-2 text-xs font-medium text-zinc-800"
+                      >
+                        <input
+                          type="checkbox"
+                          data-testid={`custom-col-${colKey}`}
+                          checked={checked}
+                          disabled={isLocked}
+                          onChange={() => handleToggleCustomColumn(colKey)}
+                          className="h-4 w-4 rounded border-zinc-300 text-zinc-900"
+                        />
+                        <span>{col.label}</span>
+                      </label>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </CardHeader>
 
       <CardContent className="p-0">
@@ -196,16 +945,31 @@ export function StocksRankingTable({
           <TableHeader>
             <TableRow>
               <TableHead className="w-12">#</TableHead>
-              <TableHead>Ativo / Empresa</TableHead>
-              <TableHead>Preço</TableHead>
-              <TableHead>Teto Bazin (6%)</TableHead>
-              <TableHead>Justo Graham</TableHead>
-              <TableHead>DY / ROE</TableHead>
-              <TableHead>P/L &amp; P/VP</TableHead>
-              <TableHead>Liquidez / Dív.</TableHead>
-              <TableHead>Tendência &amp; IFR</TableHead>
-              <TableHead>Classificação</TableHead>
-              <TableHead>Score</TableHead>
+              <TableHead>
+                <button
+                  type="button"
+                  onClick={() => handleColumnSort('ticker')}
+                  className="inline-flex items-center font-bold text-zinc-900 hover:underline"
+                >
+                  Ativos
+                  {renderSortIcon('ticker')}
+                </button>
+              </TableHead>
+              {activeColumns.map((col) => {
+                const isPrimary = col.key === primaryColKey;
+                return (
+                  <TableHead key={col.key}>
+                    <button
+                      type="button"
+                      onClick={() => handleColumnSort(col.sortField)}
+                      className="inline-flex items-center text-left font-bold text-zinc-900 hover:underline"
+                    >
+                      {isPrimary ? `(${col.label})` : col.label}
+                      {renderSortIcon(col.sortField)}
+                    </button>
+                  </TableHead>
+                );
+              })}
               <TableHead className="text-right">Ação</TableHead>
             </TableRow>
           </TableHeader>
@@ -213,14 +977,20 @@ export function StocksRankingTable({
             {loading ? (
               Array.from({ length: 8 }).map((_, idx) => (
                 <TableRow key={idx}>
-                  <TableCell colSpan={12} className="h-12 text-center text-xs text-zinc-500">
+                  <TableCell
+                    colSpan={activeColumns.length + 3}
+                    className="h-12 text-center text-xs text-zinc-500"
+                  >
                     Carregando dados quantitativos da B3...
                   </TableCell>
                 </TableRow>
               ))
             ) : items.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={12} className="h-24 text-center text-sm text-zinc-600">
+                <TableCell
+                  colSpan={activeColumns.length + 3}
+                  className="h-24 text-center text-sm text-zinc-600"
+                >
                   Nenhuma ação encontrada para os filtros selecionados.
                 </TableCell>
               </TableRow>
@@ -251,7 +1021,10 @@ export function StocksRankingTable({
                               {stock.ticker}
                             </span>
                             {!stock.passesCutFilter && (
-                              <Badge variant="outline" className="px-1 py-0 text-[10px] text-zinc-500">
+                              <Badge
+                                variant="outline"
+                                className="px-1 py-0 text-[10px] text-zinc-500"
+                              >
                                 Alerta Corte
                               </Badge>
                             )}
@@ -259,126 +1032,14 @@ export function StocksRankingTable({
                           <span className="text-xs text-zinc-600 truncate max-w-[170px]">
                             {stock.companyName}
                           </span>
-                          <span className="text-[10px] text-zinc-500">
-                            {stock.sector}
-                          </span>
                         </div>
                       </div>
                     </TableCell>
-                    <TableCell className="font-semibold text-zinc-900">
-                      {formatCurrency(stock.price)}
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex flex-col gap-0.5">
-                        <span className="text-xs font-medium text-zinc-900">
-                          {stock.bazinCeilingPrice > 0
-                            ? formatCurrency(stock.bazinCeilingPrice)
-                            : 'N/A'}
-                        </span>
-                        {stock.bazinCeilingPrice > 0 ? (
-                          <Badge
-                            variant={getMarginBadgeVariant(stock.bazinMargin)}
-                            className="w-fit px-1.5 py-0 text-[10px]"
-                          >
-                            {formatPercent(stock.bazinMargin, true)}
-                          </Badge>
-                        ) : (
-                          <span className="text-[10px] text-zinc-400">Sem DY</span>
-                        )}
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex flex-col gap-0.5">
-                        <span className="text-xs font-medium text-zinc-900">
-                          {stock.grahamFairPrice > 0
-                            ? formatCurrency(stock.grahamFairPrice)
-                            : 'N/A'}
-                        </span>
-                        {stock.grahamFairPrice > 0 ? (
-                          <Badge
-                            variant={getMarginBadgeVariant(stock.grahamMargin)}
-                            className="w-fit px-1.5 py-0 text-[10px]"
-                          >
-                            {formatPercent(stock.grahamMargin, true)}
-                          </Badge>
-                        ) : (
-                          <span className="text-[10px] text-zinc-400">
-                            LPA/VPA neg.
-                          </span>
-                        )}
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex flex-col text-xs">
-                        <span className="font-medium text-zinc-900">
-                          DY: {formatPercent(stock.dy)}
-                        </span>
-                        <span className="text-zinc-600">
-                          ROE: {formatPercent(stock.roe)}
-                        </span>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex flex-col text-xs">
-                        <span className="text-zinc-900">
-                          P/L: {stock.pl.toFixed(2)}x
-                        </span>
-                        <span className="text-zinc-600">
-                          P/VP: {stock.pvp.toFixed(2)}x
-                        </span>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex flex-col text-xs">
-                        <span className="text-zinc-900">
-                          {formatCompactCurrency(stock.dailyLiquidity)}
-                        </span>
-                        <span className="text-zinc-500">
-                          Dív/EBITDA: {stock.netDebtToEbitda.toFixed(2)}x
-                        </span>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex flex-col text-xs">
-                        <span className="font-medium text-zinc-800">
-                          {stock.technicalTrend.includes('Golden Cross')
-                            ? 'Alta (Golden Cross)'
-                            : stock.technicalTrend.includes('Death Cross')
-                              ? 'Baixa (Death Cross)'
-                              : stock.technicalTrend}
-                        </span>
-                        <span className="text-zinc-500">
-                          RSI(14): {stock.rsi14.toFixed(1)}
-                        </span>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant="secondary" className="text-[11px] font-medium">
-                        {stock.thematicCategory}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex flex-col items-start gap-0.5">
-                        <Badge
-                          variant={getScoreBadgeVariant(
-                            stock.scoreTotal,
-                            stock.passesCutFilter,
-                          )}
-                          className="text-xs font-bold"
-                        >
-                          {stock.scoreTotal.toFixed(1)} / 100
-                        </Badge>
-                        <span className="text-[10px] font-medium text-zinc-600">
-                          {!stock.passesCutFilter
-                            ? 'Reprovada no Corte'
-                            : stock.scoreTotal >= 68
-                              ? 'Compensa'
-                              : stock.scoreTotal >= 50
-                                ? 'Neutro / Aguardar'
-                                : 'Evitar / Cara'}
-                        </span>
-                      </div>
-                    </TableCell>
+                    {activeColumns.map((col) => (
+                      <TableCell key={col.key}>
+                        {renderCellValue(stock, col.key)}
+                      </TableCell>
+                    ))}
                     <TableCell className="text-right">
                       <Button
                         type="button"
