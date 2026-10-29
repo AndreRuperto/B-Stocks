@@ -5,29 +5,29 @@ Base URL padrão: `http://localhost:3001/api`
 ---
 
 ## 1. `GET /api/stocks/summary`
-Retorna as estatísticas consolidadas de todas as ações listadas na B3, contagem de oportunidades em Bazin/Graham, distribuição por categoria temática e o Top 6 do ranking.
+Retorna as estatísticas consolidadas das ações dos 6 setores da B3 (Elétrica, Bancos, Seguradoras, Commodities, Telecomunicações e Saneamento), contagem de oportunidades em Bazin/Graham, distribuição por categoria temática e o Top 6 do ranking.
 
 ### Exemplo de Resposta (`200 OK`)
 ```json
 {
-  "totalStocks": 962,
-  "passedCutCount": 195,
-  "bazinOpportunities": 112,
-  "grahamOpportunities": 128,
-  "avgScorePassed": 69.42,
-  "avgDyPassed": 6.84,
-  "avgRoePassed": 17.35,
+  "totalStocks": 212,
+  "passedCutCount": 115,
+  "bazinOpportunities": 68,
+  "grahamOpportunities": 74,
+  "avgScorePassed": 71.25,
+  "avgDyPassed": 7.42,
+  "avgRoePassed": 18.80,
   "topRanking": [ ... ],
   "categories": [
-    { "category": "Renda / Vacas Leiteiras", "count": 148 },
-    { "category": "Defensiva", "count": 290 },
-    { "category": "Crescimento Agressivo", "count": 94 },
-    { "category": "Turnaround / Risco Alto", "count": 430 }
+    { "category": "Renda / Vacas Leiteiras", "count": 82 },
+    { "category": "Defensiva", "count": 78 },
+    { "category": "Crescimento Agressivo", "count": 28 },
+    { "category": "Turnaround / Risco Alto", "count": 24 }
   ],
   "lastSync": {
-    "source": "Fundamentus + Brapi B3 Full Batch (962 tickers)",
-    "totalSynced": 962,
-    "timestamp": "2026-10-29T20:19:18.000Z"
+    "source": "Fundamentus + Brapi B3 Core Sectors (212 tickers)",
+    "totalSynced": 212,
+    "timestamp": "2026-10-29T21:04:08.000Z"
   }
 }
 ```
@@ -35,25 +35,21 @@ Retorna as estatísticas consolidadas de todas as ações listadas na B3, contag
 ---
 
 ## 2. `GET /api/stocks`
-Retorna a lista paginada, ordenada e filtrada de ações da B3.
+Retorna a lista paginada, ordenada e filtrada de ações dos 6 setores da B3.
 
-### Query Parameters (Validados via Zod)
-| Parâmetro | Tipo | Padrão | Descrição |
-| :--- | :--- | :--- | :--- |
-| `search` | `string` | `""` | Filtra por ticker (ex: `PETR4`), nome da empresa ou setor. |
-| `sector` | `string` | `"ALL"` | Filtra por setor específico da B3. |
-| `thematicCategory` | `string` | `"ALL"` | Filtra por classificação temática (`Renda / Vacas Leiteiras`, `Crescimento Agressivo`, `Defensiva`, `Turnaround / Risco Alto`). |
-| `onlyPassedCut` | `boolean` | `false` | Se `true`, retorna apenas ativos com Liquidez Diária $\ge \text{R\$ } 1\text{M}$ e Dívida Líq./EBITDA $< 3{,}0\text{x}$. |
-| `minScore` | `number` | `0` | Pontuação mínima no Score B-Stocks (0 a 100). |
-| `sortBy` | `string` | `"scoreTotal"` | Campo de ordenação (`scoreTotal`, `bazinMargin`, `grahamMargin`, `dy`, `roe`, `pl`, `pvp`, `dailyLiquidity`, `price`, `ticker`). |
-| `sortOrder` | `string` | `"desc"` | Direção da ordenação (`asc` ou `desc`). |
-| `page` | `number` | `1` | Página atual. |
-| `limit` | `number` | `50` | Quantidade de itens por página (máximo `1000`). |
+### Objeto Stock
+Cada item retornado inclui:
+- `ticker`: Símbolo de negociação (ex: `"PETR4"`).
+- `companyName`: Razão social da empresa.
+- `logoUrl`: URL do logotipo oficial (`https://icons.brapi.dev/icons/${ticker}.svg`).
+- `sector`: Um dos 6 setores (`"Energia Elétrica"`, `"Bancos"`, `"Seguradoras"`, `"Commodities"`, `"Telecomunicações"`, `"Saneamento"`).
+- `subsector`: Segmento específico de atuação.
+- Indicadores determinísticos: `bazinCeilingPrice`, `bazinMargin`, `grahamFairPrice`, `grahamMargin`, `sma50`, `sma200`, `rsi14`, `scoreTotal`.
 
 ---
 
 ## 3. `GET /api/stocks/:ticker`
-Retorna todos os múltiplos fundamentalistas, preços de Bazin e Graham, indicadores técnicos (SMA 50, SMA 200, RSI 14), decomposição do Score e a última tese gerada para o ticker informado.
+Retorna todos os múltiplos fundamentalistas, logotipo oficial, preços de Bazin e Graham, indicadores técnicos (SMA 50, SMA 200, RSI 14), decomposição do Score e a última tese gerada para o ticker informado.
 
 ---
 
@@ -71,5 +67,4 @@ Gera (ou atualiza) sob demanda o resumo narrativo em 3 pontos (**Pontos Fortes**
 ---
 
 ## 5. `POST /api/stocks/sync`
-Dispara a coleta em lote de todas as ações da B3 no Fundamentus + Brapi, recalcula todos os modelos matemáticos e atualiza o banco PostgreSQL.
-
+Dispara a coleta em lote das ações dos 6 setores essenciais no Fundamentus + Brapi, recalcula todos os modelos matemáticos e atualiza o banco PostgreSQL.
