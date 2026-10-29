@@ -8,6 +8,7 @@ import {
 export interface EvaluatedStockMetrics {
   ticker: string;
   companyName: string;
+  logoUrl: string;
   sector: string;
   subsector: string;
   price: number;
@@ -371,6 +372,7 @@ export class ValuationService {
     return {
       ticker: raw.ticker.toUpperCase(),
       companyName: raw.companyName,
+      logoUrl: raw.logoUrl || `https://icons.brapi.dev/icons/${raw.ticker.toUpperCase()}.svg`,
       sector: raw.sector,
       subsector: raw.subsector,
       price: Number(raw.price.toFixed(2)),
