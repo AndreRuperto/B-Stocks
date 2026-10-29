@@ -39,6 +39,13 @@ export class StocksService implements OnModuleInit {
   }> {
     const { stocks, source } = await this.marketData.fetchAllB3Stocks();
     const evaluatedList = stocks.map((raw) => this.valuation.evaluateStock(raw));
+    const activeTickers = evaluatedList.map((item) => item.ticker);
+
+    await this.prisma.stock.deleteMany({
+      where: {
+        ticker: { notIn: activeTickers },
+      },
+    });
 
     const chunkSize = 80;
     for (let i = 0; i < evaluatedList.length; i += chunkSize) {
@@ -49,6 +56,7 @@ export class StocksService implements OnModuleInit {
             where: { ticker: item.ticker },
             update: {
               companyName: item.companyName,
+              logoUrl: item.logoUrl,
               sector: item.sector,
               subsector: item.subsector,
               price: item.price,
@@ -282,6 +290,7 @@ export class StocksService implements OnModuleInit {
       {
         ticker: stock.ticker,
         companyName: stock.companyName,
+        logoUrl: stock.logoUrl,
         sector: stock.sector,
         subsector: stock.subsector,
         price: stock.price,
