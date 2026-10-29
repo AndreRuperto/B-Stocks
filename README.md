@@ -1,14 +1,8 @@
 # B-Stocks — Sistema de Análise Quantitativa e Fundamentalista da B3
 
-O **B-Stocks** é uma plataforma fullstack 100% gratuita em **TypeScript** focada nos setores mais sólidos e tradicionais de geração de valor e dividendos da B3:
-- **Energia Elétrica**
-- **Bancos**
-- **Seguradoras**
-- **Commodities** (Petróleo & Gás, Mineração, Siderurgia, Papel & Celulose e Agronegócio)
-- **Telecomunicações**
-- **Saneamento**
+O **B-Stocks** é uma plataforma fullstack 100% gratuita em **TypeScript** que cataloga e analisa todas as empresas e ações listadas na **B3** (Bolsa de Valores do Brasil).
 
-O sistema traz **identificação visual por logotipos de cada empresa**, calcula modelos matemáticos determinísticos consagrados (**Preço Teto de Décio Bazin**, **Preço Justo de Benjamin Graham**, **Médias Móveis SMA 50/200**, **IFR/RSI de 14 períodos** e **Score Ponderado de 0 a 100**) e sintetiza **Teses de Investimento sob demanda via Inteligência Artificial**.
+O sistema traz **identificação visual completa por logotipos oficiais das empresas**, calcula modelos matemáticos determinísticos consagrados (**Preço Teto de Décio Bazin**, **Preço Justo de Benjamin Graham**, **Médias Móveis SMA 50/200**, **IFR/RSI de 14 períodos** e **Score Ponderado de 0 a 100**) e sintetiza **Teses de Investimento sob demanda via Inteligência Artificial**.
 
 ---
 
