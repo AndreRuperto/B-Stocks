@@ -158,6 +158,21 @@ describe('StocksService', () => {
     expect(res.items[0].ticker).toBe('BBAS3');
   });
 
+  it('filters by multiple categories and deduplicates one stock per company', async () => {
+    mockPrisma.stock.findMany.mockResolvedValueOnce([
+      { ...mockStockRecord, ticker: 'PETR4', dailyLiquidity: 1_200_000_000, marketCap: 470_000_000_000 },
+      { ...mockStockRecord, ticker: 'PETR3', dailyLiquidity: 350_000_000, marketCap: 480_000_000_000 },
+    ]);
+    const res = await service.findAll({
+      sectors: 'Petróleo, Gás e Biocombustíveis|Bancos',
+      oneStockPerCompany: 'true',
+      sortBy: 'marketCap',
+      sortOrder: 'desc',
+    });
+    expect(res.items).toHaveLength(1);
+    expect(res.items[0].ticker).toBe('PETR4');
+  });
+
   it('throws NotFoundException when ticker is not found', async () => {
     mockPrisma.stock.findUnique.mockResolvedValueOnce(null);
     await expect(service.findByTicker('INVALID99')).rejects.toThrow(

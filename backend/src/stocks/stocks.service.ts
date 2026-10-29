@@ -7,6 +7,7 @@ import {
 import { Prisma } from '@prisma/client';
 import { AiService } from '../ai/ai.service';
 import { StockFilterQuerySchema } from '../common/schemas/stock.schema';
+import { B3_CATEGORIES } from '../market-data/b3-catalog';
 import { MarketDataService } from '../market-data/market-data.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { ValuationService } from '../valuation/valuation.service';
@@ -59,11 +60,17 @@ export class StocksService implements OnModuleInit {
               logoUrl: item.logoUrl,
               sector: item.sector,
               subsector: item.subsector,
+              segment: item.segment,
               price: item.price,
+              marketCap: item.marketCap,
+              equity: item.equity,
+              revenue: item.revenue,
+              netIncome: item.netIncome,
               pl: item.pl,
               pvp: item.pvp,
               psr: item.psr,
               dy: item.dy,
+              dy5y: item.dy5y,
               lpa: item.lpa,
               vpa: item.vpa,
               roe: item.roe,
@@ -75,6 +82,10 @@ export class StocksService implements OnModuleInit {
               dailyLiquidity: item.dailyLiquidity,
               revenueGrowth5y: item.revenueGrowth5y,
               avgDividends5y: item.avgDividends5y,
+              change24h: item.change24h,
+              change30d: item.change30d,
+              change12m: item.change12m,
+              change5y: item.change5y,
               bazinCeilingPrice: item.bazinCeilingPrice,
               bazinMargin: item.bazinMargin,
               grahamFairPrice: item.grahamFairPrice,
@@ -128,7 +139,9 @@ export class StocksService implements OnModuleInit {
       ];
     }
 
-    if (query.sector && query.sector !== 'ALL') {
+    if (query.sectors && query.sectors.length > 0) {
+      where.sector = { in: query.sectors };
+    } else if (query.sector && query.sector !== 'ALL') {
       where.sector = query.sector;
     }
 
@@ -140,6 +153,10 @@ export class StocksService implements OnModuleInit {
       where.passesCutFilter = true;
     }
 
+    if (query.onlySmallCaps) {
+      where.marketCap = { gt: 50_000_000, lte: 12_000_000_000 };
+    }
+
     if (query.minScore > 0) {
       where.scoreTotal = { gte: query.minScore };
     }
@@ -148,6 +165,75 @@ export class StocksService implements OnModuleInit {
     const orderBy: Prisma.StockOrderByWithRelationInput = {
       [query.sortBy]: query.sortOrder,
     };
+
+    const isTop100Popular =
+      query.onlyTop100Popular || query.rankingPreset === 'mais_queridas';
+
+    if (query.oneStockPerCompany || isTop100Popular) {
+      const [allMatched, sectorGroups] = await Promise.all([
+        this.prisma.stock.findMany({
+          where,
+          orderBy,
+        }),
+        this.prisma.stock.findMany({
+          select: { sector: true },
+          distinct: ['sector'],
+          orderBy: { sector: 'asc' },
+        }),
+      ]);
+
+      let filteredList = allMatched;
+
+      if (query.oneStockPerCompany) {
+        const bestByPrefix = new Map<string, (typeof allMatched)[number]>();
+        for (const stock of filteredList) {
+          const prefix = stock.ticker.replace(/[0-9]+$/, '');
+          const current = bestByPrefix.get(prefix);
+          if (
+            !current ||
+            stock.dailyLiquidity > current.dailyLiquidity ||
+            (stock.dailyLiquidity === current.dailyLiquidity &&
+              stock.marketCap > current.marketCap)
+          ) {
+            bestByPrefix.set(prefix, stock);
+          }
+        }
+        filteredList = Array.from(bestByPrefix.values());
+      }
+
+      if (isTop100Popular) {
+        filteredList = [...filteredList]
+          .sort((a, b) => b.dailyLiquidity - a.dailyLiquidity)
+          .slice(0, 100);
+      }
+
+      const sortField = query.sortBy;
+      const sortMult = query.sortOrder === 'asc' ? 1 : -1;
+      filteredList.sort((a, b) => {
+        const valA = a[sortField as keyof typeof a];
+        const valB = b[sortField as keyof typeof b];
+        if (typeof valA === 'string' && typeof valB === 'string') {
+          return valA.localeCompare(valB) * sortMult;
+        }
+        return ((Number(valA) || 0) - (Number(valB) || 0)) * sortMult;
+      });
+
+      const total = filteredList.length;
+      const pagedItems = filteredList.slice(skip, skip + query.limit);
+      const distinctSectors = sectorGroups.map((s) => s.sector);
+      const mergedSectors = Array.from(
+        new Set([...B3_CATEGORIES, ...distinctSectors]),
+      );
+
+      return {
+        items: pagedItems,
+        total,
+        page: query.page,
+        limit: query.limit,
+        totalPages: Math.max(1, Math.ceil(total / query.limit)),
+        sectors: mergedSectors,
+      };
+    }
 
     const [items, total, sectorGroups] = await Promise.all([
       this.prisma.stock.findMany({
@@ -164,13 +250,18 @@ export class StocksService implements OnModuleInit {
       }),
     ]);
 
+    const distinctSectors = sectorGroups.map((s) => s.sector);
+    const mergedSectors = Array.from(
+      new Set([...B3_CATEGORIES, ...distinctSectors]),
+    );
+
     return {
       items,
       total,
       page: query.page,
       limit: query.limit,
       totalPages: Math.max(1, Math.ceil(total / query.limit)),
-      sectors: sectorGroups.map((s) => s.sector),
+      sectors: mergedSectors,
     };
   }
 
