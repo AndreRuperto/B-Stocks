@@ -24,11 +24,17 @@ export const RawMarketStockSchema = z.object({
   logoUrl: z.string().optional().default(''),
   sector: z.string().min(1),
   subsector: z.string().min(1),
+  segment: z.string().optional().default('Tradicional B3'),
   price: z.number().nonnegative(),
+  marketCap: z.number().optional().default(0),
+  equity: z.number().optional().default(0),
+  revenue: z.number().optional().default(0),
+  netIncome: z.number().optional().default(0),
   pl: z.number(),
   pvp: z.number(),
   psr: z.number(),
   dy: z.number(),
+  dy5y: z.number().optional().default(0),
   roe: z.number(),
   roic: z.number(),
   netMargin: z.number(),
@@ -37,6 +43,10 @@ export const RawMarketStockSchema = z.object({
   grossDebtToEquity: z.number(),
   dailyLiquidity: z.number().nonnegative(),
   revenueGrowth5y: z.number(),
+  change24h: z.number().optional().default(0),
+  change30d: z.number().optional().default(0),
+  change12m: z.number().optional().default(0),
+  change5y: z.number().optional().default(0),
   lpa: z.number().optional(),
   vpa: z.number().optional(),
   avgDividends5y: z.number().nonnegative().optional(),
@@ -48,8 +58,48 @@ export type RawMarketStock = z.infer<typeof RawMarketStockSchema>;
 export const StockFilterQuerySchema = z.object({
   search: z.string().optional().default(''),
   sector: z.string().optional().default('ALL'),
+  sectors: z
+    .union([z.array(z.string()), z.string()])
+    .optional()
+    .transform((val) => {
+      if (!val) return [];
+      if (Array.isArray(val)) return val.map((s) => s.trim()).filter(Boolean);
+      return val
+        .split('|')
+        .map((s) => s.trim())
+        .filter(Boolean);
+    })
+    .default([]),
   thematicCategory: z.string().optional().default('ALL'),
+  rankingPreset: z.string().optional().default('valor_mercado'),
   onlyPassedCut: z
+    .union([z.boolean(), z.string()])
+    .optional()
+    .transform((val) => {
+      if (typeof val === 'boolean') return val;
+      if (val === 'true') return true;
+      return false;
+    })
+    .default(false),
+  onlySmallCaps: z
+    .union([z.boolean(), z.string()])
+    .optional()
+    .transform((val) => {
+      if (typeof val === 'boolean') return val;
+      if (val === 'true') return true;
+      return false;
+    })
+    .default(false),
+  oneStockPerCompany: z
+    .union([z.boolean(), z.string()])
+    .optional()
+    .transform((val) => {
+      if (typeof val === 'boolean') return val;
+      if (val === 'true') return true;
+      return false;
+    })
+    .default(false),
+  onlyTop100Popular: z
     .union([z.boolean(), z.string()])
     .optional()
     .transform((val) => {
@@ -71,14 +121,30 @@ export const StockFilterQuerySchema = z.object({
     .enum([
       'scoreTotal',
       'bazinMargin',
+      'bazinCeilingPrice',
       'grahamMargin',
+      'grahamFairPrice',
       'dy',
+      'dy5y',
       'roe',
       'pl',
       'pvp',
       'dailyLiquidity',
       'ticker',
       'price',
+      'marketCap',
+      'equity',
+      'revenue',
+      'netIncome',
+      'netMargin',
+      'grossDebtToEquity',
+      'change24h',
+      'change30d',
+      'change12m',
+      'change5y',
+      'sector',
+      'subsector',
+      'segment',
     ])
     .optional()
     .default('scoreTotal'),
