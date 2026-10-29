@@ -71,10 +71,10 @@ export function StocksRankingTable({
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div>
             <CardTitle className="text-base font-bold text-zinc-900">
-              Ranking dos Setores Essenciais da B3
+              Ranking de Ações da B3
             </CardTitle>
             <p className="mt-1 text-xs text-zinc-600">
-              Exibindo {items.length} de {total} ações (Elétrica, Bancos, Seguros, Commodities, Telecom e Saneamento)
+              Exibindo {items.length} de {total} empresas listadas na B3
             </p>
           </div>
 
@@ -117,7 +117,7 @@ export function StocksRankingTable({
               }
               className="flex h-9 w-full rounded-md border border-zinc-300 bg-white px-3 py-1 text-xs font-medium text-zinc-900 focus:outline-none focus:ring-1 focus:ring-zinc-600"
             >
-              <option value="ALL">Todos os Setores (6 Setores)</option>
+              <option value="ALL">Todos os Setores da B3</option>
               {sectors.map((sec) => (
                 <option key={sec} value={sec}>
                   {sec}
