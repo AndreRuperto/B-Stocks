@@ -8,6 +8,7 @@ import {
 import {
   B3CompanyMeta,
   FALLBACK_B3_STOCKS,
+  normalizeTargetSector,
   resolveB3CompanyMeta,
 } from './b3-catalog';
 
@@ -95,6 +96,20 @@ export class MarketDataService {
       const ticker = $(cells[0]).text().trim().toUpperCase();
       if (!ticker || seen.has(ticker)) return;
 
+      const catalogMeta = resolveB3CompanyMeta(ticker);
+      const extMeta = externalMetaMap.get(ticker);
+
+      const targetSector =
+        catalogMeta.isAllowed
+          ? catalogMeta.sector
+          : extMeta?.sector
+            ? normalizeTargetSector(extMeta.sector, extMeta.subsector)
+            : null;
+
+      if (!targetSector) {
+        return;
+      }
+
       const price = this.parseBrazilianNumber($(cells[1]).text());
       if (price <= 0) return;
 
@@ -113,22 +128,17 @@ export class MarketDataService {
       const grossDebtToEquity = this.parseBrazilianNumber($(cells[20]).text());
       const revenueGrowth5y = this.parseBrazilianNumber($(cells[21]).text());
 
-      const catalogMeta = resolveB3CompanyMeta(ticker);
-      const extMeta = externalMetaMap.get(ticker);
-      const meta: B3CompanyMeta = {
-        companyName: extMeta?.companyName || catalogMeta.companyName,
-        sector:
-          catalogMeta.sector !== 'Outros Setores B3'
-            ? catalogMeta.sector
-            : extMeta?.sector || catalogMeta.sector,
-        subsector: catalogMeta.subsector,
-      };
+      const companyName = extMeta?.companyName || catalogMeta.companyName;
+      const subsector = extMeta?.subsector || catalogMeta.subsector;
+      const logoUrl =
+        extMeta?.logoUrl || `https://icons.brapi.dev/icons/${ticker}.svg`;
+
       const netDebtToEbitda = this.deriveNetDebtToEbitda(
         evEbitda,
         pEbit,
         evEbit,
         grossDebtToEquity,
-        meta.sector,
+        targetSector,
       );
 
       const closes = this.buildSyntheticCloses(
@@ -141,9 +151,10 @@ export class MarketDataService {
 
       const candidate = {
         ticker,
-        companyName: meta.companyName,
-        sector: meta.sector,
-        subsector: meta.subsector,
+        companyName,
+        logoUrl,
+        sector: targetSector,
+        subsector,
         price,
         pl: Math.max(-500, Math.min(500, pl)),
         pvp: Math.max(-100, Math.min(200, pvp)),
@@ -185,10 +196,15 @@ export class MarketDataService {
           if (item?.stock && typeof item.stock === 'string') {
             const ticker = item.stock.toUpperCase().trim();
             const fallback = resolveB3CompanyMeta(ticker);
+            const logoUrl =
+              typeof item.logo === 'string' && item.logo.length > 5
+                ? item.logo
+                : `https://icons.brapi.dev/icons/${ticker}.svg`;
             map.set(ticker, {
               companyName: item.name || fallback.companyName,
               sector: item.sector || fallback.sector,
               subsector: fallback.subsector,
+              logoUrl,
             });
           }
         }
@@ -261,10 +277,10 @@ export class MarketDataService {
 
       const html = Buffer.from(response.data).toString('latin1');
       const scraped = this.parseFundamentusHtml(html, metaMap);
-      if (scraped.length >= 50) {
+      if (scraped.length >= 25) {
         return {
           stocks: scraped,
-          source: `Fundamentus + Brapi B3 Full Batch (${scraped.length} tickers)`,
+          source: `Fundamentus + Brapi B3 Core Sectors (${scraped.length} tickers)`,
         };
       }
     } catch {
@@ -284,7 +300,7 @@ export class MarketDataService {
 
     return {
       stocks: fallbackWithCloses,
-      source: `B3 Built-in Catalog (${fallbackWithCloses.length} tickers)`,
+      source: `B3 Core Sectors Catalog (${fallbackWithCloses.length} tickers)`,
     };
   }
 }
