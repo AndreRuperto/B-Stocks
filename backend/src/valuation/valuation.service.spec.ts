@@ -122,13 +122,19 @@ describe('ValuationService', () => {
         ticker: 'BBAS3',
         companyName: 'Banco do Brasil',
         logoUrl: 'https://icons.brapi.dev/icons/BBAS3.svg',
-        sector: 'Financeiro / Bancos',
+        sector: 'Bancos',
         subsector: 'Bancos',
+        segment: 'Novo Mercado',
         price: 27.5,
+        marketCap: 156_000_000_000,
+        equity: 183_500_000_000,
+        revenue: 173_000_000_000,
+        netIncome: 34_600_000_000,
         pl: 4.5,
         pvp: 0.85,
         psr: 0.9,
         dy: 9.8,
+        dy5y: 8.9,
         roe: 20.5,
         roic: 18.0,
         netMargin: 24.0,
@@ -137,9 +143,14 @@ describe('ValuationService', () => {
         grossDebtToEquity: 0,
         dailyLiquidity: 450_000_000,
         revenueGrowth5y: 14.2,
+        change24h: 1.2,
+        change30d: 4.5,
+        change12m: 18.0,
+        change5y: 110.0,
       });
 
       expect(evaluated.ticker).toBe('BBAS3');
+      expect(evaluated.marketCap).toBe(156_000_000_000);
       expect(evaluated.bazinCeilingPrice).toBeGreaterThan(evaluated.price);
       expect(evaluated.grahamFairPrice).toBeGreaterThan(evaluated.price);
       expect(evaluated.passesCutFilter).toBe(true);
@@ -152,13 +163,19 @@ describe('ValuationService', () => {
         ticker: 'TURN3',
         companyName: 'Turnaround Corp',
         logoUrl: 'https://icons.brapi.dev/icons/TURN3.svg',
-        sector: 'Varejo',
+        sector: 'Consumo Cíclico',
         subsector: 'Comércio',
+        segment: 'Novo Mercado',
         price: 5.0,
+        marketCap: 500_000_000,
+        equity: 833_000_000,
+        revenue: 1_660_000_000,
+        netIncome: -62_500_000,
         pl: -8.0,
         pvp: 0.6,
         psr: 0.3,
         dy: 0,
+        dy5y: 0,
         roe: -12.0,
         roic: 2.0,
         netMargin: -4.5,
@@ -167,6 +184,10 @@ describe('ValuationService', () => {
         grossDebtToEquity: 2.1,
         dailyLiquidity: 8_000_000,
         revenueGrowth5y: -2.0,
+        change24h: -2.1,
+        change30d: -8.4,
+        change12m: -35.0,
+        change5y: -70.0,
       });
 
       expect(evaluated.passesCutFilter).toBe(false);

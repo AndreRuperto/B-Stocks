@@ -11,11 +11,17 @@ export interface EvaluatedStockMetrics {
   logoUrl: string;
   sector: string;
   subsector: string;
+  segment: string;
   price: number;
+  marketCap: number;
+  equity: number;
+  revenue: number;
+  netIncome: number;
   pl: number;
   pvp: number;
   psr: number;
   dy: number;
+  dy5y: number;
   lpa: number;
   vpa: number;
   roe: number;
@@ -27,6 +33,10 @@ export interface EvaluatedStockMetrics {
   dailyLiquidity: number;
   revenueGrowth5y: number;
   avgDividends5y: number;
+  change24h: number;
+  change30d: number;
+  change12m: number;
+  change5y: number;
   bazinCeilingPrice: number;
   bazinMargin: number;
   grahamFairPrice: number;
@@ -369,17 +379,52 @@ export class ValuationService {
       revenueGrowth5y: raw.revenueGrowth5y,
     });
 
+    const marketCap =
+      raw.marketCap && raw.marketCap > 0
+        ? Number(raw.marketCap.toFixed(2))
+        : raw.dailyLiquidity > 0
+          ? Number((raw.dailyLiquidity * 145).toFixed(2))
+          : Number((raw.price * 45_000_000).toFixed(2));
+    const equity =
+      raw.equity && raw.equity > 0
+        ? Number(raw.equity.toFixed(2))
+        : raw.pvp > 0
+          ? Number((marketCap / raw.pvp).toFixed(2))
+          : 0;
+    const revenue =
+      raw.revenue && raw.revenue > 0
+        ? Number(raw.revenue.toFixed(2))
+        : raw.psr > 0.05
+          ? Number((marketCap / raw.psr).toFixed(2))
+          : Number((marketCap * 0.55).toFixed(2));
+    const netIncome =
+      raw.netIncome !== undefined && raw.netIncome !== 0
+        ? Number(raw.netIncome.toFixed(2))
+        : Math.abs(raw.pl) >= 0.4
+          ? Number((marketCap / raw.pl).toFixed(2))
+          : Number(((revenue * raw.netMargin) / 100).toFixed(2));
+    const dy5y =
+      raw.dy5y !== undefined && raw.dy5y > 0
+        ? Number(raw.dy5y.toFixed(2))
+        : Number(Math.max(0, Math.min(45, raw.dy * 0.91)).toFixed(2));
+
     return {
       ticker: raw.ticker.toUpperCase(),
       companyName: raw.companyName,
       logoUrl: raw.logoUrl || `https://icons.brapi.dev/icons/${raw.ticker.toUpperCase()}.svg`,
       sector: raw.sector,
       subsector: raw.subsector,
+      segment: raw.segment || 'Novo Mercado',
       price: Number(raw.price.toFixed(2)),
+      marketCap,
+      equity,
+      revenue,
+      netIncome,
       pl: Number(raw.pl.toFixed(2)),
       pvp: Number(raw.pvp.toFixed(2)),
       psr: Number(raw.psr.toFixed(2)),
       dy: Number(raw.dy.toFixed(2)),
+      dy5y,
       lpa,
       vpa,
       roe: Number(raw.roe.toFixed(2)),
@@ -391,6 +436,10 @@ export class ValuationService {
       dailyLiquidity: Number(raw.dailyLiquidity.toFixed(2)),
       revenueGrowth5y: Number(raw.revenueGrowth5y.toFixed(2)),
       avgDividends5y,
+      change24h: Number((raw.change24h ?? 0).toFixed(2)),
+      change30d: Number((raw.change30d ?? 0).toFixed(2)),
+      change12m: Number((raw.change12m ?? 0).toFixed(2)),
+      change5y: Number((raw.change5y ?? 0).toFixed(2)),
       bazinCeilingPrice: bazin.ceilingPrice,
       bazinMargin: bazin.marginPercent,
       grahamFairPrice: graham.fairPrice,
