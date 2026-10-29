@@ -15,6 +15,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { CompanyLogo } from '@/components/company-logo';
 import {
   formatCompactCurrency,
   formatCurrency,
@@ -70,10 +71,10 @@ export function StocksRankingTable({
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div>
             <CardTitle className="text-base font-bold text-zinc-900">
-              Ranking Quantitativo &amp; Fundamentalista da B3
+              Ranking dos Setores Essenciais da B3
             </CardTitle>
             <p className="mt-1 text-xs text-zinc-600">
-              Exibindo {items.length} de {total} empresas listadas na B3
+              Exibindo {items.length} de {total} ações (Elétrica, Bancos, Seguros, Commodities, Telecom e Saneamento)
             </p>
           </div>
 
@@ -98,7 +99,7 @@ export function StocksRankingTable({
             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-zinc-400" />
             <Input
               data-testid="search-input"
-              placeholder="Buscar por ticker (ex: PETR4, BBAS3, WEGE3) ou empresa..."
+              placeholder="Buscar por ticker (ex: PETR4, BBAS3, TAEE11) ou empresa..."
               value={filters.search}
               onChange={(e) =>
                 onUpdateFilters({ search: e.target.value, page: 1 })
@@ -116,7 +117,7 @@ export function StocksRankingTable({
               }
               className="flex h-9 w-full rounded-md border border-zinc-300 bg-white px-3 py-1 text-xs font-medium text-zinc-900 focus:outline-none focus:ring-1 focus:ring-zinc-600"
             >
-              <option value="ALL">Todos os Setores da B3</option>
+              <option value="ALL">Todos os Setores (6 Setores)</option>
               {sectors.map((sec) => (
                 <option key={sec} value={sec}>
                   {sec}
@@ -237,23 +238,31 @@ export function StocksRankingTable({
                       {rankNumber}
                     </TableCell>
                     <TableCell>
-                      <div className="flex flex-col">
-                        <div className="flex items-center gap-1.5">
-                          <span className="font-bold text-sm text-zinc-900">
-                            {stock.ticker}
+                      <div className="flex items-center gap-3">
+                        <CompanyLogo
+                          ticker={stock.ticker}
+                          logoUrl={stock.logoUrl}
+                          companyName={stock.companyName}
+                          size="md"
+                        />
+                        <div className="flex flex-col">
+                          <div className="flex items-center gap-1.5">
+                            <span className="font-bold text-sm text-zinc-900">
+                              {stock.ticker}
+                            </span>
+                            {!stock.passesCutFilter && (
+                              <Badge variant="outline" className="px-1 py-0 text-[10px] text-zinc-500">
+                                Alerta Corte
+                              </Badge>
+                            )}
+                          </div>
+                          <span className="text-xs text-zinc-600 truncate max-w-[170px]">
+                            {stock.companyName}
                           </span>
-                          {!stock.passesCutFilter && (
-                            <Badge variant="outline" className="px-1 py-0 text-[10px] text-zinc-500">
-                              Alerta Corte
-                            </Badge>
-                          )}
+                          <span className="text-[10px] text-zinc-500">
+                            {stock.sector}
+                          </span>
                         </div>
-                        <span className="text-xs text-zinc-600 truncate max-w-[180px]">
-                          {stock.companyName}
-                        </span>
-                        <span className="text-[10px] text-zinc-400">
-                          {stock.sector}
-                        </span>
                       </div>
                     </TableCell>
                     <TableCell className="font-semibold text-zinc-900">
@@ -395,7 +404,7 @@ export function StocksRankingTable({
           <div className="text-xs text-zinc-600">
             Página <span className="font-bold text-zinc-900">{page}</span> de{' '}
             <span className="font-bold text-zinc-900">{totalPages}</span> ({total}{' '}
-            ativos encontrados)
+            ações encontradas)
           </div>
           <div className="flex items-center gap-2">
             <Button
