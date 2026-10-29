@@ -121,6 +121,7 @@ describe('ValuationService', () => {
       const evaluated = service.evaluateStock({
         ticker: 'BBAS3',
         companyName: 'Banco do Brasil',
+        logoUrl: 'https://icons.brapi.dev/icons/BBAS3.svg',
         sector: 'Financeiro / Bancos',
         subsector: 'Bancos',
         price: 27.5,
@@ -150,6 +151,7 @@ describe('ValuationService', () => {
       const evaluated = service.evaluateStock({
         ticker: 'TURN3',
         companyName: 'Turnaround Corp',
+        logoUrl: 'https://icons.brapi.dev/icons/TURN3.svg',
         sector: 'Varejo',
         subsector: 'Comércio',
         price: 5.0,
