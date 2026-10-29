@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('B3 Stocks Ranking Table and Filters', () => {
-  test('filters stocks by ticker search and toggles cut filter switch', async ({
+  test('filters stocks by ticker search, displays company logo and toggles cut filter switch', async ({
     page,
   }) => {
     await page.goto('/');
@@ -13,6 +13,9 @@ test.describe('B3 Stocks Ranking Table and Filters', () => {
     const petrRow = page.getByTestId('stock-row-PETR4');
     await expect(petrRow).toBeVisible({ timeout: 10000 });
     await expect(petrRow).toContainText('PETR4');
+
+    const companyLogo = page.getByTestId('company-logo-PETR4');
+    await expect(companyLogo.first()).toBeVisible();
 
     const cutFilterSwitch = page.getByTestId('cut-filter-switch');
     await expect(cutFilterSwitch).toBeVisible();
