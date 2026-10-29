@@ -99,7 +99,7 @@ describe('MarketDataService', () => {
     it('resolves cataloged B3 prefixes and provides fallback for unknown tickers', () => {
       const vale = resolveB3CompanyMeta('VALE3');
       expect(vale.companyName).toBe('Vale S.A.');
-      expect(vale.sector).toBe('Materiais Básicos');
+      expect(vale.sector).toBe('Mineração');
 
       const unknown = resolveB3CompanyMeta('XYZW3');
       expect(unknown.companyName).toContain('XYZW');
