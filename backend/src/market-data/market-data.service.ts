@@ -120,7 +120,6 @@ export class MarketDataService {
       const revenueGrowth5y = this.parseBrazilianNumber($(cells[21]).text());
 
       const companyName = extMeta?.companyName || catalogMeta.companyName;
-      const subsector = extMeta?.subsector || catalogMeta.subsector;
       const logoUrl =
         extMeta?.logoUrl || `https://icons.brapi.dev/icons/${ticker}.svg`;
 
