@@ -1,6 +1,14 @@
 # B-Stocks — Sistema de Análise Quantitativa e Fundamentalista da B3
 
-O **B-Stocks** é uma plataforma fullstack 100% gratuita em **TypeScript** para análise fundamentalista, técnica e quantitativa de todas as ações listadas na B3 (Brasil, Bolsa, Balcão). O sistema coleta em lote todos os ativos da B3, calcula modelos matemáticos determinísticos no backend (**Preço Teto de Décio Bazin**, **Preço Justo de Benjamin Graham**, **Médias Móveis SMA 50/200**, **IFR/RSI de 14 períodos** e **Score Ponderado de 0 a 100**) e gera **Teses de Investimento sob demanda via Inteligência Artificial**.
+O **B-Stocks** é uma plataforma fullstack 100% gratuita em **TypeScript** focada nos setores mais sólidos e tradicionais de geração de valor e dividendos da B3:
+- **Energia Elétrica**
+- **Bancos**
+- **Seguradoras**
+- **Commodities** (Petróleo & Gás, Mineração, Siderurgia, Papel & Celulose e Agronegócio)
+- **Telecomunicações**
+- **Saneamento**
+
+O sistema traz **identificação visual por logotipos de cada empresa**, calcula modelos matemáticos determinísticos consagrados (**Preço Teto de Décio Bazin**, **Preço Justo de Benjamin Graham**, **Médias Móveis SMA 50/200**, **IFR/RSI de 14 períodos** e **Score Ponderado de 0 a 100**) e sintetiza **Teses de Investimento sob demanda via Inteligência Artificial**.
 
 ---
 
@@ -17,6 +25,7 @@ O **B-Stocks** é uma plataforma fullstack 100% gratuita em **TypeScript** para 
 ### Frontend (`/frontend`)
 - **Linguagem:** TypeScript
 - **Framework:** Next.js 14 (App Router) + React 18
+- **Identificação Visual:** Logotipos vetoriais das empresas com avatar monograma de fallback
 - **Componentes & Estilo:** Shadcn UI + Tailwind CSS (Interface sólida e neutra em tons de Zinc, sem gradientes ou efeitos visuais exagerados)
 - **Validação de Formulários e Contratos:** Zod
 - **Testes End-to-End (E2E):** Playwright
@@ -94,4 +103,3 @@ Com o backend (`localhost:3001`) e o frontend (`localhost:3000`) em execução:
 cd frontend
 npx playwright test
 ```
-
