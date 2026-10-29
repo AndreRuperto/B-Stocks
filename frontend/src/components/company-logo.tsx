@@ -43,7 +43,7 @@ export function CompanyLogo({
     <div
       data-testid={`company-logo-${ticker}`}
       className={cn(
-        'relative flex shrink-0 items-center justify-center rounded border border-zinc-300 bg-zinc-100 overflow-hidden font-bold text-zinc-800',
+        'relative flex shrink-0 items-center justify-center rounded-lg border border-zinc-700 bg-zinc-800 overflow-hidden font-bold text-zinc-200',
         sizeClasses[size],
         className,
       )}
@@ -58,7 +58,7 @@ export function CompanyLogo({
           onError={() => setHasError(true)}
         />
       ) : (
-        <span className="select-none tracking-tight">{initials}</span>
+        <span>{initials}</span>
       )}
     </div>
   );

@@ -21,7 +21,7 @@ const TableHeader = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <thead
     ref={ref}
-    className={cn('border-b border-zinc-200 bg-zinc-50', className)}
+    className={cn('border-b border-zinc-800 bg-zinc-900/80', className)}
     {...props}
   />
 ));
@@ -46,7 +46,7 @@ const TableRow = React.forwardRef<
   <tr
     ref={ref}
     className={cn(
-      'border-b border-zinc-200 transition-colors hover:bg-zinc-50',
+      'border-b border-zinc-800 transition-colors hover:bg-zinc-800/40',
       className,
     )}
     {...props}
@@ -61,7 +61,7 @@ const TableHead = React.forwardRef<
   <th
     ref={ref}
     className={cn(
-      'h-10 px-3 text-left align-middle text-xs font-semibold uppercase tracking-wider text-zinc-600',
+      'h-10 px-3 text-left align-middle text-xs font-semibold text-zinc-400 [&:has([role=checkbox])]:pr-0',
       className,
     )}
     {...props}
@@ -75,11 +75,26 @@ const TableCell = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <td
     ref={ref}
-    className={cn('p-3 align-middle text-zinc-900 tabular-nums', className)}
+    className={cn(
+      'p-3 align-middle text-zinc-200 [&:has([role=checkbox])]:pr-0',
+      className,
+    )}
     {...props}
   />
 ));
 TableCell.displayName = 'TableCell';
+
+const TableCaption = React.forwardRef<
+  HTMLTableCaptionElement,
+  React.HTMLAttributes<HTMLTableCaptionElement>
+>(({ className, ...props }, ref) => (
+  <caption
+    ref={ref}
+    className={cn('mt-4 text-xs text-zinc-400', className)}
+    {...props}
+  />
+));
+TableCaption.displayName = 'TableCaption';
 
 export {
   Table,
@@ -88,5 +103,5 @@ export {
   TableHead,
   TableRow,
   TableCell,
+  TableCaption,
 };
-
