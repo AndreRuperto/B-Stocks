@@ -33,8 +33,15 @@ export async function fetchStocks(
     params: {
       search: params.search,
       sector: params.sector,
+      sectors: params.sectors.length > 0 ? params.sectors.join('|') : undefined,
       thematicCategory: params.thematicCategory,
+      rankingPreset: params.rankingPreset,
       onlyPassedCut: String(params.onlyPassedCut),
+      onlySmallCaps: String(params.onlySmallCaps),
+      oneStockPerCompany: String(params.oneStockPerCompany),
+      onlyTop100Popular: String(
+        params.onlyTop100Popular || params.rankingPreset === 'mais_queridas',
+      ),
       minScore: params.minScore,
       sortBy: params.sortBy,
       sortOrder: params.sortOrder,
