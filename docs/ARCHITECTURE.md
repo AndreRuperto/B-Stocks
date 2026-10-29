@@ -7,14 +7,14 @@ O **B-Stocks** foi projetado com separação estrita entre coleta/normalização
 ```mermaid
 flowchart TD
     subgraph Sources["Fontes de Dados Gratuitas (B3)"]
-        Fundamentus["Fundamentus (Scraping em Lote dos 6 Setores)"]
+        Fundamentus["Fundamentus (Scraping em Lote de Todas as Ações da B3)"]
         Brapi["Brapi.dev (Metadados, Setores e Logotipos SVG)"]
         Yahoo["Yahoo Finance v8 API (Série Histórica OHLCV e Dividendos)"]
         Gemini["Google Gemini 2.0 Flash API (Tier Gratuito)"]
     end
 
     subgraph Backend["Backend NestJS (TypeScript)"]
-        MarketData["MarketDataService (Filtro dos 6 Setores + Ingestão de Logos)"]
+        MarketData["MarketDataService (Ingestão do Universo B3 + Logotipos)"]
         Valuation["ValuationService (Bazin, Graham, SMA 50/200, RSI 14, Score 0-100)"]
         AiService["AiService (Tese em 3 Pontos + Fallback Determinístico)"]
         StocksService["StocksService (Orquestração e Filtros)"]
@@ -22,7 +22,7 @@ flowchart TD
     end
 
     subgraph Database["PostgreSQL 18 (b-stocks)"]
-        StockTable[("Tabela Stock (Elétrica, Bancos, Seguros, Commodities, Telecom, Saneamento)")]
+        StockTable[("Tabela Stock (Todas as Empresas da B3 com logoUrl)")]
         ThesisTable[("Tabela StockThesis")]
         SyncLogTable[("Tabela SyncLog")]
     end
@@ -45,15 +45,17 @@ flowchart TD
 
 ---
 
-## 2. Setores Filtrados no Sistema
+## 2. Universo de Cobertura e Setorização
 
-O sistema restringe o universo de análise aos 6 setores mais consistentes para geração de valor e renda passiva:
-1. **Energia Elétrica:** Empresas de geração, transmissão e distribuição (ex: `TAEE11`, `TRPL4`, `EGIE3`, `CPFE3`, `CMIG4`).
-2. **Bancos:** Instituições bancárias e holdings financeiras (ex: `BBAS3`, `ITUB4`, `BBDC4`, `SANB11`, `ITSA4`).
-3. **Seguradoras:** Companhias de seguros, previdência e corretagem (ex: `BBSE3`, `CXSE3`, `PSSA3`).
-4. **Commodities:** Petróleo, Mineração, Siderurgia, Papel & Celulose e Agronegócio (ex: `PETR4`, `VALE3`, `PRIO3`, `GGBR4`, `SUZB3`, `KLBN11`).
-5. **Telecomunicações:** Provedoras de infraestrutura e serviços de telecomunicação (ex: `VIVT3`, `TIMS3`).
-6. **Saneamento:** Empresas de saneamento básico, água e tratamento de resíduos (ex: `SBSP3`, `SAPR11`, `CSMG3`).
+O sistema cobre 100% das empresas e ações listadas na B3 (~960+ tickers ativos), categorizando-as em seus respectivos setores e subsetores:
+- **Financeiro & Bancos** (ex: `BBAS3`, `ITUB4`, `BBDC4`, `SANB11`, `ITSA4`)
+- **Seguros & Previdência** (ex: `BBSE3`, `CXSE3`, `PSSA3`)
+- **Utilidade Pública: Energia Elétrica** (ex: `TAEE11`, `TRPL4`, `EGIE3`, `CPFE3`, `CMIG4`)
+- **Utilidade Pública: Água e Saneamento** (ex: `SBSP3`, `SAPR11`, `CSMG3`)
+- **Petróleo, Gás e Biocombustíveis** (ex: `PETR4`, `PRIO3`, `UGPA3`)
+- **Materiais Básicos: Mineração, Siderurgia, Papel & Celulose** (ex: `VALE3`, `GGBR4`, `SUZB3`, `KLBN11`)
+- **Comunicações & Telecomunicações** (ex: `VIVT3`, `TIMS3`)
+- **Bens Industriais, Construção, Consumo, Saúde e Tecnologia** (ex: `WEGE3`, `RENT3`, `ABEV3`, `RADL3`, `TOTS3`, `CURY3`, `DIRR3`)
 
 ---
 
