@@ -11,6 +11,7 @@ model Stock {
   id                 String        @id @default(uuid())
   ticker             String        @unique
   companyName        String
+  logoUrl            String        @default("")
   sector             String
   subsector          String
   price              Float
