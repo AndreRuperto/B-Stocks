@@ -12,8 +12,9 @@ describe('AiService', () => {
   const sampleStock: EvaluatedStockMetrics = {
     ticker: 'BBAS3',
     companyName: 'Banco do Brasil',
-    sector: 'Financeiro',
-    subsector: 'Bancos',
+    logoUrl: 'https://icons.brapi.dev/icons/BBAS3.svg',
+    sector: 'Bancos',
+    subsector: 'Bancos Comerciais',
     price: 27.4,
     pl: 4.45,
     pvp: 0.84,
