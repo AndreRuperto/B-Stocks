@@ -43,7 +43,7 @@ export function MarketSummaryCards({
         <Card className="border-zinc-300 bg-white">
           <CardHeader className="pb-1">
             <CardTitle className="text-xs font-medium uppercase tracking-wider text-zinc-500">
-              Ações dos Setores Essenciais
+              Total de Ativos na B3
             </CardTitle>
           </CardHeader>
           <CardContent>
