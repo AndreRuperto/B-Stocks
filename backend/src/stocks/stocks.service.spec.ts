@@ -13,8 +13,9 @@ describe('StocksService', () => {
     id: 'uuid-bbas3',
     ticker: 'BBAS3',
     companyName: 'Banco do Brasil',
-    sector: 'Financeiro',
-    subsector: 'Bancos',
+    logoUrl: 'https://icons.brapi.dev/icons/BBAS3.svg',
+    sector: 'Bancos',
+    subsector: 'Bancos Comerciais',
     price: 27.4,
     pl: 4.45,
     pvp: 0.84,
@@ -54,15 +55,16 @@ describe('StocksService', () => {
 
   const mockPrisma = {
     stock: {
-      count: jest.fn().mockResolvedValue(962),
+      count: jest.fn().mockResolvedValue(120),
       findMany: jest.fn().mockResolvedValue([mockStockRecord]),
       findUnique: jest.fn(),
       upsert: jest.fn().mockResolvedValue(mockStockRecord),
+      deleteMany: jest.fn().mockResolvedValue({ count: 0 }),
       aggregate: jest.fn().mockResolvedValue({
         _avg: { scoreTotal: 68.4, dy: 6.8, roe: 16.2 },
       }),
       groupBy: jest.fn().mockResolvedValue([
-        { thematicCategory: 'Renda / Vacas Leiteiras', _count: { ticker: 120 } },
+        { thematicCategory: 'Renda / Vacas Leiteiras', _count: { ticker: 45 } },
       ]),
     },
     stockThesis: {
@@ -85,7 +87,7 @@ describe('StocksService', () => {
       }),
       findFirst: jest.fn().mockResolvedValue({
         id: 'log-1',
-        totalSynced: 962,
+        totalSynced: 120,
         source: 'Fundamentus + Brapi',
         status: 'SUCCESS',
         createdAt: new Date(),
@@ -110,8 +112,9 @@ describe('StocksService', () => {
                 {
                   ticker: 'BBAS3',
                   companyName: 'Banco do Brasil',
-                  sector: 'Financeiro',
-                  subsector: 'Bancos',
+                  logoUrl: 'https://icons.brapi.dev/icons/BBAS3.svg',
+                  sector: 'Bancos',
+                  subsector: 'Bancos Comerciais',
                   price: 27.4,
                   pl: 4.45,
                   pvp: 0.84,
