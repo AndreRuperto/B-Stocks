@@ -1,14 +1,20 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('B3 Stocks Ranking Table and Filters', () => {
-  test('filters stocks by ticker search, multi-select categories, ranking presets and customize panel', async ({
+test.describe('B3 Stocks Ranking Table, Dark Theme and Indicator Tooltips', () => {
+  test('verifies dark theme, landing hero, filters, indicator tooltips and custom columns', async ({
     page,
   }) => {
     await page.goto('/');
 
-    await expect(page.getByTestId('header-preset-all')).toBeVisible({
+    const htmlElement = page.locator('html');
+    await expect(htmlElement).toHaveClass(/dark/);
+
+    await expect(page.getByTestId('hero-landing-section')).toBeVisible({
       timeout: 15000,
     });
+    await expect(page.getByTestId('hero-explore-button')).toBeVisible();
+
+    await expect(page.getByTestId('header-preset-all')).toBeVisible();
     await expect(page.getByTestId('header-preset-revenue')).toBeVisible();
     await expect(page.getByTestId('header-preset-marketcap')).toBeVisible();
 
@@ -31,6 +37,13 @@ test.describe('B3 Stocks Ranking Table and Filters', () => {
     await expect(page.getByTestId('header-sort-btn-grahamMargin')).toContainText(
       '(Upside de Graham)',
     );
+
+    const infoBtnPl = page.getByTestId('info-btn-pl');
+    await expect(infoBtnPl).toBeVisible();
+    await infoBtnPl.click();
+    const tooltipPl = page.getByTestId('tooltip-content-pl');
+    await expect(tooltipPl).toBeVisible();
+    await expect(tooltipPl).toContainText('Mostra quantos anos de lucro');
 
     await page.getByTestId('customize-button').click();
     const customizePanel = page.getByTestId('customize-panel');
