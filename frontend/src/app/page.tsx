@@ -271,6 +271,7 @@ export default function HomePage() {
 
       <main className="mx-auto max-w-[1520px] space-y-6 px-4 py-6 sm:px-6 lg:px-8">
         <section
+          data-testid="hero-landing-section"
           aria-label="Tela Inicial - Apresentação do Terminal"
           className="rounded-xl border border-zinc-800 bg-zinc-900/90 p-5 sm:p-6 shadow-sm"
         >
@@ -294,6 +295,7 @@ export default function HomePage() {
                 <Button
                   type="button"
                   size="sm"
+                  data-testid="hero-explore-button"
                   onClick={scrollToTable}
                   className="h-8 gap-1.5"
                 >
