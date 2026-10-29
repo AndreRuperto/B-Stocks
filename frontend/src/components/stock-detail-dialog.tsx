@@ -19,6 +19,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { CompanyLogo } from '@/components/company-logo';
 import {
   formatCompactCurrency,
   formatCurrency,
@@ -109,22 +110,30 @@ export function StockDetailDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent data-testid="stock-detail-modal">
         <DialogHeader className="border-b border-zinc-200 pb-4">
-          <div className="flex flex-wrap items-center justify-between gap-2 pr-6">
-            <div>
-              <div className="flex items-center gap-2">
-                <DialogTitle className="text-xl font-bold text-zinc-900">
-                  {detailedStock.ticker} — {detailedStock.companyName}
-                </DialogTitle>
-                <Badge variant="default">
-                  Score {detailedStock.scoreTotal.toFixed(1)} / 100
-                </Badge>
-                <Badge variant="secondary">
-                  {detailedStock.thematicCategory}
-                </Badge>
+          <div className="flex flex-wrap items-center justify-between gap-3 pr-6">
+            <div className="flex items-center gap-3">
+              <CompanyLogo
+                ticker={detailedStock.ticker}
+                logoUrl={detailedStock.logoUrl}
+                companyName={detailedStock.companyName}
+                size="lg"
+              />
+              <div>
+                <div className="flex flex-wrap items-center gap-2">
+                  <DialogTitle className="text-xl font-bold text-zinc-900">
+                    {detailedStock.ticker} — {detailedStock.companyName}
+                  </DialogTitle>
+                  <Badge variant="default">
+                    Score {detailedStock.scoreTotal.toFixed(1)} / 100
+                  </Badge>
+                  <Badge variant="secondary">
+                    {detailedStock.thematicCategory}
+                  </Badge>
+                </div>
+                <DialogDescription className="mt-1 text-xs text-zinc-600">
+                  Setor: {detailedStock.sector} | Subsetor: {detailedStock.subsector}
+                </DialogDescription>
               </div>
-              <DialogDescription className="mt-1 text-xs text-zinc-600">
-                Setor: {detailedStock.sector} | Subsetor: {detailedStock.subsector}
-              </DialogDescription>
             </div>
             <div className="text-right">
               <div className="text-xs uppercase text-zinc-500">Cotação Atual</div>
@@ -498,4 +507,3 @@ export function StockDetailDialog({
     </Dialog>
   );
 }
-
