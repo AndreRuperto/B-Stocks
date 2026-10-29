@@ -17,7 +17,17 @@ import { StocksRankingTable } from '@/components/stocks-ranking-table';
 import { StockDetailDialog } from '@/components/stock-detail-dialog';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { RefreshCw } from 'lucide-react';
+import {
+  Activity,
+  ArrowRight,
+  BookOpen,
+  CheckCircle2,
+  Database,
+  Layers,
+  RefreshCw,
+  Sparkles,
+  TrendingUp,
+} from 'lucide-react';
 
 export default function HomePage() {
   const [summary, setSummary] = useState<MarketSummary | null>(null);
@@ -151,27 +161,43 @@ export default function HomePage() {
     }
   };
 
+  const scrollToTable = () => {
+    const el = document.getElementById('ranking-table-section');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-zinc-100 text-zinc-900">
-      <header className="border-b border-zinc-300 bg-white">
-        <div className="mx-auto flex max-w-7xl flex-col gap-3 px-4 py-4">
+    <div className="min-h-screen bg-zinc-950 text-zinc-100 antialiased">
+      <header className="sticky top-0 z-40 border-b border-zinc-800 bg-zinc-950/95 backdrop-blur-md">
+        <div className="mx-auto flex max-w-[1520px] flex-col gap-3 px-4 py-3.5 sm:px-6 lg:px-8">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <div className="flex items-center gap-2.5">
-                <h1 className="text-xl font-bold tracking-tight text-zinc-900">
-                  B-STOCKS
-                </h1>
-                <Badge variant="default">B3 Completo</Badge>
-                <Badge variant="secondary">100% Gratuito</Badge>
+            <div className="flex items-center gap-3">
+              <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-zinc-700 bg-zinc-900 font-black text-sm text-zinc-100">
+                B
               </div>
-              <p className="mt-1 text-xs text-zinc-600">
-                Análise determinística de todas as ações da B3: Preço Teto Décio Bazin, Preço Justo Benjamin Graham, SMA 50/200, IFR e Tese IA.
-              </p>
+              <div>
+                <div className="flex items-center gap-2">
+                  <h1 className="text-lg font-bold tracking-tight text-zinc-100">
+                    B-STOCKS
+                  </h1>
+                  <Badge variant="default" className="text-[10px] font-semibold">
+                    B3 Completo
+                  </Badge>
+                  <Badge variant="outline" className="text-[10px]">
+                    100% Gratuito
+                  </Badge>
+                </div>
+                <p className="text-[11px] text-zinc-400">
+                  Terminal de Análise Quantitativa e Fundamentalista da Bolsa Brasileira
+                </p>
+              </div>
             </div>
 
             <div className="flex items-center gap-3">
               {summary?.lastSync && (
-                <div className="text-right text-[11px] text-zinc-500">
+                <div className="text-right text-[11px] text-zinc-400">
                   <div>Fonte: {summary.lastSync.source}</div>
                   <div>
                     Atualizado em:{' '}
@@ -186,6 +212,7 @@ export default function HomePage() {
                 onClick={handleSync}
                 disabled={syncing}
                 data-testid="sync-b3-button"
+                className="h-8"
               >
                 <RefreshCw
                   className={`mr-1.5 h-3.5 w-3.5 ${syncing ? 'animate-spin' : ''}`}
@@ -197,14 +224,18 @@ export default function HomePage() {
 
           <nav
             aria-label="Opções de Ranking no Header"
-            className="flex flex-wrap items-center gap-2 border-t border-zinc-200 pt-3"
+            className="flex flex-wrap items-center gap-2 border-t border-zinc-800/80 pt-2.5"
           >
+            <span className="text-xs font-semibold text-zinc-400 mr-1">
+              Modo Inicial:
+            </span>
             <Button
               type="button"
               size="sm"
               variant={activeHeaderPreset === 'todas' ? 'default' : 'outline'}
               data-testid="header-preset-all"
               onClick={() => handleHeaderPreset('todas')}
+              className="h-8"
             >
               Todas as Ações da Bolsa
             </Button>
@@ -216,6 +247,7 @@ export default function HomePage() {
               }
               data-testid="header-preset-revenue"
               onClick={() => handleHeaderPreset('maiores_receitas')}
+              className="h-8"
             >
               Maiores Receitas
             </Button>
@@ -229,6 +261,7 @@ export default function HomePage() {
               }
               data-testid="header-preset-marketcap"
               onClick={() => handleHeaderPreset('maiores_valor_mercado')}
+              className="h-8"
             >
               Maiores Valor de Mercado
             </Button>
@@ -236,7 +269,97 @@ export default function HomePage() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-7xl space-y-6 px-4 py-6">
+      <main className="mx-auto max-w-[1520px] space-y-6 px-4 py-6 sm:px-6 lg:px-8">
+        <section
+          aria-label="Tela Inicial - Apresentação do Terminal"
+          className="rounded-xl border border-zinc-800 bg-zinc-900/90 p-5 sm:p-6 shadow-sm"
+        >
+          <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+            <div className="max-w-3xl space-y-2.5">
+              <div className="flex items-center gap-2">
+                <Badge variant="default" className="text-[11px] uppercase tracking-wider font-bold">
+                  Terminal de Mercado
+                </Badge>
+                <span className="text-xs text-zinc-400">
+                  962 Ativos • 17 Setores • 11 Modos de Ranking
+                </span>
+              </div>
+              <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-zinc-100">
+                Análise Matemática &amp; Fundamentalista para Decisões Conscientes na B3
+              </h2>
+              <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed">
+                Combine o <strong>Preço-teto de Dividendos de Décio Bazin</strong>, o <strong>Preço Justo de Benjamin Graham</strong>, métricas de saúde financeira e tendências técnicas objetivas com síntese em 3 pontos gerada sob demanda via Inteligência Artificial.
+              </p>
+              <div className="flex flex-wrap items-center gap-2 pt-1">
+                <Button
+                  type="button"
+                  size="sm"
+                  onClick={scrollToTable}
+                  className="h-8 gap-1.5"
+                >
+                  Explorar Tabela Completa
+                  <ArrowRight className="h-3.5 w-3.5" />
+                </Button>
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="outline"
+                  onClick={() => handleHeaderPreset('maiores_valor_mercado')}
+                  className="h-8"
+                >
+                  Ver Maiores por Market Cap
+                </Button>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-2 lg:w-96 shrink-0">
+              <div className="rounded-lg border border-zinc-800 bg-zinc-950/70 p-3">
+                <div className="flex items-center gap-1.5 text-xs text-zinc-400">
+                  <Database className="h-3.5 w-3.5 text-zinc-300" />
+                  <span>Bazin 6%</span>
+                </div>
+                <div className="mt-1 text-sm font-bold text-zinc-100">
+                  Preço Teto Real
+                </div>
+                <div className="text-[10px] text-zinc-400">Renda passiva</div>
+              </div>
+
+              <div className="rounded-lg border border-zinc-800 bg-zinc-950/70 p-3">
+                <div className="flex items-center gap-1.5 text-xs text-zinc-400">
+                  <BookOpen className="h-3.5 w-3.5 text-zinc-300" />
+                  <span>Graham</span>
+                </div>
+                <div className="mt-1 text-sm font-bold text-zinc-100">
+                  Preço Justo
+                </div>
+                <div className="text-[10px] text-zinc-400">√(22,5 × LPA × VPA)</div>
+              </div>
+
+              <div className="rounded-lg border border-zinc-800 bg-zinc-950/70 p-3">
+                <div className="flex items-center gap-1.5 text-xs text-zinc-400">
+                  <Activity className="h-3.5 w-3.5 text-zinc-300" />
+                  <span>Médias &amp; IFR</span>
+                </div>
+                <div className="mt-1 text-sm font-bold text-zinc-100">
+                  SMA 50 / 200
+                </div>
+                <div className="text-[10px] text-zinc-400">Golden &amp; Death Cross</div>
+              </div>
+
+              <div className="rounded-lg border border-zinc-800 bg-zinc-950/70 p-3">
+                <div className="flex items-center gap-1.5 text-xs text-zinc-400">
+                  <Sparkles className="h-3.5 w-3.5 text-zinc-300" />
+                  <span>Tese IA</span>
+                </div>
+                <div className="mt-1 text-sm font-bold text-zinc-100">
+                  3 Pontos Chave
+                </div>
+                <div className="text-[10px] text-zinc-400">Fortes, Riscos, Veredito</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         <MarketSummaryCards
           summary={summary}
           selectedCategory={filters.thematicCategory}
@@ -248,15 +371,15 @@ export default function HomePage() {
 
         <section
           aria-label="Filtro de Categorias da B3"
-          className="rounded-md border border-zinc-300 bg-white p-4"
+          className="rounded-xl border border-zinc-800 bg-zinc-900 p-4 shadow-sm"
         >
           <div className="mb-2.5 flex flex-wrap items-center justify-between gap-2">
             <div className="flex items-center gap-2">
-              <span className="text-xs font-bold uppercase tracking-wider text-zinc-700">
+              <span className="text-xs font-bold uppercase tracking-wider text-zinc-300">
                 Categorias da B3 (Multi-seleção)
               </span>
               {filters.sectors.length > 0 && (
-                <Badge variant="default" className="text-[11px]">
+                <Badge variant="default" className="text-[11px] font-semibold">
                   {filters.sectors.length} selecionada(s)
                 </Badge>
               )}
@@ -279,10 +402,10 @@ export default function HomePage() {
               type="button"
               data-testid="category-chip-ALL"
               onClick={handleClearCategories}
-              className={`rounded border px-2.5 py-1 text-xs font-medium transition-colors ${
+              className={`rounded-lg border px-2.5 py-1 text-xs font-medium transition-colors ${
                 filters.sectors.length === 0
-                  ? 'border-zinc-900 bg-zinc-900 text-white'
-                  : 'border-zinc-300 bg-zinc-50 text-zinc-700 hover:bg-zinc-200'
+                  ? 'border-zinc-100 bg-zinc-100 text-zinc-950 font-bold'
+                  : 'border-zinc-800 bg-zinc-950 text-zinc-300 hover:bg-zinc-800'
               }`}
             >
               Todas ({B3_STANDARD_CATEGORIES.length})
@@ -295,10 +418,10 @@ export default function HomePage() {
                   type="button"
                   data-testid={`category-chip-${category}`}
                   onClick={() => handleToggleCategory(category)}
-                  className={`rounded border px-2.5 py-1 text-xs font-medium transition-colors ${
+                  className={`rounded-lg border px-2.5 py-1 text-xs font-medium transition-colors ${
                     isSelected
-                      ? 'border-zinc-900 bg-zinc-900 text-white'
-                      : 'border-zinc-300 bg-white text-zinc-800 hover:bg-zinc-100'
+                      ? 'border-zinc-100 bg-zinc-100 text-zinc-950 font-bold'
+                      : 'border-zinc-800 bg-zinc-950/80 text-zinc-300 hover:bg-zinc-800'
                   }`}
                 >
                   {category}
@@ -308,21 +431,23 @@ export default function HomePage() {
           </div>
         </section>
 
-        <StocksRankingTable
-          items={stocks}
-          total={total}
-          page={filters.page}
-          totalPages={totalPages}
-          sectors={sectors}
-          filters={filters}
-          loading={loading}
-          onUpdateFilters={handleUpdateFilters}
-          onSelectStock={handleSelectStock}
-        />
+        <div id="ranking-table-section">
+          <StocksRankingTable
+            items={stocks}
+            total={total}
+            page={filters.page}
+            totalPages={totalPages}
+            sectors={sectors}
+            filters={filters}
+            loading={loading}
+            onUpdateFilters={handleUpdateFilters}
+            onSelectStock={handleSelectStock}
+          />
+        </div>
       </main>
 
-      <footer className="mt-12 border-t border-zinc-300 bg-white py-4">
-        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-4 text-xs text-zinc-500 sm:flex-row">
+      <footer className="mt-12 border-t border-zinc-800 bg-zinc-900/60 py-5">
+        <div className="mx-auto flex max-w-[1520px] flex-col items-center justify-between gap-2 px-4 text-xs text-zinc-400 sm:flex-row sm:px-6 lg:px-8">
           <span>
             B-Stocks MVP — Modelos matemáticos determinísticos (Décio Bazin, Benjamin Graham, SMA 50/200, RSI 14).
           </span>
