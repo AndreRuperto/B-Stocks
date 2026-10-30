@@ -6,6 +6,8 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { StockTickerCarousel } from '@/components/stock-ticker-carousel';
 import { IbovMarketOverview } from '@/components/ibov-market-overview';
+import { LandingRankingsPreview } from '@/components/landing-rankings-preview';
+import { MarketNewsSection } from '@/components/market-news-section';
 import { CompanyLogo } from '@/components/company-logo';
 import {
   Activity,
@@ -118,26 +120,6 @@ const SHOWCASE_STOCKS: ShowcaseStock[] = [
   },
 ];
 
-const SECTORS_LIST = [
-  'Água e Saneamento',
-  'Bancos',
-  'Bens Industriais',
-  'Construção Civil',
-  'Consumo Cíclico',
-  'Consumo Não Cíclico',
-  'Energia Elétrica',
-  'Financeiro',
-  'Materiais Básicos',
-  'Mineração',
-  'Petróleo, Gás e Biocombustíveis',
-  'Previdência e Seguros',
-  'Saúde',
-  'Seguradoras',
-  'Tecnologia',
-  'Telecomunicações',
-  'Utilidade Pública',
-];
-
 const FAQ_ITEMS = [
   {
     question: 'O B-Stocks é realmente 100% gratuito no MVP?',
@@ -212,6 +194,12 @@ export default function LandingHomePage() {
               Ibovespa &amp; Pregão
             </a>
             <a
+              href="#rankings"
+              className="hover:text-emerald-400 transition-colors"
+            >
+              Ranking dos Ativos
+            </a>
+            <a
               href="#metodologia"
               className="hover:text-emerald-400 transition-colors"
             >
@@ -224,10 +212,10 @@ export default function LandingHomePage() {
               Por Que B-Stocks
             </a>
             <a
-              href="#setores"
+              href="#noticias"
               className="hover:text-emerald-400 transition-colors"
             >
-              17 Setores B3
+              Notícias da Bolsa
             </a>
             <a
               href="#faq"
@@ -573,6 +561,8 @@ export default function LandingHomePage() {
           <IbovMarketOverview />
         </div>
 
+        <LandingRankingsPreview />
+
         <section id="metodologia" className="scroll-mt-24 space-y-8">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div className="max-w-2xl space-y-2">
@@ -844,42 +834,7 @@ export default function LandingHomePage() {
           </div>
         </section>
 
-        <section id="setores" className="scroll-mt-24 space-y-6">
-          <div className="text-center max-w-2xl mx-auto space-y-2">
-            <Badge
-              variant="outline"
-              className="border-zinc-700 bg-zinc-900 text-zinc-300 text-[10px] uppercase font-bold"
-            >
-              Mapeamento Completo B3
-            </Badge>
-            <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-zinc-50">
-              17 Setores Econômicos com Filtro Multicategoria
-            </h2>
-            <p className="text-xs sm:text-sm text-zinc-400">
-              Selecione um ou múltiplos setores simultaneamente no terminal para
-              comparar empresas perenes de energia, bancos, saneamento,
-              seguradoras e commodities.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
-            {SECTORS_LIST.map((sector) => (
-              <Link
-                key={sector}
-                href="/terminal"
-                className="group relative overflow-hidden flex flex-col justify-between rounded-2xl border border-zinc-800/90 bg-zinc-900/75 p-4 transition-all hover:-translate-y-0.5 hover:border-emerald-500/50 hover:bg-zinc-900 shadow-sm"
-              >
-                <span className="text-xs font-bold text-zinc-100 group-hover:text-emerald-300 transition-colors">
-                  {sector}
-                </span>
-                <span className="mt-3 inline-flex items-center gap-1 text-[10px] font-semibold text-zinc-500 group-hover:text-zinc-300">
-                  Filtrar ativos
-                  <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" />
-                </span>
-              </Link>
-            ))}
-          </div>
-        </section>
+        <MarketNewsSection />
 
         <section id="faq" className="scroll-mt-24 space-y-6">
           <div className="text-center max-w-2xl mx-auto space-y-2">
