@@ -11,6 +11,8 @@ import {
   B3_STANDARD_CATEGORIES,
   FilterParams,
   MarketSummary,
+  RankingPreset,
+  RankingPresetEnum,
   StockItem,
 } from '@/lib/schemas';
 import { MarketSummaryCards } from '@/components/market-summary-cards';
@@ -72,6 +74,84 @@ export default function TerminalPage() {
       }
     } finally {
       setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const params = new URLSearchParams(window.location.search);
+    const searchParam = params.get('search');
+    const headerPresetParam = params.get('headerPreset');
+    const presetParam = params.get('preset');
+
+    if (
+      headerPresetParam === 'todas' ||
+      headerPresetParam === 'maiores_receitas' ||
+      headerPresetParam === 'maiores_valor_mercado'
+    ) {
+      setActiveHeaderPreset(headerPresetParam);
+      if (headerPresetParam === 'maiores_receitas') {
+        setFilters((prev) => ({
+          ...prev,
+          search: searchParam || prev.search,
+          rankingPreset: 'maiores_receitas',
+          sortBy: 'revenue',
+          sortOrder: 'desc',
+          page: 1,
+        }));
+        return;
+      }
+      setFilters((prev) => ({
+        ...prev,
+        search: searchParam || prev.search,
+        rankingPreset: 'valor_mercado',
+        sortBy: 'marketCap',
+        sortOrder: 'desc',
+        page: 1,
+      }));
+      return;
+    }
+
+    if (presetParam) {
+      const parsed = RankingPresetEnum.safeParse(presetParam);
+      if (parsed.success) {
+        const preset: RankingPreset = parsed.data;
+        if (preset === 'maiores_receitas') {
+          setActiveHeaderPreset('maiores_receitas');
+        } else if (preset === 'valor_mercado') {
+          setActiveHeaderPreset('maiores_valor_mercado');
+        }
+        const sortFieldMap: Record<RankingPreset, FilterParams['sortBy']> = {
+          valor_mercado: 'marketCap',
+          dy: 'dy',
+          graham: 'grahamMargin',
+          margem_liquida: 'netMargin',
+          buy_and_hold: 'scoreTotal',
+          mais_queridas: 'dailyLiquidity',
+          bazin: 'bazinMargin',
+          maiores_receitas: 'revenue',
+          maiores_lucros: 'netIncome',
+          maiores_altas: 'change24h',
+          maiores_baixas: 'change24h',
+        };
+        setFilters((prev) => ({
+          ...prev,
+          search: searchParam || prev.search,
+          rankingPreset: preset,
+          sortBy: sortFieldMap[preset],
+          sortOrder: preset === 'maiores_baixas' ? 'asc' : 'desc',
+          page: 1,
+        }));
+        return;
+      }
+    }
+
+    if (searchParam) {
+      setFilters((prev) => ({
+        ...prev,
+        search: searchParam,
+        page: 1,
+      }));
     }
   }, []);
 
