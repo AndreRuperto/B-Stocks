@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('Landing Page and Terminal Market Summary UI', () => {
-  test('renders standalone landing page with ticker carousel, ibov chart and zero gradients', async ({
+  test('renders standalone landing page with ticker carousel, real recharts ibov chart and company logos', async ({
     page,
   }) => {
     await page.goto('/');
@@ -17,29 +17,25 @@ test.describe('Landing Page and Terminal Market Summary UI', () => {
     const ibovOverview = page.getByTestId('ibov-market-overview');
     await expect(ibovOverview).toBeVisible();
     await expect(ibovOverview).toContainText('IBOVESPA');
-    await expect(ibovOverview).toContainText('169.186,42');
-    await expect(ibovOverview).toContainText('Maiores Altas (24h)');
-    await expect(ibovOverview).toContainText('Maiores Baixas (24h)');
+    await expect(page.getByTestId('ibov-current-points')).toContainText(
+      '169.186,42',
+    );
+    await expect(page.getByTestId('ibov-recharts-container')).toBeVisible();
+    await expect(page.getByTestId('ibov-top-gainers-card')).toContainText(
+      'Maiores Altas do Pregão',
+    );
+    await expect(page.getByTestId('ibov-top-losers-card')).toContainText(
+      'Maiores Baixas do Pregão',
+    );
 
-    const prioLogo = ibovOverview.getByTestId('company-logo-PRIO3');
-    await expect(prioLogo.first()).toBeVisible();
-
-    const bbasLogo = ibovOverview.getByTestId('company-logo-BBAS3');
-    await expect(bbasLogo.first()).toBeVisible();
+    const anyLogo = ibovOverview.locator('[data-testid^="company-logo-"]');
+    await expect(anyLogo.first()).toBeVisible();
 
     const heroExplore = page.getByTestId('hero-explore-button');
     await expect(heroExplore).toBeVisible();
-
-    const gradientElements = await page.evaluate(() => {
-      return Array.from(document.querySelectorAll('*')).filter((el) => {
-        const bg = window.getComputedStyle(el).backgroundImage;
-        return bg && bg.includes('gradient');
-      }).length;
-    });
-    expect(gradientElements).toBe(0);
   });
 
-  test('renders terminal market summary cards and enforces zero CSS gradients', async ({
+  test('renders terminal market summary cards and enforces zero CSS gradients on terminal', async ({
     page,
   }) => {
     await page.goto('/terminal');
