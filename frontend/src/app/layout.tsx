@@ -1,5 +1,12 @@
 import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
 import './globals.css';
+
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+  display: 'swap',
+});
 
 export const metadata: Metadata = {
   title: 'B-Stocks | Terminal Quantitativo e Fundamentalista da B3',
@@ -14,7 +21,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt-BR" className="dark">
-      <body className="min-h-screen bg-zinc-950 text-zinc-100 antialiased">
+      <body className={`${inter.variable} font-sans min-h-screen bg-zinc-950 text-zinc-100 antialiased`}>
         {children}
       </body>
     </html>
