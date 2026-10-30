@@ -886,46 +886,6 @@ export function StocksRankingTable({
           </div>
         )}
 
-        <div
-          aria-label="Botões Rápidos de Ordenação da Lista"
-          className="mt-3 flex flex-wrap items-center gap-1.5 border-t border-zinc-800 pt-3"
-        >
-          <span className="mr-1 text-[11px] font-semibold uppercase tracking-wider text-zinc-400">
-            Ordenar Colunas:
-          </span>
-          <button
-            type="button"
-            data-testid="header-sort-btn-ticker"
-            onClick={() => handleColumnSort('ticker')}
-            className={`inline-flex items-center rounded-lg border px-2.5 py-1 text-xs font-medium transition-colors ${
-              filters.sortBy === 'ticker'
-                ? 'border-zinc-500 bg-zinc-800 text-zinc-100 shadow-sm'
-                : 'border-zinc-800 bg-zinc-950 text-zinc-300 hover:bg-zinc-800 hover:text-zinc-100'
-            }`}
-          >
-            Ativos
-          </button>
-          {activeColumns.map((col) => {
-            const isPrimary = col.key === primaryColKey;
-            const isSorted = filters.sortBy === col.sortField;
-            return (
-              <button
-                key={col.key}
-                type="button"
-                data-testid={`header-sort-btn-${col.key}`}
-                onClick={() => handleColumnSort(col.sortField)}
-                className={`inline-flex items-center rounded-lg border px-2.5 py-1 text-xs font-medium transition-colors ${
-                  isSorted
-                    ? 'border-zinc-500 bg-zinc-800 text-zinc-100 shadow-sm'
-                    : 'border-zinc-800 bg-zinc-950 text-zinc-300 hover:bg-zinc-800 hover:text-zinc-100'
-                }`}
-              >
-                {isPrimary ? `(${col.label})` : col.label}
-              </button>
-            );
-          })}
-        </div>
-
         {customizeOpen && (
           <div
             data-testid="customize-panel"
@@ -1049,6 +1009,7 @@ export function StocksRankingTable({
               <TableHead>
                 <button
                   type="button"
+                  data-testid="header-sort-btn-ticker"
                   onClick={() => handleColumnSort('ticker')}
                   className="inline-flex items-center font-bold text-zinc-200 hover:text-zinc-100"
                 >
@@ -1064,6 +1025,7 @@ export function StocksRankingTable({
                     <div className="inline-flex items-center gap-1">
                       <button
                         type="button"
+                        data-testid={`header-sort-btn-${col.key}`}
                         onClick={() => handleColumnSort(col.sortField)}
                         className="inline-flex items-center text-left font-bold text-zinc-200 hover:text-zinc-100"
                       >
