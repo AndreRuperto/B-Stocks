@@ -41,9 +41,9 @@ export function MarketNewsSection() {
           <div className="flex items-center gap-2">
             <Badge
               variant="outline"
-              className="border-zinc-700 bg-zinc-800/60 text-zinc-100 text-[10px] uppercase font-bold tracking-wider"
+              className="border-zinc-700 bg-zinc-800/60 text-zinc-200 text-[10px] uppercase font-bold tracking-wider"
             >
-              <Newspaper className="mr-1.5 h-3 w-3 text-zinc-100" />
+              <Newspaper className="mr-1.5 h-3 w-3 text-zinc-200" />
               Feed em Tempo Real • Exclusivo Bolsa &amp; B3
             </Badge>
           </div>
@@ -110,7 +110,7 @@ export function MarketNewsSection() {
                     <div className="absolute left-3 top-3">
                       <Badge
                         variant="outline"
-                        className="border-zinc-700/90 bg-zinc-950/90 text-[10px] font-bold text-zinc-100 backdrop-blur-md"
+                        className="border-zinc-700/90 bg-zinc-950/90 text-[10px] font-bold text-zinc-200 backdrop-blur-md"
                       >
                         {article.source}
                       </Badge>
@@ -118,7 +118,7 @@ export function MarketNewsSection() {
                   </div>
 
                   <div className="p-5 space-y-2.5">
-                    <h3 className="text-sm sm:text-base font-extrabold text-zinc-100 leading-snug line-clamp-2 group-hover:text-zinc-100 transition-colors">
+                    <h3 className="text-sm sm:text-base font-extrabold text-zinc-100 leading-snug line-clamp-2 group-hover:text-zinc-200 transition-colors">
                       {article.title}
                     </h3>
                     <p className="text-xs text-zinc-400 leading-relaxed line-clamp-3">
@@ -132,7 +132,7 @@ export function MarketNewsSection() {
                     <Calendar className="h-3.5 w-3.5 text-zinc-500" />
                     {formattedDate}
                   </span>
-                  <span className="inline-flex items-center gap-1 text-zinc-100 group-hover:text-zinc-100">
+                  <span className="inline-flex items-center gap-1 text-zinc-200 group-hover:text-zinc-200">
                     Ler matéria completa
                     <ExternalLink className="h-3.5 w-3.5" />
                   </span>

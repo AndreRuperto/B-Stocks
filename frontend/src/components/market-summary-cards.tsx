@@ -132,7 +132,7 @@ export function MarketSummaryCards({
               onClick={() => onSelectCategory('ALL')}
               className={`rounded-lg border px-3 py-1.5 text-xs font-medium transition-colors ${
                 selectedCategory === 'ALL'
-                  ? 'border-zinc-100 bg-zinc-100 text-zinc-950 font-semibold'
+                  ? 'border-zinc-600 bg-zinc-700 text-zinc-50 font-semibold'
                   : 'border-zinc-800 bg-zinc-950/70 text-zinc-300 hover:bg-zinc-800'
               }`}
             >
@@ -149,7 +149,7 @@ export function MarketSummaryCards({
                 }
                 className={`rounded-lg border px-3 py-1.5 text-xs font-medium transition-colors ${
                   selectedCategory === cat.category
-                    ? 'border-zinc-100 bg-zinc-100 text-zinc-950 font-semibold'
+                    ? 'border-zinc-600 bg-zinc-700 text-zinc-50 font-semibold'
                     : 'border-zinc-800 bg-zinc-950/70 text-zinc-300 hover:bg-zinc-800'
                 }`}
               >

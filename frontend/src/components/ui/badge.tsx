@@ -10,9 +10,9 @@ const badgeVariants = cva(
         default: 'border-zinc-700 bg-zinc-800 text-zinc-100',
         secondary: 'border-zinc-800 bg-zinc-900/90 text-zinc-300',
         outline: 'border-zinc-700 bg-zinc-950 text-zinc-300',
-        positive: 'border-zinc-700 bg-zinc-800 text-zinc-100 font-semibold',
-        negative: 'border-zinc-700 bg-zinc-800 text-zinc-100 font-semibold',
-        warning: 'border-zinc-700 bg-zinc-800 text-zinc-100 font-semibold',
+        positive: 'border-emerald-800 bg-emerald-950/70 text-emerald-300 font-semibold',
+        negative: 'border-red-800 bg-red-950/70 text-red-300 font-semibold',
+        warning: 'border-amber-800 bg-amber-950/70 text-amber-300 font-semibold',
       },
     },
     defaultVariants: {

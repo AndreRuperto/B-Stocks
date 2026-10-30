@@ -202,7 +202,7 @@ export default function LandingHomePage() {
               <Button
                 type="button"
                 size="sm"
-                className="h-9 rounded-xl bg-zinc-100 px-4 text-xs font-extrabold text-zinc-950 hover:bg-zinc-200 gap-1.5 shadow-lg transition-all"
+                className="h-9 rounded-xl bg-zinc-800 px-4 text-xs font-extrabold text-zinc-50 border border-zinc-700 hover:bg-zinc-700 gap-1.5 shadow-lg transition-all"
               >
                 <Terminal className="h-3.5 w-3.5" />
                 Acessar Terminal
@@ -223,7 +223,7 @@ export default function LandingHomePage() {
           <div className="relative grid grid-cols-1 gap-10 lg:grid-cols-12 lg:items-center">
             <div className="space-y-6 lg:col-span-7">
               <div className="inline-flex flex-wrap items-center gap-2 rounded-full border border-zinc-700 bg-zinc-800/60 px-4 py-1.5 text-xs font-bold text-zinc-100">
-                <span className="flex h-2 w-2 rounded-full bg-zinc-200 animate-ping" />
+                <span className="flex h-2 w-2 rounded-full bg-zinc-500 animate-ping" />
                 <span>Motor Quantitativo B3 em Tempo Real</span>
                 <span className="text-zinc-100">•</span>
                 <span className="text-zinc-200">962 Ações Sincronizadas</span>
@@ -256,7 +256,7 @@ export default function LandingHomePage() {
                     type="button"
                     size="lg"
                     data-testid="hero-explore-button"
-                    className="h-12 rounded-xl bg-zinc-100 px-7 text-sm font-black text-zinc-950 hover:bg-zinc-200 gap-2 shadow-xl transition-all"
+                    className="h-12 rounded-xl bg-zinc-800 px-7 text-sm font-black text-zinc-50 border border-zinc-700 hover:bg-zinc-700 gap-2 shadow-xl transition-all"
                   >
                     Abrir Terminal de Ações Completo
                     <ArrowRight className="h-4 w-4" />
@@ -295,7 +295,7 @@ export default function LandingHomePage() {
               <div className="rounded-2xl border border-zinc-700/80 bg-zinc-900/90 p-5 shadow-2xl backdrop-blur-xl">
                 <div className="flex items-center justify-between border-b border-zinc-800 pb-3.5">
                   <div className="flex items-center gap-2">
-                    <span className="h-2.5 w-2.5 rounded-full bg-zinc-200" />
+                    <span className="h-2.5 w-2.5 rounded-full bg-zinc-500" />
                     <span className="text-xs font-extrabold uppercase tracking-wider text-zinc-200">
                       Simulador Rápido de Valuation
                     </span>
@@ -388,8 +388,8 @@ export default function LandingHomePage() {
                         <span
                           className={`text-xs font-extrabold tabular-nums ${
                             selectedShowcase.bazinUpside >= 0
-                              ? 'text-zinc-100'
-                              : 'text-zinc-100'
+                              ? 'text-emerald-400'
+                              : 'text-red-400'
                           }`}
                         >
                           {selectedShowcase.bazinUpside >= 0 ? '+' : ''}
@@ -416,8 +416,8 @@ export default function LandingHomePage() {
                         <span
                           className={`text-xs font-extrabold tabular-nums ${
                             selectedShowcase.grahamUpside >= 0
-                              ? 'text-zinc-100'
-                              : 'text-zinc-100'
+                              ? 'text-emerald-400'
+                              : 'text-red-400'
                           }`}
                         >
                           {selectedShowcase.grahamUpside >= 0 ? '+' : ''}
@@ -451,7 +451,7 @@ export default function LandingHomePage() {
                       <span className="block text-[10px] text-zinc-500">
                         DY 12m
                       </span>
-                      <strong className="font-bold text-zinc-100 tabular-nums">
+                      <strong className="font-bold text-emerald-400 tabular-nums">
                         {selectedShowcase.dy.toFixed(2).replace('.', ',')}%
                       </strong>
                     </div>
@@ -459,7 +459,7 @@ export default function LandingHomePage() {
                       <span className="block text-[10px] text-zinc-500">
                         Score B&amp;H
                       </span>
-                      <strong className="font-black text-zinc-100 tabular-nums">
+                      <strong className="font-black text-emerald-400 tabular-nums">
                         {selectedShowcase.score}/100
                       </strong>
                     </div>
@@ -858,7 +858,7 @@ export default function LandingHomePage() {
               <Button
                 type="button"
                 size="lg"
-                className="h-12 rounded-xl bg-zinc-100 px-8 text-sm font-black text-zinc-950 hover:bg-zinc-200 gap-2 shadow-xl"
+                className="h-12 rounded-xl bg-zinc-800 px-8 text-sm font-black text-zinc-50 border border-zinc-700 hover:bg-zinc-700 gap-2 shadow-xl"
               >
                 Acessar Terminal B-Stocks Agora
                 <ArrowRight className="h-4 w-4" />

@@ -77,7 +77,7 @@ function IbovCustomTooltip({ active, payload }: CustomTooltipProps) {
         </span>
         <span
           className={`text-[11px] font-bold tabular-nums ${
-            isUp ? 'text-zinc-100' : 'text-zinc-100'
+            isUp ? 'text-emerald-400' : 'text-red-400'
           }`}
         >
           {isUp ? '+' : ''}
@@ -97,13 +97,13 @@ function IbovCustomTooltip({ active, payload }: CustomTooltipProps) {
         </div>
         <div>
           <span className="block text-zinc-500">Máxima</span>
-          <strong className="tabular-nums text-zinc-100">
+          <strong className="tabular-nums text-emerald-400">
             {formatCompactPoints(point.high)}
           </strong>
         </div>
         <div>
           <span className="block text-zinc-500">Mínima</span>
-          <strong className="tabular-nums text-zinc-100">
+          <strong className="tabular-nums text-red-400">
             {formatCompactPoints(point.low)}
           </strong>
         </div>
@@ -190,7 +190,7 @@ export function IbovMarketOverview() {
     ibovData && ibovData.currentPoints > 0 && ibovData.points.length > 0,
   );
   const isPositive = (ibovData?.changePercent ?? 0) >= 0;
-  const strokeColor = '#e4e4e7';
+  const strokeColor = isPositive ? '#10b981' : '#ef4444';
 
   const formattedPoints = hasValidIbov
     ? formatPointsBrl(ibovData!.currentPoints)
@@ -228,9 +228,9 @@ export function IbovMarketOverview() {
           <div className="flex flex-wrap items-center gap-2">
             <Badge
               variant="outline"
-              className="border-zinc-700 bg-zinc-800/60 text-zinc-100 text-[10px] uppercase font-bold tracking-wider"
+              className="border-zinc-700 bg-zinc-800/60 text-zinc-200 text-[10px] uppercase font-bold tracking-wider"
             >
-              <span className="mr-1.5 inline-block h-1.5 w-1.5 rounded-full bg-zinc-200 animate-pulse" />
+              <span className="mr-1.5 inline-block h-1.5 w-1.5 rounded-full bg-zinc-800 animate-pulse" />
               Série Histórica Oficial (^BVSP)
             </Badge>
             <span className="flex items-center gap-1 text-xs text-zinc-400">
@@ -251,7 +251,7 @@ export function IbovMarketOverview() {
             className="rounded-xl border-zinc-700/80 bg-zinc-900/90 px-4 py-2 text-xs font-bold text-zinc-100 hover:border-zinc-700 hover:bg-zinc-800 gap-2 transition-all"
           >
             Explorar Todos os Ativos no Terminal
-            <ArrowRight className="h-3.5 w-3.5 text-zinc-100" />
+            <ArrowRight className="h-3.5 w-3.5 text-zinc-200" />
           </Button>
         </Link>
       </div>
@@ -262,7 +262,7 @@ export function IbovMarketOverview() {
             <div className="flex flex-wrap items-start justify-between gap-4 border-b border-zinc-800/80 pb-4">
               <div>
                 <div className="flex items-center gap-2">
-                  <BarChart3 className="h-4 w-4 text-zinc-100" />
+                  <BarChart3 className="h-4 w-4 text-zinc-200" />
                   <span className="text-xs font-extrabold uppercase tracking-wider text-zinc-300">
                     IBOVESPA
                   </span>
@@ -291,8 +291,8 @@ export function IbovMarketOverview() {
                     <span
                       className={`inline-flex items-center gap-1 rounded-lg px-2.5 py-1 text-xs font-bold tabular-nums ${
                         isPositive
-                          ? 'bg-zinc-800/60 text-zinc-100 border border-zinc-700'
-                          : 'bg-zinc-800/60 text-zinc-100 border border-zinc-700'
+                          ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30'
+                          : 'bg-red-500/15 text-red-400 border border-red-500/30'
                       }`}
                     >
                       {isPositive ? (
@@ -320,7 +320,7 @@ export function IbovMarketOverview() {
                     onClick={() => setSelectedPeriod(period)}
                     className={`rounded-lg px-3 py-1.5 text-xs font-bold transition-all ${
                       selectedPeriod === period
-                        ? 'bg-zinc-100 text-zinc-950 shadow-sm'
+                        ? 'bg-zinc-700 text-zinc-50 shadow-sm'
                         : 'text-zinc-400 hover:text-zinc-100'
                     }`}
                   >
@@ -335,7 +335,7 @@ export function IbovMarketOverview() {
                 <span className="block text-[10px] font-semibold uppercase tracking-wider text-zinc-500">
                   Máxima ({selectedPeriod})
                 </span>
-                <strong className="mt-0.5 block text-xs sm:text-sm font-bold text-zinc-100 tabular-nums">
+                <strong className="mt-0.5 block text-xs sm:text-sm font-bold text-emerald-400 tabular-nums">
                   {hasValidIbov ? `${formatPointsBrl(ibovData!.dayHigh)} pts` : '-'}
                 </strong>
               </div>
@@ -343,7 +343,7 @@ export function IbovMarketOverview() {
                 <span className="block text-[10px] font-semibold uppercase tracking-wider text-zinc-500">
                   Mínima ({selectedPeriod})
                 </span>
-                <strong className="mt-0.5 block text-xs sm:text-sm font-bold text-zinc-100 tabular-nums">
+                <strong className="mt-0.5 block text-xs sm:text-sm font-bold text-red-400 tabular-nums">
                   {hasValidIbov ? `${formatPointsBrl(ibovData!.dayLow)} pts` : '-'}
                 </strong>
               </div>
@@ -445,7 +445,7 @@ export function IbovMarketOverview() {
               </ResponsiveContainer>
             ) : (
               <div className="flex h-full w-full items-center justify-center rounded-xl border border-zinc-800/60 bg-zinc-950/40 text-xs text-zinc-400">
-                <Activity className="mr-2 h-4 w-4 animate-pulse text-zinc-100" />
+                <Activity className="mr-2 h-4 w-4 animate-pulse text-zinc-200" />
                 {isLoading
                   ? 'Carregando série histórica oficial do Ibovespa (^BVSP)...'
                   : 'Série histórica indisponível no momento (-)'}
@@ -474,7 +474,7 @@ export function IbovMarketOverview() {
           >
             <div className="flex items-center justify-between border-b border-zinc-800/80 pb-3">
               <div className="flex items-center gap-2.5">
-                <div className="flex h-7 w-7 items-center justify-center rounded-lg border border-zinc-700 bg-zinc-800/60 text-zinc-100">
+                <div className="flex h-7 w-7 items-center justify-center rounded-lg border border-zinc-700 bg-zinc-800/60 text-zinc-200">
                   <TrendingUp className="h-4 w-4" />
                 </div>
                 <div>
@@ -488,7 +488,7 @@ export function IbovMarketOverview() {
               </div>
               <Link
                 href="/terminal?preset=maiores_altas"
-                className="text-[11px] font-bold text-zinc-100 hover:text-zinc-100 transition-colors"
+                className="text-[11px] font-bold text-zinc-200 hover:text-zinc-50 transition-colors"
               >
                 Ver Ranking &rarr;
               </Link>
@@ -515,7 +515,7 @@ export function IbovMarketOverview() {
                       />
                       <div className="min-w-0">
                         <div className="flex items-center gap-1.5">
-                          <span className="font-extrabold text-zinc-100 group-hover:text-zinc-100 transition-colors">
+                          <span className="font-extrabold text-zinc-100 group-hover:text-zinc-200 transition-colors">
                             {stock.ticker}
                           </span>
                           <span className="truncate rounded bg-zinc-800/80 px-1.5 py-0.5 text-[9px] font-medium text-zinc-400 max-w-[115px]">
@@ -537,7 +537,7 @@ export function IbovMarketOverview() {
                             })
                           : '-'}
                       </div>
-                      <span className="inline-flex items-center text-[11px] font-bold text-zinc-100 tabular-nums">
+                      <span className="inline-flex items-center text-[11px] font-bold text-emerald-400 tabular-nums">
                         <ArrowUp className="mr-0.5 h-3 w-3" />+
                         {Math.abs(stock.change24h).toFixed(2).replace('.', ',')}%
                       </span>
@@ -554,7 +554,7 @@ export function IbovMarketOverview() {
           >
             <div className="flex items-center justify-between border-b border-zinc-800/80 pb-3">
               <div className="flex items-center gap-2.5">
-                <div className="flex h-7 w-7 items-center justify-center rounded-lg border border-zinc-700 bg-zinc-800/60 text-zinc-100">
+                <div className="flex h-7 w-7 items-center justify-center rounded-lg border border-red-500/30 bg-red-500/15 text-red-400">
                   <TrendingDown className="h-4 w-4" />
                 </div>
                 <div>
@@ -595,7 +595,7 @@ export function IbovMarketOverview() {
                       />
                       <div className="min-w-0">
                         <div className="flex items-center gap-1.5">
-                          <span className="font-extrabold text-zinc-100 group-hover:text-zinc-100 transition-colors">
+                          <span className="font-extrabold text-zinc-100 group-hover:text-red-300 transition-colors">
                             {stock.ticker}
                           </span>
                           <span className="truncate rounded bg-zinc-800/80 px-1.5 py-0.5 text-[9px] font-medium text-zinc-400 max-w-[115px]">
@@ -617,7 +617,7 @@ export function IbovMarketOverview() {
                             })
                           : '-'}
                       </div>
-                      <span className="inline-flex items-center text-[11px] font-bold text-zinc-100 tabular-nums">
+                      <span className="inline-flex items-center text-[11px] font-bold text-red-400 tabular-nums">
                         <ArrowDown className="mr-0.5 h-3 w-3" />-
                         {Math.abs(stock.change24h).toFixed(2).replace('.', ',')}%
                       </span>
