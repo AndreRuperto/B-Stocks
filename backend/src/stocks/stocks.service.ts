@@ -329,6 +329,64 @@ export class StocksService implements OnModuleInit {
     };
   }
 
+  async getMarketOverview(periodParam?: string) {
+    const validPeriods = ['1D', '5D', '1M', '6M', '1A'] as const;
+    const normalized = (periodParam || '1D').toUpperCase();
+    const period: '1D' | '5D' | '1M' | '6M' | '1A' = (
+      validPeriods as readonly string[]
+    ).includes(normalized)
+      ? (normalized as '1D' | '5D' | '1M' | '6M' | '1A')
+      : '1D';
+
+    const famousTickers = [
+      'BBAS3',
+      'PETR4',
+      'VALE3',
+      'ITUB4',
+      'WEGE3',
+      'BBDC4',
+      'ABEV3',
+      'RENT3',
+      'PRIO3',
+      'SBSP3',
+      'VIVT3',
+      'BBSE3',
+      'RADL3',
+      'SUZB3',
+      'CMIG4',
+      'CPLE6',
+      'TAEE11',
+      'EGIE3',
+      'LREN3',
+      'GGBR4',
+    ];
+
+    const [ibovespa, topGainers, topLosers, tickerTape] = await Promise.all([
+      this.marketDataService.fetchIbovespaHistory(period),
+      this.prisma.stock.findMany({
+        where: { dailyLiquidity: { gte: 1_000_000 }, change24h: { gt: 0 } },
+        orderBy: [{ change24h: 'desc' }, { dailyLiquidity: 'desc' }],
+        take: 6,
+      }),
+      this.prisma.stock.findMany({
+        where: { dailyLiquidity: { gte: 1_000_000 }, change24h: { lt: 0 } },
+        orderBy: [{ change24h: 'asc' }, { dailyLiquidity: 'desc' }],
+        take: 6,
+      }),
+      this.prisma.stock.findMany({
+        where: { ticker: { in: famousTickers } },
+        orderBy: { marketCap: 'desc' },
+      }),
+    ]);
+
+    return {
+      ibovespa,
+      topGainers,
+      topLosers,
+      tickerTape,
+    };
+  }
+
   async findByTicker(ticker: string) {
     const clean = ticker.toUpperCase().trim();
     const stock = await this.prisma.stock.findUnique({
