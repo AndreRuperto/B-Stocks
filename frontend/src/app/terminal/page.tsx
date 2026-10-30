@@ -1,5 +1,6 @@
 'use client';
 
+import { BrandLogo } from '@/components/brand-logo';
 import React, { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
 import {
@@ -241,37 +242,7 @@ export default function TerminalPage() {
       <header className="sticky top-0 z-40 border-b border-zinc-800 bg-zinc-950/95 backdrop-blur-md">
         <div className="mx-auto flex max-w-[1520px] flex-col gap-3 px-4 py-3.5 sm:px-6 lg:px-8">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <div className="flex items-center gap-3">
-              <Link
-                href="/"
-                className="flex h-9 w-9 items-center justify-center rounded-lg border border-zinc-700 bg-zinc-900 font-black text-sm text-zinc-100 hover:border-zinc-500 transition-colors"
-                title="Voltar para a Landing Page"
-              >
-                B
-              </Link>
-              <div>
-                <div className="flex items-center gap-2">
-                  <h1 className="text-base font-black tracking-tight text-zinc-100">
-                    B-STOCKS TERMINAL
-                  </h1>
-                  <Badge
-                    variant="outline"
-                    className="border-zinc-700 text-[10px] text-zinc-300 px-1.5 py-0"
-                  >
-                    B3 Realtime
-                  </Badge>
-                  <Badge
-                    variant="default"
-                    className="text-[10px] uppercase tracking-wider font-bold"
-                  >
-                    100% Free
-                  </Badge>
-                </div>
-                <p className="text-[11px] text-zinc-400">
-                  Terminal de Análise Quantitativa e Fundamentalista da Bolsa Brasileira
-                </p>
-              </div>
-            </div>
+            <BrandLogo />
 
             <div className="flex flex-wrap items-center gap-3">
               <Link href="/">
