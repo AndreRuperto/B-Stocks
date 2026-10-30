@@ -24,12 +24,12 @@ export function MarketSummaryCards({
     return (
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {[1, 2, 3, 4].map((idx) => (
-          <Card key={idx} className="border-zinc-800 bg-zinc-900">
+          <Card key={idx} className="border-mist-800 bg-mist-900">
             <CardHeader className="pb-2">
-              <div className="h-4 w-32 bg-zinc-800 rounded animate-pulse" />
+              <div className="h-4 w-32 bg-mist-800 rounded animate-pulse" />
             </CardHeader>
             <CardContent>
-              <div className="h-7 w-20 bg-zinc-800 rounded animate-pulse" />
+              <div className="h-7 w-20 bg-mist-800 rounded animate-pulse" />
             </CardContent>
           </Card>
         ))}
@@ -40,79 +40,79 @@ export function MarketSummaryCards({
   return (
     <div className="space-y-4">
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <Card className="border-zinc-800 bg-zinc-900">
+        <Card className="border-mist-800 bg-mist-900">
           <CardHeader className="pb-1">
-            <CardTitle className="text-xs font-semibold uppercase tracking-wider text-zinc-400">
+            <CardTitle className="text-xs font-semibold uppercase tracking-wider text-stone-400">
               Total de Ativos na B3
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div
               data-testid="summary-total-stocks"
-              className="text-2xl font-bold text-zinc-100 tabular-nums"
+              className="text-2xl font-bold text-stone-100 tabular-nums"
             >
               {summary.totalStocks}
             </div>
-            <p className="mt-1 text-xs text-zinc-400">
+            <p className="mt-1 text-xs text-stone-400">
               {summary.passedCutCount} aprovadas no corte (Liq &gt; R$ 1M e Dív/EBITDA &lt; 3x)
             </p>
           </CardContent>
         </Card>
 
-        <Card className="border-zinc-800 bg-zinc-900">
+        <Card className="border-mist-800 bg-mist-900">
           <CardHeader className="pb-1">
-            <CardTitle className="text-xs font-semibold uppercase tracking-wider text-zinc-400">
+            <CardTitle className="text-xs font-semibold uppercase tracking-wider text-stone-400">
               Oportunidades Décio Bazin (DY 6%)
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div
               data-testid="summary-bazin-count"
-              className="text-2xl font-bold text-zinc-100 tabular-nums"
+              className="text-2xl font-bold text-stone-100 tabular-nums"
             >
               {summary.bazinOpportunities}
             </div>
-            <p className="mt-1 text-xs text-zinc-400">
+            <p className="mt-1 text-xs text-stone-400">
               Ações líquidas abaixo do Preço Teto de Bazin
             </p>
           </CardContent>
         </Card>
 
-        <Card className="border-zinc-800 bg-zinc-900">
+        <Card className="border-mist-800 bg-mist-900">
           <CardHeader className="pb-1">
-            <CardTitle className="text-xs font-semibold uppercase tracking-wider text-zinc-400">
+            <CardTitle className="text-xs font-semibold uppercase tracking-wider text-stone-400">
               Oportunidades Benjamin Graham
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div
               data-testid="summary-graham-count"
-              className="text-2xl font-bold text-zinc-100 tabular-nums"
+              className="text-2xl font-bold text-stone-100 tabular-nums"
             >
               {summary.grahamOpportunities}
             </div>
-            <p className="mt-1 text-xs text-zinc-400">
+            <p className="mt-1 text-xs text-stone-400">
               Ações líquidas negociadas abaixo de √(22,5 × LPA × VPA)
             </p>
           </CardContent>
         </Card>
 
-        <Card className="border-zinc-800 bg-zinc-900">
+        <Card className="border-mist-800 bg-mist-900">
           <CardHeader className="pb-1">
-            <CardTitle className="text-xs font-semibold uppercase tracking-wider text-zinc-400">
+            <CardTitle className="text-xs font-semibold uppercase tracking-wider text-stone-400">
               Média das Aprovadas no Corte
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex items-baseline gap-3">
-              <span className="text-2xl font-bold text-zinc-100 tabular-nums">
+              <span className="text-2xl font-bold text-stone-100 tabular-nums">
                 Score {summary.avgScorePassed.toFixed(1)}
               </span>
-              <span className="text-xs font-medium text-zinc-400 tabular-nums">
+              <span className="text-xs font-medium text-stone-400 tabular-nums">
                 DY {formatPercent(summary.avgDyPassed)} | ROE {formatPercent(summary.avgRoePassed)}
               </span>
             </div>
-            <p className="mt-1 text-xs text-zinc-400">
+            <p className="mt-1 text-xs text-stone-400">
               Ações com liquidez diária consistente na B3
             </p>
           </CardContent>
@@ -120,9 +120,9 @@ export function MarketSummaryCards({
       </div>
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-12">
-        <Card className="border-zinc-800 bg-zinc-900 lg:col-span-5">
+        <Card className="border-mist-800 bg-mist-900 lg:col-span-5">
           <CardHeader className="pb-2">
-            <CardTitle className="text-xs font-semibold uppercase tracking-wider text-zinc-400">
+            <CardTitle className="text-xs font-semibold uppercase tracking-wider text-stone-400">
               Classificação Temática (Modelo de Negócio)
             </CardTitle>
           </CardHeader>
@@ -132,8 +132,8 @@ export function MarketSummaryCards({
               onClick={() => onSelectCategory('ALL')}
               className={`rounded-lg border px-3 py-1.5 text-xs font-medium transition-colors ${
                 selectedCategory === 'ALL'
-                  ? 'border-zinc-600 bg-zinc-700 text-zinc-50 font-semibold'
-                  : 'border-zinc-800 bg-zinc-950/70 text-zinc-300 hover:bg-zinc-800'
+                  ? 'border-mist-600 bg-mist-700 text-stone-50 font-semibold'
+                  : 'border-mist-800 bg-mist-950/70 text-stone-300 hover:bg-mist-800'
               }`}
             >
               Todas ({summary.totalStocks})
@@ -149,8 +149,8 @@ export function MarketSummaryCards({
                 }
                 className={`rounded-lg border px-3 py-1.5 text-xs font-medium transition-colors ${
                   selectedCategory === cat.category
-                    ? 'border-zinc-600 bg-zinc-700 text-zinc-50 font-semibold'
-                    : 'border-zinc-800 bg-zinc-950/70 text-zinc-300 hover:bg-zinc-800'
+                    ? 'border-mist-600 bg-mist-700 text-stone-50 font-semibold'
+                    : 'border-mist-800 bg-mist-950/70 text-stone-300 hover:bg-mist-800'
                 }`}
               >
                 {cat.category} ({cat.count})
@@ -159,9 +159,9 @@ export function MarketSummaryCards({
           </CardContent>
         </Card>
 
-        <Card className="border-zinc-800 bg-zinc-900 lg:col-span-7">
+        <Card className="border-mist-800 bg-mist-900 lg:col-span-7">
           <CardHeader className="pb-2">
-            <CardTitle className="text-xs font-semibold uppercase tracking-wider text-zinc-400">
+            <CardTitle className="text-xs font-semibold uppercase tracking-wider text-stone-400">
               Destaques Quantitativos (Top Score com Liquidez &gt; R$ 1M)
             </CardTitle>
           </CardHeader>
@@ -172,7 +172,7 @@ export function MarketSummaryCards({
                   key={stock.ticker}
                   type="button"
                   onClick={() => onSelectStock(stock)}
-                  className="flex flex-col items-start justify-between rounded-lg border border-zinc-800 bg-zinc-950/80 p-2.5 text-left hover:border-zinc-700 hover:bg-zinc-800/80 transition-all"
+                  className="flex flex-col items-start justify-between rounded-lg border border-mist-800 bg-mist-950/80 p-2.5 text-left hover:border-mist-700 hover:bg-mist-800/80 transition-all"
                 >
                   <div className="flex w-full items-center justify-between gap-1">
                     <div className="flex items-center gap-1.5 min-w-0">
@@ -182,7 +182,7 @@ export function MarketSummaryCards({
                         companyName={stock.companyName}
                         size="sm"
                       />
-                      <span className="font-bold text-xs text-zinc-100 truncate">
+                      <span className="font-bold text-xs text-stone-100 truncate">
                         {stock.ticker}
                       </span>
                     </div>
@@ -190,10 +190,10 @@ export function MarketSummaryCards({
                       {stock.scoreTotal.toFixed(0)}
                     </Badge>
                   </div>
-                  <span className="mt-2 text-xs font-semibold text-zinc-200 tabular-nums">
+                  <span className="mt-2 text-xs font-semibold text-stone-200 tabular-nums">
                     {formatCurrency(stock.price)}
                   </span>
-                  <span className="text-[11px] text-zinc-400 tabular-nums">
+                  <span className="text-[11px] text-stone-400 tabular-nums">
                     DY {formatPercent(stock.dy)}
                   </span>
                 </button>

@@ -80,8 +80,8 @@ export function LandingRankingsPreview() {
       subtitle: 'Top 5 ativos com maior liquidez e valor na B3',
       href: '/terminal?headerPreset=todas',
       icon: BarChart3,
-      accentColor: 'text-zinc-200',
-      badgeBg: 'border-zinc-700 bg-zinc-800/60 text-zinc-200',
+      accentColor: 'text-stone-200',
+      badgeBg: 'border-mist-700 bg-mist-800/60 text-stone-200',
       items: allStocks,
       renderMetric: (stock: StockItem) => ({
         primary:
@@ -96,8 +96,8 @@ export function LandingRankingsPreview() {
       subtitle: 'Top 5 companhias por receita operacional líquida',
       href: '/terminal?headerPreset=maiores_receitas',
       icon: TrendingUp,
-      accentColor: 'text-zinc-200',
-      badgeBg: 'border-zinc-700 bg-zinc-800/60 text-zinc-200',
+      accentColor: 'text-stone-200',
+      badgeBg: 'border-mist-700 bg-mist-800/60 text-stone-200',
       items: topRevenue,
       renderMetric: (stock: StockItem) => ({
         primary:
@@ -115,8 +115,8 @@ export function LandingRankingsPreview() {
       subtitle: 'Top 5 empresas mais valiosas listadas na B3',
       href: '/terminal?headerPreset=maiores_valor_mercado',
       icon: Building2,
-      accentColor: 'text-zinc-200',
-      badgeBg: 'border-zinc-700 bg-zinc-800/60 text-zinc-200',
+      accentColor: 'text-stone-200',
+      badgeBg: 'border-mist-700 bg-mist-800/60 text-stone-200',
       items: topMarketCap,
       renderMetric: (stock: StockItem) => ({
         primary:
@@ -141,15 +141,15 @@ export function LandingRankingsPreview() {
           <div className="flex items-center gap-2">
             <Badge
               variant="outline"
-              className="border-zinc-700 bg-zinc-800/60 text-zinc-200 text-[10px] uppercase font-bold tracking-wider"
+              className="border-mist-700 bg-mist-800/60 text-stone-200 text-[10px] uppercase font-bold tracking-wider"
             >
               Rankings Oficiais do Terminal
             </Badge>
           </div>
-          <h2 className="mt-2 text-2xl sm:text-3xl font-black tracking-tight text-zinc-100">
+          <h2 className="mt-2 text-2xl sm:text-3xl font-black tracking-tight text-stone-100">
             Ranking dos Ativos
           </h2>
-          <p className="mt-1 text-xs sm:text-sm text-zinc-400">
+          <p className="mt-1 text-xs sm:text-sm text-stone-400">
             As 5 primeiras colocadas nos 3 modos principais disponíveis no
             cabeçalho do terminal B-Stocks.
           </p>
@@ -160,10 +160,10 @@ export function LandingRankingsPreview() {
             type="button"
             variant="outline"
             size="sm"
-            className="rounded-xl border-zinc-700/80 bg-zinc-900/90 px-4 py-2 text-xs font-bold text-zinc-100 hover:border-zinc-700 hover:bg-zinc-800 gap-2 transition-all"
+            className="rounded-xl border-mist-700/80 bg-mist-900/90 px-4 py-2 text-xs font-bold text-stone-100 hover:border-mist-700 hover:bg-mist-800 gap-2 transition-all"
           >
             Ver Todos os 11 Rankings no Terminal
-            <ArrowRight className="h-3.5 w-3.5 text-zinc-200" />
+            <ArrowRight className="h-3.5 w-3.5 text-stone-200" />
           </Button>
         </Link>
       </div>
@@ -175,10 +175,10 @@ export function LandingRankingsPreview() {
             <div
               key={card.id}
               data-testid={card.testId}
-              className="flex flex-col justify-between rounded-2xl border border-zinc-800/90 bg-zinc-900/80 p-5 shadow-xl backdrop-blur-xl"
+              className="flex flex-col justify-between rounded-2xl border border-mist-800/90 bg-mist-900/80 p-5 shadow-xl backdrop-blur-xl"
             >
               <div>
-                <div className="flex items-start justify-between gap-3 border-b border-zinc-800/80 pb-3.5">
+                <div className="flex items-start justify-between gap-3 border-b border-mist-800/80 pb-3.5">
                   <div className="flex items-center gap-3">
                     <div
                       className={`flex h-9 w-9 items-center justify-center rounded-xl border ${card.badgeBg}`}
@@ -186,23 +186,23 @@ export function LandingRankingsPreview() {
                       <IconComponent className="h-4 w-4" />
                     </div>
                     <div>
-                      <h3 className="text-sm font-extrabold text-zinc-100">
+                      <h3 className="text-sm font-extrabold text-stone-100">
                         {card.title}
                       </h3>
-                      <p className="text-[11px] text-zinc-400">
+                      <p className="text-[11px] text-stone-400">
                         {card.subtitle}
                       </p>
                     </div>
                   </div>
                 </div>
 
-                <div className="mt-3 divide-y divide-zinc-800/60">
+                <div className="mt-3 divide-y divide-mist-800/60">
                   {loading && card.items.length === 0 ? (
-                    <div className="py-8 text-center text-xs text-zinc-500">
+                    <div className="py-8 text-center text-xs text-stone-500">
                       Carregando top 5 ativos da API...
                     </div>
                   ) : card.items.length === 0 ? (
-                    <div className="py-8 text-center text-xs text-zinc-500">
+                    <div className="py-8 text-center text-xs text-stone-500">
                       -
                     </div>
                   ) : (
@@ -212,10 +212,10 @@ export function LandingRankingsPreview() {
                         <Link
                           key={stock.ticker}
                           href={`/terminal?search=${encodeURIComponent(stock.ticker)}`}
-                          className="group flex items-center justify-between py-3 px-2 rounded-lg transition-colors hover:bg-zinc-800/50"
+                          className="group flex items-center justify-between py-3 px-2 rounded-lg transition-colors hover:bg-mist-800/50"
                         >
                           <div className="flex items-center gap-3 min-w-0">
-                            <span className="w-5 text-xs font-black text-zinc-500 tabular-nums">
+                            <span className="w-5 text-xs font-black text-stone-500 tabular-nums">
                               {idx + 1}º
                             </span>
                             <CompanyLogo
@@ -226,24 +226,24 @@ export function LandingRankingsPreview() {
                             />
                             <div className="min-w-0">
                               <div className="flex items-center gap-1.5">
-                                <span className="text-xs font-extrabold text-zinc-100 group-hover:text-zinc-200 transition-colors">
+                                <span className="text-xs font-extrabold text-stone-100 group-hover:text-stone-200 transition-colors">
                                   {stock.ticker}
                                 </span>
-                                <span className="truncate rounded bg-zinc-800/80 px-1.5 py-0.5 text-[9px] font-medium text-zinc-400 max-w-[100px]">
+                                <span className="truncate rounded bg-mist-800/80 px-1.5 py-0.5 text-[9px] font-medium text-stone-400 max-w-[100px]">
                                   {stock.sector}
                                 </span>
                               </div>
-                              <div className="text-[11px] text-zinc-400 truncate max-w-[155px]">
+                              <div className="text-[11px] text-stone-400 truncate max-w-[155px]">
                                 {stock.companyName}
                               </div>
                             </div>
                           </div>
 
                           <div className="text-right shrink-0">
-                            <div className="text-xs font-extrabold text-zinc-100 tabular-nums">
+                            <div className="text-xs font-extrabold text-stone-100 tabular-nums">
                               {metrics.primary}
                             </div>
-                            <div className="text-[10px] font-medium text-zinc-400 tabular-nums">
+                            <div className="text-[10px] font-medium text-stone-400 tabular-nums">
                               {metrics.secondary}
                             </div>
                           </div>
@@ -254,17 +254,17 @@ export function LandingRankingsPreview() {
                 </div>
               </div>
 
-              <div className="mt-4 border-t border-zinc-800/80 pt-3.5">
+              <div className="mt-4 border-t border-mist-800/80 pt-3.5">
                 <Link href={card.href} className="block w-full">
                   <Button
                     type="button"
                     variant="outline"
                     size="sm"
                     data-testid={`ver-ranking-btn-${card.id}`}
-                    className="w-full rounded-xl border-zinc-700/80 bg-zinc-950/90 text-xs font-bold text-zinc-100 hover:border-zinc-700 hover:bg-zinc-800 gap-1.5 transition-all"
+                    className="w-full rounded-xl border-mist-700/80 bg-mist-950/90 text-xs font-bold text-stone-100 hover:border-mist-700 hover:bg-mist-800 gap-1.5 transition-all"
                   >
                     Ver Ranking
-                    <ArrowRight className="h-3.5 w-3.5 text-zinc-200" />
+                    <ArrowRight className="h-3.5 w-3.5 text-stone-200" />
                   </Button>
                 </Link>
               </div>

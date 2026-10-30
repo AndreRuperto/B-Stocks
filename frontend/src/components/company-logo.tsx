@@ -137,7 +137,7 @@ export function CompanyLogo({
     <div
       data-testid={`company-logo-${ticker}`}
       className={cn(
-        'relative flex shrink-0 items-center justify-center rounded-lg border border-zinc-700/80 bg-zinc-800/90 overflow-hidden font-bold text-zinc-200',
+        'relative flex shrink-0 items-center justify-center rounded-lg border border-mist-700/80 bg-mist-800/90 overflow-hidden font-bold text-stone-200',
         sizeClasses[size],
         className,
       )}

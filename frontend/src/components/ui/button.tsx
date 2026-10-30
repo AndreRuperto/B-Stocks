@@ -4,16 +4,16 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-zinc-400 disabled:pointer-events-none disabled:opacity-50',
+  'inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-mist-400 disabled:pointer-events-none disabled:opacity-50',
   {
     variants: {
       variant: {
-        default: 'bg-zinc-800 text-zinc-50 hover:bg-zinc-700 border border-zinc-700 font-semibold',
-        destructive: 'bg-red-700 text-zinc-50 hover:bg-red-800 border border-red-700',
-        outline: 'border border-zinc-700 bg-zinc-900 text-zinc-100 hover:bg-zinc-800 hover:text-zinc-50',
-        secondary: 'bg-zinc-800 text-zinc-200 hover:bg-zinc-700 border border-zinc-700',
-        ghost: 'hover:bg-zinc-800 text-zinc-200',
-        link: 'text-zinc-100 underline-offset-4 hover:underline',
+        default: 'bg-mist-800 text-stone-50 hover:bg-mist-700 border border-mist-700 font-semibold',
+        destructive: 'bg-red-700 text-stone-50 hover:bg-red-800 border border-red-700',
+        outline: 'border border-mist-700 bg-mist-900 text-stone-100 hover:bg-mist-800 hover:text-stone-50',
+        secondary: 'bg-mist-800 text-stone-200 hover:bg-mist-700 border border-mist-700',
+        ghost: 'hover:bg-mist-800 text-stone-200',
+        link: 'text-stone-100 underline-offset-4 hover:underline',
       },
       size: {
         default: 'h-9 px-4 py-2',

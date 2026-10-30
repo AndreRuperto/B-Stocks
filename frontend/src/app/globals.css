@@ -4,48 +4,48 @@
 
 @layer base {
   :root {
-    --background: 240 10% 4%;
-    --foreground: 0 0% 98%;
-    --card: 240 10% 7%;
+    --background: 200 14% 4%;
+    --foreground: 60 10% 98%;
+    --card: 195 13% 10%;
     --card-foreground: 0 0% 98%;
-    --popover: 240 10% 7%;
+    --popover: 195 13% 10%;
     --popover-foreground: 0 0% 98%;
     --primary: 0 0% 98%;
-    --primary-foreground: 240 6% 10%;
-    --secondary: 240 4% 15%;
+    --primary-foreground: 200 14% 6%;
+    --secondary: 195 12% 15%;
     --secondary-foreground: 0 0% 98%;
-    --muted: 240 4% 15%;
-    --muted-foreground: 240 5% 65%;
-    --accent: 240 4% 15%;
+    --muted: 195 12% 15%;
+    --muted-foreground: 195 7% 64%;
+    --accent: 195 12% 15%;
     --accent-foreground: 0 0% 98%;
     --destructive: 0 65% 50%;
     --destructive-foreground: 0 0% 98%;
-    --border: 240 4% 18%;
-    --input: 240 4% 18%;
-    --ring: 240 5% 65%;
+    --border: 195 12% 15%;
+    --input: 195 12% 15%;
+    --ring: 195 7% 64%;
     --radius: 0.5rem;
   }
 
   .dark {
-    --background: 240 10% 4%;
-    --foreground: 0 0% 98%;
-    --card: 240 10% 7%;
+    --background: 200 14% 4%;
+    --foreground: 60 10% 98%;
+    --card: 195 13% 10%;
     --card-foreground: 0 0% 98%;
-    --popover: 240 10% 7%;
+    --popover: 195 13% 10%;
     --popover-foreground: 0 0% 98%;
     --primary: 0 0% 98%;
-    --primary-foreground: 240 6% 10%;
-    --secondary: 240 4% 15%;
+    --primary-foreground: 200 14% 6%;
+    --secondary: 195 12% 15%;
     --secondary-foreground: 0 0% 98%;
-    --muted: 240 4% 15%;
-    --muted-foreground: 240 5% 65%;
-    --accent: 240 4% 15%;
+    --muted: 195 12% 15%;
+    --muted-foreground: 195 7% 64%;
+    --accent: 195 12% 15%;
     --accent-foreground: 0 0% 98%;
     --destructive: 0 65% 50%;
     --destructive-foreground: 0 0% 98%;
-    --border: 240 4% 18%;
-    --input: 240 4% 18%;
-    --ring: 240 5% 65%;
+    --border: 195 12% 15%;
+    --input: 195 12% 15%;
+    --ring: 195 7% 64%;
   }
 }
 
@@ -54,7 +54,7 @@
     @apply border-border;
   }
   body {
-    @apply bg-zinc-950 text-zinc-100 antialiased;
+    @apply bg-mist-950 text-stone-100 antialiased;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
 }

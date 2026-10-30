@@ -66,13 +66,13 @@ function IbovCustomTooltip({ active, payload }: CustomTooltipProps) {
   const isUp = diff >= 0;
 
   return (
-    <div className="rounded-xl border border-zinc-700/90 bg-zinc-950/95 p-3.5 shadow-2xl backdrop-blur-md">
-      <div className="flex items-center justify-between gap-4 border-b border-zinc-800 pb-1.5 text-[11px] font-semibold text-zinc-400">
+    <div className="rounded-xl border border-mist-700/90 bg-mist-950/95 p-3.5 shadow-2xl backdrop-blur-md">
+      <div className="flex items-center justify-between gap-4 border-b border-mist-800 pb-1.5 text-[11px] font-semibold text-stone-400">
         <span>IBOVESPA (^BVSP)</span>
-        <span className="font-mono text-zinc-300">{point.fullDate}</span>
+        <span className="font-mono text-stone-300">{point.fullDate}</span>
       </div>
       <div className="mt-2 flex items-baseline gap-2">
-        <span className="text-base font-black tabular-nums text-zinc-100">
+        <span className="text-base font-black tabular-nums text-stone-100">
           {formatPointsBrl(point.close)} pts
         </span>
         <span
@@ -88,21 +88,21 @@ function IbovCustomTooltip({ active, payload }: CustomTooltipProps) {
           pts
         </span>
       </div>
-      <div className="mt-2 grid grid-cols-3 gap-2 border-t border-zinc-800/80 pt-2 text-[10px] text-zinc-400">
+      <div className="mt-2 grid grid-cols-3 gap-2 border-t border-mist-800/80 pt-2 text-[10px] text-stone-400">
         <div>
-          <span className="block text-zinc-500">Abertura</span>
-          <strong className="tabular-nums text-zinc-200">
+          <span className="block text-stone-500">Abertura</span>
+          <strong className="tabular-nums text-stone-200">
             {formatCompactPoints(point.open)}
           </strong>
         </div>
         <div>
-          <span className="block text-zinc-500">Máxima</span>
+          <span className="block text-stone-500">Máxima</span>
           <strong className="tabular-nums text-emerald-400">
             {formatCompactPoints(point.high)}
           </strong>
         </div>
         <div>
-          <span className="block text-zinc-500">Mínima</span>
+          <span className="block text-stone-500">Mínima</span>
           <strong className="tabular-nums text-red-400">
             {formatCompactPoints(point.low)}
           </strong>
@@ -228,17 +228,17 @@ export function IbovMarketOverview() {
           <div className="flex flex-wrap items-center gap-2">
             <Badge
               variant="outline"
-              className="border-zinc-700 bg-zinc-800/60 text-zinc-200 text-[10px] uppercase font-bold tracking-wider"
+              className="border-mist-700 bg-mist-800/60 text-stone-200 text-[10px] uppercase font-bold tracking-wider"
             >
-              <span className="mr-1.5 inline-block h-1.5 w-1.5 rounded-full bg-zinc-800 animate-pulse" />
+              <span className="mr-1.5 inline-block h-1.5 w-1.5 rounded-full bg-mist-800 animate-pulse" />
               Série Histórica Oficial (^BVSP)
             </Badge>
-            <span className="flex items-center gap-1 text-xs text-zinc-400">
-              <Clock className="h-3 w-3 text-zinc-500" />
+            <span className="flex items-center gap-1 text-xs text-stone-400">
+              <Clock className="h-3 w-3 text-stone-500" />
               Dados Reais B3 • Yahoo Finance &amp; Brapi
             </span>
           </div>
-          <h2 className="mt-2 text-2xl sm:text-3xl font-black tracking-tight text-zinc-100">
+          <h2 className="mt-2 text-2xl sm:text-3xl font-black tracking-tight text-stone-100">
             Índice Ibovespa &amp; Movimentações em Tempo Real
           </h2>
         </div>
@@ -248,43 +248,43 @@ export function IbovMarketOverview() {
             type="button"
             variant="outline"
             size="sm"
-            className="rounded-xl border-zinc-700/80 bg-zinc-900/90 px-4 py-2 text-xs font-bold text-zinc-100 hover:border-zinc-700 hover:bg-zinc-800 gap-2 transition-all"
+            className="rounded-xl border-mist-700/80 bg-mist-900/90 px-4 py-2 text-xs font-bold text-stone-100 hover:border-mist-700 hover:bg-mist-800 gap-2 transition-all"
           >
             Explorar Todos os Ativos no Terminal
-            <ArrowRight className="h-3.5 w-3.5 text-zinc-200" />
+            <ArrowRight className="h-3.5 w-3.5 text-stone-200" />
           </Button>
         </Link>
       </div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
-        <div className="relative overflow-hidden rounded-2xl border border-zinc-800/90 bg-zinc-900/75 p-5 sm:p-6 shadow-2xl backdrop-blur-xl lg:col-span-7 flex flex-col justify-between">
+        <div className="relative overflow-hidden rounded-2xl border border-mist-800/90 bg-mist-900/75 p-5 sm:p-6 shadow-2xl backdrop-blur-xl lg:col-span-7 flex flex-col justify-between">
           <div>
-            <div className="flex flex-wrap items-start justify-between gap-4 border-b border-zinc-800/80 pb-4">
+            <div className="flex flex-wrap items-start justify-between gap-4 border-b border-mist-800/80 pb-4">
               <div>
                 <div className="flex items-center gap-2">
-                  <BarChart3 className="h-4 w-4 text-zinc-200" />
-                  <span className="text-xs font-extrabold uppercase tracking-wider text-zinc-300">
+                  <BarChart3 className="h-4 w-4 text-stone-200" />
+                  <span className="text-xs font-extrabold uppercase tracking-wider text-stone-300">
                     IBOVESPA
                   </span>
                   <Badge
                     variant="outline"
-                    className="border-zinc-700 bg-zinc-950/80 text-[10px] font-mono text-zinc-300"
+                    className="border-mist-700 bg-mist-950/80 text-[10px] font-mono text-stone-300"
                   >
                     ^BVSP
                   </Badge>
                   {isLoading && (
-                    <RefreshCw className="h-3 w-3 animate-spin text-zinc-500" />
+                    <RefreshCw className="h-3 w-3 animate-spin text-stone-500" />
                   )}
                 </div>
 
                 <div className="mt-2 flex flex-wrap items-baseline gap-3">
                   <span
                     data-testid="ibov-current-points"
-                    className="text-3xl sm:text-4xl font-black text-zinc-50 tabular-nums tracking-tight"
+                    className="text-3xl sm:text-4xl font-black text-stone-50 tabular-nums tracking-tight"
                   >
                     {formattedPoints}
                   </span>
-                  <span className="text-xs font-semibold uppercase text-zinc-400">
+                  <span className="text-xs font-semibold uppercase text-stone-400">
                     pontos
                   </span>
                   {hasValidIbov && (
@@ -307,7 +307,7 @@ export function IbovMarketOverview() {
               </div>
 
               <div
-                className="flex items-center gap-1 rounded-xl border border-zinc-800 bg-zinc-950/90 p-1"
+                className="flex items-center gap-1 rounded-xl border border-mist-800 bg-mist-950/90 p-1"
                 role="tablist"
                 aria-label="Período do gráfico Ibovespa"
               >
@@ -320,8 +320,8 @@ export function IbovMarketOverview() {
                     onClick={() => setSelectedPeriod(period)}
                     className={`rounded-lg px-3 py-1.5 text-xs font-bold transition-all ${
                       selectedPeriod === period
-                        ? 'bg-zinc-700 text-zinc-50 shadow-sm'
-                        : 'text-zinc-400 hover:text-zinc-100'
+                        ? 'bg-mist-700 text-stone-50 shadow-sm'
+                        : 'text-stone-400 hover:text-stone-100'
                     }`}
                   >
                     {period}
@@ -331,37 +331,37 @@ export function IbovMarketOverview() {
             </div>
 
             <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
-              <div className="rounded-xl border border-zinc-800/70 bg-zinc-950/60 px-3 py-2">
-                <span className="block text-[10px] font-semibold uppercase tracking-wider text-zinc-500">
+              <div className="rounded-xl border border-mist-800/70 bg-mist-950/60 px-3 py-2">
+                <span className="block text-[10px] font-semibold uppercase tracking-wider text-stone-500">
                   Máxima ({selectedPeriod})
                 </span>
                 <strong className="mt-0.5 block text-xs sm:text-sm font-bold text-emerald-400 tabular-nums">
                   {hasValidIbov ? `${formatPointsBrl(ibovData!.dayHigh)} pts` : '-'}
                 </strong>
               </div>
-              <div className="rounded-xl border border-zinc-800/70 bg-zinc-950/60 px-3 py-2">
-                <span className="block text-[10px] font-semibold uppercase tracking-wider text-zinc-500">
+              <div className="rounded-xl border border-mist-800/70 bg-mist-950/60 px-3 py-2">
+                <span className="block text-[10px] font-semibold uppercase tracking-wider text-stone-500">
                   Mínima ({selectedPeriod})
                 </span>
                 <strong className="mt-0.5 block text-xs sm:text-sm font-bold text-red-400 tabular-nums">
                   {hasValidIbov ? `${formatPointsBrl(ibovData!.dayLow)} pts` : '-'}
                 </strong>
               </div>
-              <div className="rounded-xl border border-zinc-800/70 bg-zinc-950/60 px-3 py-2">
-                <span className="block text-[10px] font-semibold uppercase tracking-wider text-zinc-500">
+              <div className="rounded-xl border border-mist-800/70 bg-mist-950/60 px-3 py-2">
+                <span className="block text-[10px] font-semibold uppercase tracking-wider text-stone-500">
                   Fech. Anterior
                 </span>
-                <strong className="mt-0.5 block text-xs sm:text-sm font-bold text-zinc-200 tabular-nums">
+                <strong className="mt-0.5 block text-xs sm:text-sm font-bold text-stone-200 tabular-nums">
                   {hasValidIbov
                     ? `${formatPointsBrl(ibovData!.previousClose)} pts`
                     : '-'}
                 </strong>
               </div>
-              <div className="rounded-xl border border-zinc-800/70 bg-zinc-950/60 px-3 py-2">
-                <span className="block text-[10px] font-semibold uppercase tracking-wider text-zinc-500">
+              <div className="rounded-xl border border-mist-800/70 bg-mist-950/60 px-3 py-2">
+                <span className="block text-[10px] font-semibold uppercase tracking-wider text-stone-500">
                   Volume Reportado
                 </span>
-                <strong className="mt-0.5 block text-xs sm:text-sm font-bold text-zinc-200 tabular-nums">
+                <strong className="mt-0.5 block text-xs sm:text-sm font-bold text-stone-200 tabular-nums">
                   {volumeDisplay}
                 </strong>
               </div>
@@ -401,20 +401,20 @@ export function IbovMarketOverview() {
                   </defs>
                   <CartesianGrid
                     strokeDasharray="3 3"
-                    stroke="#27272a"
+                    stroke="#22292b"
                     vertical={false}
                   />
                   <XAxis
                     dataKey="label"
-                    stroke="#71717a"
+                    stroke="#9ca8ab"
                     fontSize={11}
                     tickLine={false}
-                    axisLine={{ stroke: '#27272a' }}
+                    axisLine={{ stroke: '#22292b' }}
                     minTickGap={28}
                   />
                   <YAxis
                     domain={yDomain}
-                    stroke="#71717a"
+                    stroke="#9ca8ab"
                     fontSize={11}
                     tickLine={false}
                     axisLine={false}
@@ -424,7 +424,7 @@ export function IbovMarketOverview() {
                   <Tooltip content={<IbovCustomTooltip />} />
                   <ReferenceLine
                     y={ibovData!.previousClose}
-                    stroke="#52525b"
+                    stroke="#67787c"
                     strokeDasharray="4 4"
                   />
                   <Area
@@ -437,15 +437,15 @@ export function IbovMarketOverview() {
                     activeDot={{
                       r: 5,
                       fill: strokeColor,
-                      stroke: '#09090b',
+                      stroke: '#090b0c',
                       strokeWidth: 2,
                     }}
                   />
                 </AreaChart>
               </ResponsiveContainer>
             ) : (
-              <div className="flex h-full w-full items-center justify-center rounded-xl border border-zinc-800/60 bg-zinc-950/40 text-xs text-zinc-400">
-                <Activity className="mr-2 h-4 w-4 animate-pulse text-zinc-200" />
+              <div className="flex h-full w-full items-center justify-center rounded-xl border border-mist-800/60 bg-mist-950/40 text-xs text-stone-400">
+                <Activity className="mr-2 h-4 w-4 animate-pulse text-stone-200" />
                 {isLoading
                   ? 'Carregando série histórica oficial do Ibovespa (^BVSP)...'
                   : 'Série histórica indisponível no momento (-)'}
@@ -453,10 +453,10 @@ export function IbovMarketOverview() {
             )}
           </div>
 
-          <div className="mt-3 flex flex-wrap items-center justify-between gap-2 border-t border-zinc-800/70 pt-3 text-[11px] text-zinc-400">
+          <div className="mt-3 flex flex-wrap items-center justify-between gap-2 border-t border-mist-800/70 pt-3 text-[11px] text-stone-400">
             <span>
               Fonte:{' '}
-              <strong className="text-zinc-300">
+              <strong className="text-stone-300">
                 {ibovData?.source || '-'}
               </strong>
             </span>
@@ -470,33 +470,33 @@ export function IbovMarketOverview() {
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:col-span-5 lg:grid-cols-1">
           <div
             data-testid="ibov-top-gainers-card"
-            className="rounded-2xl border border-zinc-800/90 bg-zinc-900/75 p-4 sm:p-5 shadow-xl backdrop-blur-xl"
+            className="rounded-2xl border border-mist-800/90 bg-mist-900/75 p-4 sm:p-5 shadow-xl backdrop-blur-xl"
           >
-            <div className="flex items-center justify-between border-b border-zinc-800/80 pb-3">
+            <div className="flex items-center justify-between border-b border-mist-800/80 pb-3">
               <div className="flex items-center gap-2.5">
-                <div className="flex h-7 w-7 items-center justify-center rounded-lg border border-zinc-700 bg-zinc-800/60 text-zinc-200">
+                <div className="flex h-7 w-7 items-center justify-center rounded-lg border border-mist-700 bg-mist-800/60 text-stone-200">
                   <TrendingUp className="h-4 w-4" />
                 </div>
                 <div>
-                  <h3 className="text-xs font-extrabold uppercase tracking-wider text-zinc-100">
+                  <h3 className="text-xs font-extrabold uppercase tracking-wider text-stone-100">
                     Maiores Altas do Pregão
                   </h3>
-                  <p className="text-[10px] text-zinc-400">
+                  <p className="text-[10px] text-stone-400">
                     Ativos com liquidez institucional na B3
                   </p>
                 </div>
               </div>
               <Link
                 href="/terminal?preset=maiores_altas"
-                className="text-[11px] font-bold text-zinc-200 hover:text-zinc-50 transition-colors"
+                className="text-[11px] font-bold text-stone-200 hover:text-stone-50 transition-colors"
               >
                 Ver Ranking &rarr;
               </Link>
             </div>
 
-            <div className="mt-2 divide-y divide-zinc-800/60">
+            <div className="mt-2 divide-y divide-mist-800/60">
               {topGainers.length === 0 ? (
-                <div className="py-6 text-center text-xs text-zinc-500">
+                <div className="py-6 text-center text-xs text-stone-500">
                   {isLoading ? 'Carregando maiores altas da API...' : '-'}
                 </div>
               ) : (
@@ -504,7 +504,7 @@ export function IbovMarketOverview() {
                   <Link
                     href={`/terminal?search=${encodeURIComponent(stock.ticker)}`}
                     key={stock.ticker}
-                    className="flex items-center justify-between py-2.5 px-2 text-xs transition-all hover:bg-zinc-800/50 rounded-lg group"
+                    className="flex items-center justify-between py-2.5 px-2 text-xs transition-all hover:bg-mist-800/50 rounded-lg group"
                   >
                     <div className="flex items-center gap-3 min-w-0">
                       <CompanyLogo
@@ -515,21 +515,21 @@ export function IbovMarketOverview() {
                       />
                       <div className="min-w-0">
                         <div className="flex items-center gap-1.5">
-                          <span className="font-extrabold text-zinc-100 group-hover:text-zinc-200 transition-colors">
+                          <span className="font-extrabold text-stone-100 group-hover:text-stone-200 transition-colors">
                             {stock.ticker}
                           </span>
-                          <span className="truncate rounded bg-zinc-800/80 px-1.5 py-0.5 text-[9px] font-medium text-zinc-400 max-w-[115px]">
+                          <span className="truncate rounded bg-mist-800/80 px-1.5 py-0.5 text-[9px] font-medium text-stone-400 max-w-[115px]">
                             {stock.sector}
                           </span>
                         </div>
-                        <div className="text-[11px] text-zinc-400 truncate max-w-[165px]">
+                        <div className="text-[11px] text-stone-400 truncate max-w-[165px]">
                           {stock.companyName}
                         </div>
                       </div>
                     </div>
 
                     <div className="text-right shrink-0">
-                      <div className="font-bold text-zinc-100 tabular-nums">
+                      <div className="font-bold text-stone-100 tabular-nums">
                         {stock.price > 0
                           ? stock.price.toLocaleString('pt-BR', {
                               style: 'currency',
@@ -550,33 +550,33 @@ export function IbovMarketOverview() {
 
           <div
             data-testid="ibov-top-losers-card"
-            className="rounded-2xl border border-zinc-800/90 bg-zinc-900/75 p-4 sm:p-5 shadow-xl backdrop-blur-xl"
+            className="rounded-2xl border border-mist-800/90 bg-mist-900/75 p-4 sm:p-5 shadow-xl backdrop-blur-xl"
           >
-            <div className="flex items-center justify-between border-b border-zinc-800/80 pb-3">
+            <div className="flex items-center justify-between border-b border-mist-800/80 pb-3">
               <div className="flex items-center gap-2.5">
                 <div className="flex h-7 w-7 items-center justify-center rounded-lg border border-red-500/30 bg-red-500/15 text-red-400">
                   <TrendingDown className="h-4 w-4" />
                 </div>
                 <div>
-                  <h3 className="text-xs font-extrabold uppercase tracking-wider text-zinc-100">
+                  <h3 className="text-xs font-extrabold uppercase tracking-wider text-stone-100">
                     Maiores Baixas do Pregão
                   </h3>
-                  <p className="text-[10px] text-zinc-400">
+                  <p className="text-[10px] text-stone-400">
                     Descontos e correções recentes na B3
                   </p>
                 </div>
               </div>
               <Link
                 href="/terminal?preset=maiores_baixas"
-                className="text-[11px] font-bold text-zinc-400 hover:text-zinc-200 transition-colors"
+                className="text-[11px] font-bold text-stone-400 hover:text-stone-200 transition-colors"
               >
                 Ver Ranking &rarr;
               </Link>
             </div>
 
-            <div className="mt-2 divide-y divide-zinc-800/60">
+            <div className="mt-2 divide-y divide-mist-800/60">
               {topLosers.length === 0 ? (
-                <div className="py-6 text-center text-xs text-zinc-500">
+                <div className="py-6 text-center text-xs text-stone-500">
                   {isLoading ? 'Carregando maiores baixas da API...' : '-'}
                 </div>
               ) : (
@@ -584,7 +584,7 @@ export function IbovMarketOverview() {
                   <Link
                     href={`/terminal?search=${encodeURIComponent(stock.ticker)}`}
                     key={stock.ticker}
-                    className="flex items-center justify-between py-2.5 px-2 text-xs transition-all hover:bg-zinc-800/50 rounded-lg group"
+                    className="flex items-center justify-between py-2.5 px-2 text-xs transition-all hover:bg-mist-800/50 rounded-lg group"
                   >
                     <div className="flex items-center gap-3 min-w-0">
                       <CompanyLogo
@@ -595,21 +595,21 @@ export function IbovMarketOverview() {
                       />
                       <div className="min-w-0">
                         <div className="flex items-center gap-1.5">
-                          <span className="font-extrabold text-zinc-100 group-hover:text-red-300 transition-colors">
+                          <span className="font-extrabold text-stone-100 group-hover:text-red-300 transition-colors">
                             {stock.ticker}
                           </span>
-                          <span className="truncate rounded bg-zinc-800/80 px-1.5 py-0.5 text-[9px] font-medium text-zinc-400 max-w-[115px]">
+                          <span className="truncate rounded bg-mist-800/80 px-1.5 py-0.5 text-[9px] font-medium text-stone-400 max-w-[115px]">
                             {stock.sector}
                           </span>
                         </div>
-                        <div className="text-[11px] text-zinc-400 truncate max-w-[165px]">
+                        <div className="text-[11px] text-stone-400 truncate max-w-[165px]">
                           {stock.companyName}
                         </div>
                       </div>
                     </div>
 
                     <div className="text-right shrink-0">
-                      <div className="font-bold text-zinc-100 tabular-nums">
+                      <div className="font-bold text-stone-100 tabular-nums">
                         {stock.price > 0
                           ? stock.price.toLocaleString('pt-BR', {
                               style: 'currency',

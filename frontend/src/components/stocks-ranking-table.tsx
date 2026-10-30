@@ -550,12 +550,12 @@ export function StocksRankingTable({
 
   const renderSortIcon = (field: SortField) => {
     if (filters.sortBy !== field) {
-      return <ArrowUpDown className="ml-1 h-3 w-3 text-zinc-500" />;
+      return <ArrowUpDown className="ml-1 h-3 w-3 text-stone-500" />;
     }
     return filters.sortOrder === 'desc' ? (
-      <ArrowDown className="ml-1 h-3 w-3 text-zinc-200" />
+      <ArrowDown className="ml-1 h-3 w-3 text-stone-200" />
     ) : (
-      <ArrowUp className="ml-1 h-3 w-3 text-zinc-200" />
+      <ArrowUp className="ml-1 h-3 w-3 text-stone-200" />
     );
   };
 
@@ -563,37 +563,37 @@ export function StocksRankingTable({
     switch (colKey) {
       case 'marketCap':
         return (
-          <span className="font-semibold text-zinc-200 tabular-nums">
+          <span className="font-semibold text-stone-200 tabular-nums">
             {stock.marketCap > 0 ? formatCompactCurrency(stock.marketCap) : '-'}
           </span>
         );
       case 'pl':
         return (
-          <span className="font-medium text-zinc-200 tabular-nums">
+          <span className="font-medium text-stone-200 tabular-nums">
             {formatMultiple(stock.pl)}
           </span>
         );
       case 'pvp':
         return (
-          <span className="font-medium text-zinc-200 tabular-nums">
+          <span className="font-medium text-stone-200 tabular-nums">
             {formatMultiple(stock.pvp)}
           </span>
         );
       case 'dy':
         return (
-          <span className="font-semibold text-zinc-200 tabular-nums">
+          <span className="font-semibold text-stone-200 tabular-nums">
             {stock.dy > 0 ? formatPercent(stock.dy) : '-'}
           </span>
         );
       case 'dy5y':
         return (
-          <span className="font-medium text-zinc-300 tabular-nums">
+          <span className="font-medium text-stone-300 tabular-nums">
             {stock.dy5y > 0 ? formatPercent(stock.dy5y) : '-'}
           </span>
         );
       case 'netMargin':
         return (
-          <span className="font-medium text-zinc-200 tabular-nums">
+          <span className="font-medium text-stone-200 tabular-nums">
             {stock.netMargin !== 0 ? formatPercent(stock.netMargin) : '-'}
           </span>
         );
@@ -605,26 +605,26 @@ export function StocksRankingTable({
         );
       case 'subsector':
         return (
-          <span className="text-xs text-zinc-400">{stock.subsector || '-'}</span>
+          <span className="text-xs text-stone-400">{stock.subsector || '-'}</span>
         );
       case 'segment':
         return (
           <Badge
             variant="outline"
-            className="text-[11px] text-zinc-300 border-zinc-700"
+            className="text-[11px] text-stone-300 border-mist-700"
           >
             {stock.segment || '-'}
           </Badge>
         );
       case 'price':
         return (
-          <span className="font-semibold text-zinc-200 tabular-nums">
+          <span className="font-semibold text-stone-200 tabular-nums">
             {stock.price > 0 ? formatCurrency(stock.price) : '-'}
           </span>
         );
       case 'grahamFairPrice':
         return (
-          <span className="font-medium text-zinc-200 tabular-nums">
+          <span className="font-medium text-stone-200 tabular-nums">
             {stock.grahamFairPrice > 0
               ? formatCurrency(stock.grahamFairPrice)
               : '-'}
@@ -639,11 +639,11 @@ export function StocksRankingTable({
             {formatPercent(stock.grahamMargin, true)}
           </Badge>
         ) : (
-          <span className="text-xs text-zinc-500">-</span>
+          <span className="text-xs text-stone-500">-</span>
         );
       case 'bazinCeilingPrice':
         return (
-          <span className="font-medium text-zinc-200 tabular-nums">
+          <span className="font-medium text-stone-200 tabular-nums">
             {stock.bazinCeilingPrice > 0
               ? formatCurrency(stock.bazinCeilingPrice)
               : '-'}
@@ -658,7 +658,7 @@ export function StocksRankingTable({
             {formatPercent(stock.bazinMargin, true)}
           </Badge>
         ) : (
-          <span className="text-xs text-zinc-500">-</span>
+          <span className="text-xs text-stone-500">-</span>
         );
       case 'scoreTotal':
         return (
@@ -674,7 +674,7 @@ export function StocksRankingTable({
         );
       case 'dailyLiquidity':
         return (
-          <span className="font-semibold text-zinc-200 tabular-nums">
+          <span className="font-semibold text-stone-200 tabular-nums">
             {stock.dailyLiquidity > 0
               ? formatCompactCurrency(stock.dailyLiquidity)
               : '-'}
@@ -682,7 +682,7 @@ export function StocksRankingTable({
         );
       case 'revenue':
         return (
-          <span className="font-semibold text-zinc-200 tabular-nums">
+          <span className="font-semibold text-stone-200 tabular-nums">
             {stock.revenue > 0 ? formatCompactCurrency(stock.revenue) : '-'}
           </span>
         );
@@ -690,23 +690,23 @@ export function StocksRankingTable({
         return stock.netIncome !== 0 ? (
           <span
             className={`font-semibold tabular-nums ${
-              stock.netIncome >= 0 ? 'text-zinc-200' : 'text-red-400'
+              stock.netIncome >= 0 ? 'text-stone-200' : 'text-red-400'
             }`}
           >
             {formatCompactCurrency(stock.netIncome)}
           </span>
         ) : (
-          <span className="text-zinc-500">-</span>
+          <span className="text-stone-500">-</span>
         );
       case 'equity':
         return (
-          <span className="font-medium text-zinc-200 tabular-nums">
+          <span className="font-medium text-stone-200 tabular-nums">
             {stock.equity > 0 ? formatCompactCurrency(stock.equity) : '-'}
           </span>
         );
       case 'grossDebtToEquity':
         return (
-          <span className="font-medium text-zinc-300 tabular-nums">
+          <span className="font-medium text-stone-300 tabular-nums">
             {stock.grossDebtToEquity > 0
               ? formatMultiple(stock.grossDebtToEquity)
               : '-'}
@@ -714,7 +714,7 @@ export function StocksRankingTable({
         );
       case 'roe':
         return (
-          <span className="font-medium text-zinc-200 tabular-nums">
+          <span className="font-medium text-stone-200 tabular-nums">
             {stock.roe !== 0 ? formatPercent(stock.roe) : '-'}
           </span>
         );
@@ -727,7 +727,7 @@ export function StocksRankingTable({
             {formatPercent(stock.change24h, true)}
           </Badge>
         ) : (
-          <span className="text-xs text-zinc-500">-</span>
+          <span className="text-xs text-stone-500">-</span>
         );
       case 'change30d':
         return stock.change30d !== 0 ? (
@@ -738,7 +738,7 @@ export function StocksRankingTable({
             {formatPercent(stock.change30d, true)}
           </Badge>
         ) : (
-          <span className="text-xs text-zinc-500">-</span>
+          <span className="text-xs text-stone-500">-</span>
         );
       case 'change12m':
         return stock.change12m !== 0 ? (
@@ -749,7 +749,7 @@ export function StocksRankingTable({
             {formatPercent(stock.change12m, true)}
           </Badge>
         ) : (
-          <span className="text-xs text-zinc-500">-</span>
+          <span className="text-xs text-stone-500">-</span>
         );
       case 'change5y':
         return stock.change5y !== 0 ? (
@@ -760,7 +760,7 @@ export function StocksRankingTable({
             {formatPercent(stock.change5y, true)}
           </Badge>
         ) : (
-          <span className="text-xs text-zinc-500">-</span>
+          <span className="text-xs text-stone-500">-</span>
         );
       default:
         return null;
@@ -768,20 +768,20 @@ export function StocksRankingTable({
   };
 
   return (
-    <Card className="border-zinc-800 bg-zinc-900 rounded-xl shadow-sm">
-      <CardHeader className="border-b border-zinc-800 pb-4">
+    <Card className="border-mist-800 bg-mist-900 rounded-xl shadow-sm">
+      <CardHeader className="border-b border-mist-800 pb-4">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div>
-            <CardTitle className="text-base font-bold text-zinc-100">
+            <CardTitle className="text-base font-bold text-stone-100">
               Ranking de Ações da B3
             </CardTitle>
-            <p className="mt-1 text-xs text-zinc-400">
+            <p className="mt-1 text-xs text-stone-400">
               Exibindo {items.length} de {total} empresas listadas na B3
             </p>
           </div>
 
           <div className="flex flex-wrap items-center gap-2.5">
-            <div className="flex items-center gap-2 rounded-lg border border-zinc-800 bg-zinc-950 px-3 py-1.5">
+            <div className="flex items-center gap-2 rounded-lg border border-mist-800 bg-mist-950 px-3 py-1.5">
               <Switch
                 data-testid="cut-filter-switch"
                 checked={filters.onlyPassedCut}
@@ -789,7 +789,7 @@ export function StocksRankingTable({
                   onUpdateFilters({ onlyPassedCut: checked, page: 1 })
                 }
               />
-              <span className="text-xs font-medium text-zinc-300">
+              <span className="text-xs font-medium text-stone-300">
                 Filtro de Corte (Liq &gt; R$ 1M e Dív/EBITDA &lt; 3,0)
               </span>
             </div>
@@ -810,7 +810,7 @@ export function StocksRankingTable({
 
         <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
           <div className="relative sm:col-span-2">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-zinc-500" />
+            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-stone-500" />
             <Input
               data-testid="search-input"
               placeholder="Buscar por ticker (ex: PETR4, BBAS3, TAEE11) ou empresa..."
@@ -818,7 +818,7 @@ export function StocksRankingTable({
               onChange={(e) =>
                 onUpdateFilters({ search: e.target.value, page: 1 })
               }
-              className="pl-9 bg-zinc-950 border-zinc-800 text-zinc-100 placeholder:text-zinc-500 rounded-lg"
+              className="pl-9 bg-mist-950 border-mist-800 text-stone-100 placeholder:text-stone-500 rounded-lg"
             />
           </div>
 
@@ -829,10 +829,10 @@ export function StocksRankingTable({
               onChange={(e) =>
                 handleRankingPresetChange(e.target.value as RankingPreset)
               }
-              className="flex h-9 w-full rounded-lg border border-zinc-800 bg-zinc-950 px-3 py-1 text-xs font-medium text-zinc-200 focus:outline-none focus:ring-1 focus:ring-zinc-600"
+              className="flex h-9 w-full rounded-lg border border-mist-800 bg-mist-950 px-3 py-1 text-xs font-medium text-stone-200 focus:outline-none focus:ring-1 focus:ring-mist-600"
             >
               {(Object.keys(PRESET_CONFIG) as RankingPreset[]).map((key) => (
-                <option key={key} value={key} className="bg-zinc-900 text-zinc-100">
+                <option key={key} value={key} className="bg-mist-900 text-stone-100">
                   Ranking por: {PRESET_CONFIG[key].label}
                 </option>
               ))}
@@ -844,7 +844,7 @@ export function StocksRankingTable({
               type="button"
               variant="outline"
               size="sm"
-              className="h-9 flex-1 rounded-lg border-zinc-800 bg-zinc-950 text-zinc-300 hover:bg-zinc-800 hover:text-zinc-100"
+              className="h-9 flex-1 rounded-lg border-mist-800 bg-mist-950 text-stone-300 hover:bg-mist-800 hover:text-stone-100"
               onClick={() =>
                 onUpdateFilters({
                   sortOrder: filters.sortOrder === 'desc' ? 'asc' : 'desc',
@@ -868,20 +868,20 @@ export function StocksRankingTable({
               onChange={(e) =>
                 onUpdateFilters({ limit: Number(e.target.value), page: 1 })
               }
-              className="flex h-9 rounded-lg border border-zinc-800 bg-zinc-950 px-2 py-1 text-xs font-medium text-zinc-200 focus:outline-none"
+              className="flex h-9 rounded-lg border border-mist-800 bg-mist-950 px-2 py-1 text-xs font-medium text-stone-200 focus:outline-none"
             >
-              <option value={25} className="bg-zinc-900 text-zinc-100">25 / pág</option>
-              <option value={50} className="bg-zinc-900 text-zinc-100">50 / pág</option>
-              <option value={100} className="bg-zinc-900 text-zinc-100">100 / pág</option>
-              <option value={200} className="bg-zinc-900 text-zinc-100">200 / pág</option>
+              <option value={25} className="bg-mist-900 text-stone-100">25 / pág</option>
+              <option value={50} className="bg-mist-900 text-stone-100">50 / pág</option>
+              <option value={100} className="bg-mist-900 text-stone-100">100 / pág</option>
+              <option value={200} className="bg-mist-900 text-stone-100">200 / pág</option>
             </select>
           </div>
         </div>
 
         {(filters.rankingPreset === 'maiores_altas' ||
           filters.rankingPreset === 'maiores_baixas') && (
-          <div className="mt-3 flex items-center gap-2 rounded-lg border border-zinc-800 bg-zinc-950 px-3 py-2">
-            <span className="text-xs font-semibold text-zinc-300">
+          <div className="mt-3 flex items-center gap-2 rounded-lg border border-mist-800 bg-mist-950 px-3 py-2">
+            <span className="text-xs font-semibold text-stone-300">
               Período da Variação:
             </span>
             {(['24h', '30d', '12m'] as const).map((period) => (
@@ -909,15 +909,15 @@ export function StocksRankingTable({
         {customizeOpen && (
           <div
             data-testid="customize-panel"
-            className="mt-3 rounded-xl border border-zinc-800 bg-zinc-950 p-4"
+            className="mt-3 rounded-xl border border-mist-800 bg-mist-950 p-4"
           >
             <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
               <div>
-                <h4 className="mb-2.5 text-xs font-bold uppercase tracking-wider text-zinc-200">
+                <h4 className="mb-2.5 text-xs font-bold uppercase tracking-wider text-stone-200">
                   Configurações
                 </h4>
                 <div className="space-y-2.5">
-                  <label className="flex cursor-pointer items-center gap-2 text-xs font-medium text-zinc-300 hover:text-zinc-100">
+                  <label className="flex cursor-pointer items-center gap-2 text-xs font-medium text-stone-300 hover:text-stone-100">
                     <input
                       type="checkbox"
                       data-testid="config-small-caps"
@@ -928,11 +928,11 @@ export function StocksRankingTable({
                           page: 1,
                         })
                       }
-                      className="h-4 w-4 rounded border-zinc-700 bg-zinc-800 text-zinc-100 accent-zinc-500"
+                      className="h-4 w-4 rounded border-mist-700 bg-mist-800 text-stone-100 accent-mist-500"
                     />
                     Apenas Small Caps
                   </label>
-                  <label className="flex cursor-pointer items-center gap-2 text-xs font-medium text-zinc-300 hover:text-zinc-100">
+                  <label className="flex cursor-pointer items-center gap-2 text-xs font-medium text-stone-300 hover:text-stone-100">
                     <input
                       type="checkbox"
                       data-testid="config-one-per-company"
@@ -943,7 +943,7 @@ export function StocksRankingTable({
                           page: 1,
                         })
                       }
-                      className="h-4 w-4 rounded border-zinc-700 bg-zinc-800 text-zinc-100 accent-zinc-500"
+                      className="h-4 w-4 rounded border-mist-700 bg-mist-800 text-stone-100 accent-mist-500"
                     />
                     Uma Ação por empresa
                   </label>
@@ -952,7 +952,7 @@ export function StocksRankingTable({
 
               <div>
                 <div className="mb-2.5 flex items-center gap-2">
-                  <h4 className="text-xs font-bold uppercase tracking-wider text-zinc-200">
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-stone-200">
                     Dados Avançados — Coluna PRO
                   </h4>
                   <Badge variant="default" className="px-1.5 py-0 text-[10px]">
@@ -966,14 +966,14 @@ export function StocksRankingTable({
                     return (
                       <label
                         key={colKey}
-                        className="flex cursor-pointer items-center gap-2 text-xs font-medium text-zinc-300 hover:text-zinc-100"
+                        className="flex cursor-pointer items-center gap-2 text-xs font-medium text-stone-300 hover:text-stone-100"
                       >
                         <input
                           type="checkbox"
                           data-testid={`custom-col-${colKey}`}
                           checked={checked}
                           onChange={() => handleToggleCustomColumn(colKey)}
-                          className="h-4 w-4 rounded border-zinc-700 bg-zinc-800 text-zinc-100 accent-zinc-500"
+                          className="h-4 w-4 rounded border-mist-700 bg-mist-800 text-stone-100 accent-mist-500"
                         />
                         <span>{col.label}</span>
                         <Badge
@@ -989,7 +989,7 @@ export function StocksRankingTable({
               </div>
 
               <div>
-                <h4 className="mb-2.5 text-xs font-bold uppercase tracking-wider text-zinc-200">
+                <h4 className="mb-2.5 text-xs font-bold uppercase tracking-wider text-stone-200">
                   Dados Gerais
                 </h4>
                 <div className="grid grid-cols-2 gap-2">
@@ -1000,7 +1000,7 @@ export function StocksRankingTable({
                     return (
                       <label
                         key={colKey}
-                        className="flex cursor-pointer items-center gap-2 text-xs font-medium text-zinc-300 hover:text-zinc-100"
+                        className="flex cursor-pointer items-center gap-2 text-xs font-medium text-stone-300 hover:text-stone-100"
                       >
                         <input
                           type="checkbox"
@@ -1008,7 +1008,7 @@ export function StocksRankingTable({
                           checked={checked}
                           disabled={isLocked}
                           onChange={() => handleToggleCustomColumn(colKey)}
-                          className="h-4 w-4 rounded border-zinc-700 bg-zinc-800 text-zinc-100 accent-zinc-500"
+                          className="h-4 w-4 rounded border-mist-700 bg-mist-800 text-stone-100 accent-mist-500"
                         />
                         <span>{col.label}</span>
                       </label>
@@ -1024,14 +1024,14 @@ export function StocksRankingTable({
       <CardContent className="p-0">
         <Table>
           <TableHeader>
-            <TableRow className="border-zinc-800 hover:bg-zinc-900 bg-zinc-950/60">
-              <TableHead className="w-12 text-zinc-400">#</TableHead>
+            <TableRow className="border-mist-800 hover:bg-mist-900 bg-mist-950/60">
+              <TableHead className="w-12 text-stone-400">#</TableHead>
               <TableHead>
                 <button
                   type="button"
                   data-testid="header-sort-btn-ticker"
                   onClick={() => handleColumnSort('ticker')}
-                  className="inline-flex items-center font-bold text-zinc-200 hover:text-zinc-100"
+                  className="inline-flex items-center font-bold text-stone-200 hover:text-stone-100"
                 >
                   Ativos
                   {renderSortIcon('ticker')}
@@ -1041,13 +1041,13 @@ export function StocksRankingTable({
                 const isPrimary = col.key === primaryColKey;
                 const info = INDICATOR_TOOLTIPS[col.key];
                 return (
-                  <TableHead key={col.key} className="text-zinc-300">
+                  <TableHead key={col.key} className="text-stone-300">
                     <div className="inline-flex items-center gap-1">
                       <button
                         type="button"
                         data-testid={`header-sort-btn-${col.key}`}
                         onClick={() => handleColumnSort(col.sortField)}
-                        className="inline-flex items-center text-left font-bold text-zinc-200 hover:text-zinc-100"
+                        className="inline-flex items-center text-left font-bold text-stone-200 hover:text-stone-100"
                       >
                         {isPrimary ? `(${col.label})` : col.label}
                         {renderSortIcon(col.sortField)}
@@ -1064,7 +1064,7 @@ export function StocksRankingTable({
                                 prev === col.key ? null : col.key,
                               );
                             }}
-                            className="inline-flex h-4 w-4 items-center justify-center rounded-full border border-zinc-700 bg-zinc-800 text-[10px] font-bold text-zinc-400 hover:border-zinc-500 hover:text-zinc-100 focus:outline-none"
+                            className="inline-flex h-4 w-4 items-center justify-center rounded-full border border-mist-700 bg-mist-800 text-[10px] font-bold text-stone-400 hover:border-mist-500 hover:text-stone-100 focus:outline-none"
                             aria-label={`Informações sobre ${info.title}`}
                           >
                             ?
@@ -1072,10 +1072,10 @@ export function StocksRankingTable({
                           {activeTooltip === col.key && (
                             <div
                               data-testid={`tooltip-content-${col.key}`}
-                              className="absolute left-1/2 top-full z-50 mt-1.5 w-64 -translate-x-1/2 rounded-lg border border-zinc-700 bg-zinc-900 p-2.5 text-xs text-zinc-200 shadow-xl"
+                              className="absolute left-1/2 top-full z-50 mt-1.5 w-64 -translate-x-1/2 rounded-lg border border-mist-700 bg-mist-900 p-2.5 text-xs text-stone-200 shadow-xl"
                             >
-                              <div className="flex items-center justify-between border-b border-zinc-800 pb-1">
-                                <span className="font-bold text-zinc-100">
+                              <div className="flex items-center justify-between border-b border-mist-800 pb-1">
+                                <span className="font-bold text-stone-100">
                                   {info.title}
                                 </span>
                                 <button
@@ -1084,12 +1084,12 @@ export function StocksRankingTable({
                                     e.stopPropagation();
                                     setActiveTooltip(null);
                                   }}
-                                  className="text-[10px] text-zinc-400 hover:text-zinc-200"
+                                  className="text-[10px] text-stone-400 hover:text-stone-200"
                                 >
                                   ✕
                                 </button>
                               </div>
-                              <p className="mt-1.5 leading-relaxed text-zinc-300">
+                              <p className="mt-1.5 leading-relaxed text-stone-300">
                                 {info.desc}
                               </p>
                             </div>
@@ -1100,26 +1100,26 @@ export function StocksRankingTable({
                   </TableHead>
                 );
               })}
-              <TableHead className="text-right text-zinc-300">Ação</TableHead>
+              <TableHead className="text-right text-stone-300">Ação</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {loading ? (
               Array.from({ length: 8 }).map((_, idx) => (
-                <TableRow key={idx} className="border-zinc-800">
+                <TableRow key={idx} className="border-mist-800">
                   <TableCell
                     colSpan={activeColumns.length + 3}
-                    className="h-12 text-center text-xs text-zinc-500"
+                    className="h-12 text-center text-xs text-stone-500"
                   >
                     Carregando dados quantitativos da B3...
                   </TableCell>
                 </TableRow>
               ))
             ) : items.length === 0 ? (
-              <TableRow className="border-zinc-800">
+              <TableRow className="border-mist-800">
                 <TableCell
                   colSpan={activeColumns.length + 3}
-                  className="h-24 text-center text-sm text-zinc-400"
+                  className="h-24 text-center text-sm text-stone-400"
                 >
                   Nenhuma ação encontrada para os filtros selecionados.
                 </TableCell>
@@ -1131,10 +1131,10 @@ export function StocksRankingTable({
                   <TableRow
                     key={stock.ticker}
                     data-testid={`stock-row-${stock.ticker}`}
-                    className="h-16 cursor-pointer border-zinc-800/80 hover:bg-zinc-850"
+                    className="h-16 cursor-pointer border-mist-800/80 hover:bg-mist-850"
                     onClick={() => onSelectStock(stock)}
                   >
-                    <TableCell className="py-4 text-xs font-medium text-zinc-500">
+                    <TableCell className="py-4 text-xs font-medium text-stone-500">
                       {rankNumber}
                     </TableCell>
                     <TableCell className="py-4">
@@ -1147,19 +1147,19 @@ export function StocksRankingTable({
                         />
                         <div className="flex flex-col gap-0.5">
                           <div className="flex items-center gap-1.5">
-                            <span className="font-bold text-sm text-zinc-100">
+                            <span className="font-bold text-sm text-stone-100">
                               {stock.ticker}
                             </span>
                             {!stock.passesCutFilter && (
                               <Badge
                                 variant="outline"
-                                className="px-1 py-0 text-[10px] text-zinc-400 border-zinc-700"
+                                className="px-1 py-0 text-[10px] text-stone-400 border-mist-700"
                               >
                                 Alerta Corte
                               </Badge>
                             )}
                           </div>
-                          <span className="text-xs text-zinc-400 truncate max-w-[180px]">
+                          <span className="text-xs text-stone-400 truncate max-w-[180px]">
                             {stock.companyName}
                           </span>
                         </div>
@@ -1176,7 +1176,7 @@ export function StocksRankingTable({
                         size="sm"
                         variant="outline"
                         data-testid={`analyze-btn-${stock.ticker}`}
-                        className="rounded-lg border-zinc-800 bg-zinc-950 text-zinc-300 hover:bg-zinc-800 hover:text-zinc-100"
+                        className="rounded-lg border-mist-800 bg-mist-950 text-stone-300 hover:bg-mist-800 hover:text-stone-100"
                         onClick={(e) => {
                           e.stopPropagation();
                           onSelectStock(stock);
@@ -1192,10 +1192,10 @@ export function StocksRankingTable({
           </TableBody>
         </Table>
 
-        <div className="flex flex-col items-center justify-between gap-3 border-t border-zinc-800 px-4 py-3 sm:flex-row">
-          <div className="text-xs text-zinc-400">
-            Página <span className="font-bold text-zinc-100">{page}</span> de{' '}
-            <span className="font-bold text-zinc-100">{totalPages}</span> ({total}{' '}
+        <div className="flex flex-col items-center justify-between gap-3 border-t border-mist-800 px-4 py-3 sm:flex-row">
+          <div className="text-xs text-stone-400">
+            Página <span className="font-bold text-stone-100">{page}</span> de{' '}
+            <span className="font-bold text-stone-100">{totalPages}</span> ({total}{' '}
             ações encontradas)
           </div>
           <div className="flex items-center gap-2">
@@ -1204,7 +1204,7 @@ export function StocksRankingTable({
               variant="outline"
               size="sm"
               disabled={page <= 1}
-              className="rounded-lg border-zinc-800 bg-zinc-950 text-zinc-300 hover:bg-zinc-800 hover:text-zinc-100 disabled:opacity-40"
+              className="rounded-lg border-mist-800 bg-mist-950 text-stone-300 hover:bg-mist-800 hover:text-stone-100 disabled:opacity-40"
               onClick={() => onUpdateFilters({ page: Math.max(1, page - 1) })}
             >
               <ChevronLeft className="mr-1 h-4 w-4" /> Anterior
@@ -1214,7 +1214,7 @@ export function StocksRankingTable({
               variant="outline"
               size="sm"
               disabled={page >= totalPages}
-              className="rounded-lg border-zinc-800 bg-zinc-950 text-zinc-300 hover:bg-zinc-800 hover:text-zinc-100 disabled:opacity-40"
+              className="rounded-lg border-mist-800 bg-mist-950 text-stone-300 hover:bg-mist-800 hover:text-stone-100 disabled:opacity-40"
               onClick={() =>
                 onUpdateFilters({ page: Math.min(totalPages, page + 1) })
               }

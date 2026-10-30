@@ -88,11 +88,11 @@ export function StockTickerCarousel({ stocks }: StockTickerCarouselProps) {
   return (
     <div
       data-testid="stock-ticker-carousel"
-      className="relative w-full overflow-hidden border-y border-zinc-800/80 bg-zinc-950/90 py-3 backdrop-blur-md"
+      className="relative w-full overflow-hidden border-y border-mist-800/80 bg-mist-950/90 py-3 backdrop-blur-md"
       aria-label="Cotações em tempo real das principais ações da B3"
     >
-      <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r from-zinc-950 to-transparent" />
-      <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-zinc-950 to-transparent" />
+      <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r from-mist-950 to-transparent" />
+      <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-mist-950 to-transparent" />
 
       <div className="animate-ticker flex items-center gap-4">
         {displayList.map((item, index) => {
@@ -109,7 +109,7 @@ export function StockTickerCarousel({ stocks }: StockTickerCarouselProps) {
             <Link
               href={`/terminal?search=${encodeURIComponent(item.ticker)}`}
               key={`${item.ticker}-${index}`}
-              className="group inline-flex items-center gap-2.5 rounded-lg border border-zinc-800/80 bg-zinc-900/75 px-3.5 py-1.5 text-xs font-semibold tracking-wide text-zinc-200 transition-all hover:border-zinc-700 hover:bg-zinc-900"
+              className="group inline-flex items-center gap-2.5 rounded-lg border border-mist-800/80 bg-mist-900/75 px-3.5 py-1.5 text-xs font-semibold tracking-wide text-stone-200 transition-all hover:border-mist-700 hover:bg-mist-900"
             >
               <CompanyLogo
                 ticker={item.ticker}
@@ -117,10 +117,10 @@ export function StockTickerCarousel({ stocks }: StockTickerCarouselProps) {
                 size="sm"
                 className="h-4 w-4 rounded-sm border-0 bg-transparent"
               />
-              <span className="font-extrabold text-zinc-100 group-hover:text-zinc-200 transition-colors">
+              <span className="font-extrabold text-stone-100 group-hover:text-stone-200 transition-colors">
                 {item.ticker}
               </span>
-              <span className="tabular-nums text-zinc-300">{formattedPrice}</span>
+              <span className="tabular-nums text-stone-300">{formattedPrice}</span>
               <span
                 className={`inline-flex items-center gap-0.5 rounded px-1.5 py-0.5 tabular-nums text-[11px] font-bold ${
                   isPositive

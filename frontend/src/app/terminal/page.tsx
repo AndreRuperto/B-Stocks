@@ -238,8 +238,8 @@ export default function TerminalPage() {
   };
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-100 antialiased font-sans">
-      <header className="sticky top-0 z-40 border-b border-zinc-800 bg-zinc-950/95 backdrop-blur-md">
+    <div className="min-h-screen bg-mist-950 text-stone-100 antialiased font-sans">
+      <header className="sticky top-0 z-40 border-b border-mist-800 bg-mist-950/95 backdrop-blur-md">
         <div className="mx-auto flex max-w-[1520px] flex-col gap-3 px-4 py-3.5 sm:px-6 lg:px-8">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <BrandLogo />
@@ -250,7 +250,7 @@ export default function TerminalPage() {
                   type="button"
                   variant="outline"
                   size="sm"
-                  className="h-8 rounded-lg border-zinc-800 bg-zinc-900 text-xs text-zinc-300 hover:text-zinc-100 hover:bg-zinc-850 gap-1.5"
+                  className="h-8 rounded-lg border-mist-800 bg-mist-900 text-xs text-stone-300 hover:text-stone-100 hover:bg-mist-850 gap-1.5"
                 >
                   <ArrowLeft className="h-3.5 w-3.5" />
                   Tela Inicial
@@ -258,7 +258,7 @@ export default function TerminalPage() {
               </Link>
 
               {summary?.lastSync && (
-                <div className="hidden lg:block text-right text-[11px] text-zinc-400">
+                <div className="hidden lg:block text-right text-[11px] text-stone-400">
                   <div>Fonte: {summary.lastSync.source}</div>
                   <div>
                     Atualizado em:{' '}
@@ -273,7 +273,7 @@ export default function TerminalPage() {
                 onClick={handleSync}
                 disabled={syncing}
                 data-testid="sync-b3-button"
-                className="h-8 rounded-lg border-zinc-800 bg-zinc-900 text-zinc-200 hover:bg-zinc-850 hover:text-zinc-100"
+                className="h-8 rounded-lg border-mist-800 bg-mist-900 text-stone-200 hover:bg-mist-850 hover:text-stone-100"
               >
                 <RefreshCw
                   className={`mr-1.5 h-3.5 w-3.5 ${syncing ? 'animate-spin' : ''}`}
@@ -285,9 +285,9 @@ export default function TerminalPage() {
 
           <nav
             aria-label="Opções de Ranking no Header"
-            className="flex flex-wrap items-center gap-2 border-t border-zinc-800/80 pt-2.5"
+            className="flex flex-wrap items-center gap-2 border-t border-mist-800/80 pt-2.5"
           >
-            <span className="text-xs font-semibold text-zinc-400 mr-1">
+            <span className="text-xs font-semibold text-stone-400 mr-1">
               Modo Inicial:
             </span>
             <Button
@@ -332,12 +332,12 @@ export default function TerminalPage() {
 
       <main className="mx-auto max-w-[1520px] space-y-6 px-4 py-6 sm:px-6 lg:px-8">
         <div className="space-y-4">
-          <div className="flex items-center justify-between border-b border-zinc-800 pb-2">
-            <h2 className="text-base font-bold text-zinc-100 flex items-center gap-2">
-              <BarChart3 className="h-4 w-4 text-zinc-400" />
+          <div className="flex items-center justify-between border-b border-mist-800 pb-2">
+            <h2 className="text-base font-bold text-stone-100 flex items-center gap-2">
+              <BarChart3 className="h-4 w-4 text-stone-400" />
               Resumo do Mercado B3
             </h2>
-            <span className="text-xs text-zinc-400">
+            <span className="text-xs text-stone-400">
               {total} empresas monitoradas
             </span>
           </div>
@@ -354,11 +354,11 @@ export default function TerminalPage() {
 
         <section
           aria-label="Filtro de Categorias da B3"
-          className="rounded-xl border border-zinc-800 bg-zinc-900 p-4 shadow-sm"
+          className="rounded-xl border border-mist-800 bg-mist-900 p-4 shadow-sm"
         >
           <div className="mb-2.5 flex flex-wrap items-center justify-between gap-2">
             <div className="flex items-center gap-2">
-              <span className="text-xs font-bold uppercase tracking-wider text-zinc-300">
+              <span className="text-xs font-bold uppercase tracking-wider text-stone-300">
                 Categorias da B3 (Multi-seleção)
               </span>
               {filters.sectors.length > 0 && (
@@ -387,8 +387,8 @@ export default function TerminalPage() {
               onClick={handleClearCategories}
               className={`rounded-lg border px-2.5 py-1 text-xs font-medium transition-colors ${
                 filters.sectors.length === 0
-                  ? 'border-zinc-100 bg-zinc-100 text-zinc-950 font-bold'
-                  : 'border-zinc-800 bg-zinc-950 text-zinc-300 hover:bg-zinc-800'
+                  ? 'border-mist-100 bg-mist-100 text-stone-950 font-bold'
+                  : 'border-mist-800 bg-mist-950 text-stone-300 hover:bg-mist-800'
               }`}
             >
               Todas ({B3_STANDARD_CATEGORIES.length})
@@ -403,8 +403,8 @@ export default function TerminalPage() {
                   onClick={() => handleToggleCategory(category)}
                   className={`rounded-lg border px-2.5 py-1 text-xs font-medium transition-colors ${
                     isSelected
-                      ? 'border-zinc-100 bg-zinc-100 text-zinc-950 font-bold'
-                      : 'border-zinc-800 bg-zinc-950/80 text-zinc-300 hover:bg-zinc-800'
+                      ? 'border-mist-100 bg-mist-100 text-stone-950 font-bold'
+                      : 'border-mist-800 bg-mist-950/80 text-stone-300 hover:bg-mist-800'
                   }`}
                 >
                   {category}
@@ -429,19 +429,19 @@ export default function TerminalPage() {
         </div>
       </main>
 
-      <footer className="mt-16 border-t border-zinc-800 bg-zinc-900/80 py-8">
-        <div className="mx-auto flex max-w-[1520px] flex-col gap-4 px-4 sm:px-6 lg:px-8 text-xs text-zinc-400">
+      <footer className="mt-16 border-t border-mist-800 bg-mist-900/80 py-8">
+        <div className="mx-auto flex max-w-[1520px] flex-col gap-4 px-4 sm:px-6 lg:px-8 text-xs text-stone-400">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div className="flex items-center gap-2">
-              <span className="font-bold text-zinc-100">B-STOCKS TERMINAL</span>
-              <span className="text-zinc-600">•</span>
+              <span className="font-bold text-stone-100">B-STOCKS TERMINAL</span>
+              <span className="text-stone-600">•</span>
               <span>Análise Quantitativa B3</span>
             </div>
-            <Link href="/" className="hover:text-zinc-200 transition-colors">
+            <Link href="/" className="hover:text-stone-200 transition-colors">
               Voltar para a Landing Page Inicial &rarr;
             </Link>
           </div>
-          <div className="border-t border-zinc-800/80 pt-3 text-[11px] text-zinc-500">
+          <div className="border-t border-mist-800/80 pt-3 text-[11px] text-stone-500">
             Finalidade exclusivamente analítica e educacional. Não constitui recomendação de investimento.
           </div>
         </div>
