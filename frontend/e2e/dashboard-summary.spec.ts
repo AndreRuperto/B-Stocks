@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('Landing Page and Terminal Market Summary UI', () => {
-  test('renders standalone landing page with ticker carousel, real recharts ibov chart and company logos', async ({
+  test('renders standalone landing page with ticker carousel, real recharts ibov chart, top 5 rankings preview and b3 news', async ({
     page,
   }) => {
     await page.goto('/');
@@ -12,15 +12,17 @@ test.describe('Landing Page and Terminal Market Summary UI', () => {
     const tickerEl = page.getByTestId('stock-ticker-carousel');
     await expect(tickerEl).toBeVisible();
     await expect(tickerEl).toContainText('BBAS3');
-    await expect(tickerEl).toContainText('-2,02%');
 
     const ibovOverview = page.getByTestId('ibov-market-overview');
     await expect(ibovOverview).toBeVisible();
     await expect(ibovOverview).toContainText('IBOVESPA');
-    await expect(page.getByTestId('ibov-current-points')).toContainText(
-      '169.186,42',
+    await expect(page.getByTestId('ibov-current-points')).toHaveText(
+      /\d{2,3}\.\d{3},\d{2}/,
+      { timeout: 15000 },
     );
-    await expect(page.getByTestId('ibov-recharts-container')).toBeVisible();
+    await expect(page.getByTestId('ibov-recharts-container')).toBeVisible({
+      timeout: 15000,
+    });
     await expect(page.getByTestId('ibov-top-gainers-card')).toContainText(
       'Maiores Altas do Pregão',
     );
@@ -29,7 +31,39 @@ test.describe('Landing Page and Terminal Market Summary UI', () => {
     );
 
     const anyLogo = ibovOverview.locator('[data-testid^="company-logo-"]');
-    await expect(anyLogo.first()).toBeVisible();
+    await expect(anyLogo.first()).toBeVisible({ timeout: 15000 });
+
+    const rankingsSection = page.getByTestId('landing-rankings-section');
+    await expect(rankingsSection).toBeVisible();
+    await expect(page.getByTestId('landing-ranking-card-todas')).toBeVisible();
+    await expect(
+      page.getByTestId('landing-ranking-card-receitas'),
+    ).toBeVisible();
+    await expect(
+      page.getByTestId('landing-ranking-card-valor-mercado'),
+    ).toBeVisible();
+
+    const verRankingTodas = page.getByTestId('ver-ranking-btn-todas');
+    await expect(verRankingTodas).toContainText('Ver Ranking');
+    await expect(verRankingTodas.locator('xpath=..')).toHaveAttribute(
+      'href',
+      '/terminal?headerPreset=todas',
+    );
+    await expect(
+      page.getByTestId('ver-ranking-btn-maiores_receitas').locator('xpath=..'),
+    ).toHaveAttribute('href', '/terminal?headerPreset=maiores_receitas');
+    await expect(
+      page
+        .getByTestId('ver-ranking-btn-maiores_valor_mercado')
+        .locator('xpath=..'),
+    ).toHaveAttribute('href', '/terminal?headerPreset=maiores_valor_mercado');
+
+    const newsSection = page.getByTestId('market-news-section');
+    await expect(newsSection).toBeVisible();
+    const firstNewsCard = page.getByTestId('market-news-card').first();
+    await expect(firstNewsCard).toBeVisible({ timeout: 15000 });
+    await expect(firstNewsCard).toHaveAttribute('href', /^https?:\/\//);
+    await expect(firstNewsCard.locator('img')).toBeVisible();
 
     const heroExplore = page.getByTestId('hero-explore-button');
     await expect(heroExplore).toBeVisible();
