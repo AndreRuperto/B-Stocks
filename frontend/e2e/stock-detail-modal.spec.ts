@@ -4,7 +4,7 @@ test.describe('Stock Detail Modal, Bazin Simulator and AI Thesis', () => {
   test('opens stock analysis modal, verifies company logo, recalculates Bazin ceiling and renders AI thesis', async ({
     page,
   }) => {
-    await page.goto('/');
+    await page.goto('/terminal');
 
     const searchInput = page.getByTestId('search-input');
     await expect(searchInput).toBeVisible({ timeout: 15000 });

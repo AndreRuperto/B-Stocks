@@ -1,20 +1,17 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('B3 Stocks Ranking Table, Dark Theme and Indicator Tooltips', () => {
-  test('verifies dark theme, landing hero, filters, indicator tooltips and custom columns', async ({
+  test('verifies dark theme, filters, indicator tooltips and custom columns in terminal', async ({
     page,
   }) => {
-    await page.goto('/');
+    await page.goto('/terminal');
 
     const htmlElement = page.locator('html');
     await expect(htmlElement).toHaveClass(/dark/);
 
-    await expect(page.getByTestId('hero-landing-section')).toBeVisible({
+    await expect(page.getByTestId('header-preset-all')).toBeVisible({
       timeout: 15000,
     });
-    await expect(page.getByTestId('hero-explore-button')).toBeVisible();
-
-    await expect(page.getByTestId('header-preset-all')).toBeVisible();
     await expect(page.getByTestId('header-preset-revenue')).toBeVisible();
     await expect(page.getByTestId('header-preset-marketcap')).toBeVisible();
 
