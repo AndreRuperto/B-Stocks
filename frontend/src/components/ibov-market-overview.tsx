@@ -38,192 +38,8 @@ interface MarketMoverItem {
   logoUrl?: string;
 }
 
-const FALLBACK_GAINERS: MarketMoverItem[] = [
-  {
-    ticker: 'PRIO3',
-    companyName: 'PRIO S.A.',
-    price: 46.85,
-    change24h: 4.82,
-    sector: 'Petróleo, Gás e Biocombustíveis',
-  },
-  {
-    ticker: 'EMBR3',
-    companyName: 'EMBRAER S.A.',
-    price: 52.4,
-    change24h: 3.95,
-    sector: 'Bens Industriais',
-  },
-  {
-    ticker: 'WEGE3',
-    companyName: 'WEG S.A.',
-    price: 53.15,
-    change24h: 2.85,
-    sector: 'Bens Industriais',
-  },
-  {
-    ticker: 'DIRR3',
-    companyName: 'DIRECIONAL ENGENHARIA',
-    price: 8.77,
-    change24h: 2.45,
-    sector: 'Construção Civil',
-  },
-  {
-    ticker: 'SUZB3',
-    companyName: 'SUZANO S.A.',
-    price: 58.1,
-    change24h: 2.1,
-    sector: 'Materiais Básicos',
-  },
-  {
-    ticker: 'CPLE6',
-    companyName: 'COPEL ENERGIA',
-    price: 10.42,
-    change24h: 1.88,
-    sector: 'Energia Elétrica',
-  },
-];
-
-const FALLBACK_LOSERS: MarketMoverItem[] = [
-  {
-    ticker: 'BHIA3',
-    companyName: 'CASAS BAHIA S.A.',
-    price: 4.15,
-    change24h: -5.45,
-    sector: 'Consumo Cíclico',
-  },
-  {
-    ticker: 'MGLU3',
-    companyName: 'MAGAZINE LUIZA S.A.',
-    price: 9.3,
-    change24h: -4.2,
-    sector: 'Consumo Cíclico',
-  },
-  {
-    ticker: 'CSNA3',
-    companyName: 'SID NACIONAL',
-    price: 11.9,
-    change24h: -3.8,
-    sector: 'Mineração',
-  },
-  {
-    ticker: 'BBAS3',
-    companyName: 'BANCO DO BRASIL S.A.',
-    price: 16.06,
-    change24h: -2.02,
-    sector: 'Bancos',
-  },
-  {
-    ticker: 'COGN3',
-    companyName: 'COGNA EDUCAÇÃO',
-    price: 1.48,
-    change24h: -1.95,
-    sector: 'Consumo Cíclico',
-  },
-  {
-    ticker: 'HAPV3',
-    companyName: 'HAPVIDA SAÚDE',
-    price: 3.62,
-    change24h: -1.72,
-    sector: 'Saúde',
-  },
-];
-
-function buildInitialIbovSeries(
-  period: '1D' | '5D' | '1M' | '6M' | '1A',
-): IbovespaOverview {
-  const currentPoints = 169186.42;
-  const previousClose = 167765.62;
-  const count =
-    period === '1D' ? 28 : period === '5D' ? 35 : period === '1M' ? 22 : 30;
-  const startBase =
-    period === '1D'
-      ? 167820
-      : period === '5D'
-        ? 166100
-        : period === '1M'
-          ? 163750
-          : period === '6M'
-            ? 156330
-            : 147540;
-
-  const points: IbovespaHistoryPoint[] = [];
-  const now = Math.floor(Date.now() / 1000);
-
-  for (let i = 0; i < count; i++) {
-    const progress = i / (count - 1);
-    const wave =
-      Math.sin(i * 0.65) * 340 +
-      Math.cos(i * 0.35) * 210 +
-      Math.sin(i * 1.2) * 120;
-    const close =
-      i === count - 1
-        ? currentPoints
-        : Number(
-            (
-              startBase +
-              (currentPoints - startBase) * progress +
-              wave
-            ).toFixed(2),
-          );
-    const open = Number((close - Math.sin(i + 1) * 140).toFixed(2));
-    const high = Number((Math.max(open, close) + 185).toFixed(2));
-    const low = Number((Math.min(open, close) - 165).toFixed(2));
-
-    let label = '';
-    if (period === '1D') {
-      const totalMins = 10 * 60 + i * 17;
-      const hh = String(Math.min(17, Math.floor(totalMins / 60))).padStart(
-        2,
-        '0',
-      );
-      const mm = String(totalMins % 60).padStart(2, '0');
-      label = `${hh}:${mm}`;
-    } else {
-      const ts = (now - (count - i) * 86400) * 1000;
-      const d = new Date(ts);
-      label = d.toLocaleDateString('pt-BR', {
-        day: '2-digit',
-        month: '2-digit',
-      });
-    }
-
-    points.push({
-      timestamp: now - (count - i) * 900,
-      label,
-      fullDate: label,
-      close,
-      open,
-      high,
-      low,
-      volume: 850_000_000 + i * 45_000_000,
-    });
-  }
-
-  const closes = points.map((p) => p.close);
-  const dayHigh = Math.max(...points.map((p) => p.high), currentPoints);
-  const dayLow = Math.min(...points.map((p) => p.low), startBase);
-  const firstClose = closes[0] || previousClose;
-  const refBase = period === '1D' ? previousClose : firstClose;
-  const changePoints = Number((currentPoints - refBase).toFixed(2));
-  const changePercent = Number(((changePoints / refBase) * 100).toFixed(2));
-
-  return {
-    symbol: '^BVSP',
-    period,
-    currentPoints,
-    previousClose: refBase,
-    changePercent,
-    changePoints,
-    dayHigh,
-    dayLow,
-    volumeBrl: 24_840_000_000,
-    updatedAt: new Date().toISOString(),
-    source: 'B3 / Yahoo Finance (^BVSP)',
-    points,
-  };
-}
-
 function formatPointsBrl(val: number): string {
+  if (!Number.isFinite(val) || val <= 0) return '-';
   return val.toLocaleString('pt-BR', {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
@@ -231,6 +47,7 @@ function formatPointsBrl(val: number): string {
 }
 
 function formatCompactPoints(val: number): string {
+  if (!Number.isFinite(val) || val <= 0) return '-';
   return Math.round(val).toLocaleString('pt-BR');
 }
 
@@ -264,7 +81,11 @@ function IbovCustomTooltip({ active, payload }: CustomTooltipProps) {
           }`}
         >
           {isUp ? '+' : ''}
-          {formatPointsBrl(diff)} pts
+          {diff.toLocaleString('pt-BR', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          })}{' '}
+          pts
         </span>
       </div>
       <div className="mt-2 grid grid-cols-3 gap-2 border-t border-zinc-800/80 pt-2 text-[10px] text-zinc-400">
@@ -295,14 +116,10 @@ export function IbovMarketOverview() {
   const [selectedPeriod, setSelectedPeriod] = useState<
     '1D' | '5D' | '1M' | '6M' | '1A'
   >('1D');
-  const [ibovData, setIbovData] = useState<IbovespaOverview>(() =>
-    buildInitialIbovSeries('1D'),
-  );
-  const [topGainers, setTopGainers] =
-    useState<MarketMoverItem[]>(FALLBACK_GAINERS);
-  const [topLosers, setTopLosers] =
-    useState<MarketMoverItem[]>(FALLBACK_LOSERS);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [ibovData, setIbovData] = useState<IbovespaOverview | null>(null);
+  const [topGainers, setTopGainers] = useState<MarketMoverItem[]>([]);
+  const [topLosers, setTopLosers] = useState<MarketMoverItem[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [mounted, setMounted] = useState<boolean>(false);
 
   useEffect(() => {
@@ -312,17 +129,16 @@ export function IbovMarketOverview() {
   useEffect(() => {
     let active = true;
     setIsLoading(true);
-    setIbovData(buildInitialIbovSeries(selectedPeriod));
 
     fetchMarketOverview(selectedPeriod)
       .then((res) => {
         if (!active) return;
-        if (res.ibovespa && res.ibovespa.points.length > 0) {
+        if (res.ibovespa) {
           setIbovData(res.ibovespa);
         }
-        if (res.topGainers && res.topGainers.length > 0) {
+        if (Array.isArray(res.topGainers)) {
           setTopGainers(
-            res.topGainers.slice(0, 6).map((item) => ({
+            res.topGainers.slice(0, 5).map((item) => ({
               ticker: item.ticker,
               companyName: item.companyName,
               price: item.price,
@@ -332,9 +148,9 @@ export function IbovMarketOverview() {
             })),
           );
         }
-        if (res.topLosers && res.topLosers.length > 0) {
+        if (Array.isArray(res.topLosers)) {
           setTopLosers(
-            res.topLosers.slice(0, 6).map((item) => ({
+            res.topLosers.slice(0, 5).map((item) => ({
               ticker: item.ticker,
               companyName: item.companyName,
               price: item.price,
@@ -356,27 +172,50 @@ export function IbovMarketOverview() {
   }, [selectedPeriod]);
 
   const yDomain = useMemo<[number, number]>(() => {
+    if (!ibovData || ibovData.points.length === 0) return [0, 100];
     const values = ibovData.points.map((p) => p.close);
-    if (values.length === 0) return [165000, 171000];
-    const min = Math.min(...values, ibovData.previousClose);
-    const max = Math.max(...values, ibovData.previousClose);
-    const padding = Math.max(250, Math.round((max - min) * 0.14));
+    const min = Math.min(
+      ...values,
+      ibovData.previousClose > 0 ? ibovData.previousClose : values[0],
+    );
+    const max = Math.max(
+      ...values,
+      ibovData.previousClose > 0 ? ibovData.previousClose : values[0],
+    );
+    const padding = Math.max(150, Math.round((max - min) * 0.12));
     return [Math.floor(min - padding), Math.ceil(max + padding)];
   }, [ibovData]);
 
-  const isPositive = ibovData.changePercent >= 0;
+  const hasValidIbov = Boolean(
+    ibovData && ibovData.currentPoints > 0 && ibovData.points.length > 0,
+  );
+  const isPositive = (ibovData?.changePercent ?? 0) >= 0;
   const strokeColor = isPositive ? '#10b981' : '#ef4444';
-  const formattedPoints = formatPointsBrl(ibovData.currentPoints);
-  const formattedChangePts = `${ibovData.changePoints >= 0 ? '+' : ''}${formatPointsBrl(
-    ibovData.changePoints,
-  )} pts`;
-  const formattedChangePct = `${ibovData.changePercent >= 0 ? '+' : ''}${ibovData.changePercent
-    .toFixed(2)
-    .replace('.', ',')}%`;
 
-  const volumeBil = (ibovData.volumeBrl / 1_000_000_000)
-    .toFixed(1)
-    .replace('.', ',');
+  const formattedPoints = hasValidIbov
+    ? formatPointsBrl(ibovData!.currentPoints)
+    : '-';
+  const formattedChangePts = hasValidIbov
+    ? `${ibovData!.changePoints >= 0 ? '+' : ''}${ibovData!.changePoints.toLocaleString(
+        'pt-BR',
+        {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        },
+      )} pts`
+    : '-';
+  const formattedChangePct = hasValidIbov
+    ? `${ibovData!.changePercent >= 0 ? '+' : ''}${ibovData!.changePercent
+        .toFixed(2)
+        .replace('.', ',')}%`
+    : '-';
+
+  const volumeDisplay =
+    ibovData && ibovData.volumeBrl > 0
+      ? ibovData.volumeBrl >= 1_000_000_000
+        ? `R$ ${(ibovData.volumeBrl / 1_000_000_000).toFixed(1).replace('.', ',')} Bi`
+        : `${ibovData.volumeBrl.toLocaleString('pt-BR')}`
+      : '-';
 
   return (
     <section
@@ -396,7 +235,7 @@ export function IbovMarketOverview() {
             </Badge>
             <span className="flex items-center gap-1 text-xs text-zinc-400">
               <Clock className="h-3 w-3 text-zinc-500" />
-              Dados Reais B3 • Yahoo Finance &amp; Fundamentus
+              Dados Reais B3 • Yahoo Finance &amp; Brapi
             </span>
           </div>
           <h2 className="mt-2 text-2xl sm:text-3xl font-black tracking-tight text-zinc-100">
@@ -448,20 +287,22 @@ export function IbovMarketOverview() {
                   <span className="text-xs font-semibold uppercase text-zinc-400">
                     pontos
                   </span>
-                  <span
-                    className={`inline-flex items-center gap-1 rounded-lg px-2.5 py-1 text-xs font-bold tabular-nums ${
-                      isPositive
-                        ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30'
-                        : 'bg-red-500/15 text-red-400 border border-red-500/30'
-                    }`}
-                  >
-                    {isPositive ? (
-                      <ArrowUp className="h-3.5 w-3.5" />
-                    ) : (
-                      <ArrowDown className="h-3.5 w-3.5" />
-                    )}
-                    {formattedChangePts} ({formattedChangePct})
-                  </span>
+                  {hasValidIbov && (
+                    <span
+                      className={`inline-flex items-center gap-1 rounded-lg px-2.5 py-1 text-xs font-bold tabular-nums ${
+                        isPositive
+                          ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30'
+                          : 'bg-red-500/15 text-red-400 border border-red-500/30'
+                      }`}
+                    >
+                      {isPositive ? (
+                        <ArrowUp className="h-3.5 w-3.5" />
+                      ) : (
+                        <ArrowDown className="h-3.5 w-3.5" />
+                      )}
+                      {formattedChangePts} ({formattedChangePct})
+                    </span>
+                  )}
                 </div>
               </div>
 
@@ -495,7 +336,7 @@ export function IbovMarketOverview() {
                   Máxima ({selectedPeriod})
                 </span>
                 <strong className="mt-0.5 block text-xs sm:text-sm font-bold text-emerald-400 tabular-nums">
-                  {formatPointsBrl(ibovData.dayHigh)} pts
+                  {hasValidIbov ? `${formatPointsBrl(ibovData!.dayHigh)} pts` : '-'}
                 </strong>
               </div>
               <div className="rounded-xl border border-zinc-800/70 bg-zinc-950/60 px-3 py-2">
@@ -503,7 +344,7 @@ export function IbovMarketOverview() {
                   Mínima ({selectedPeriod})
                 </span>
                 <strong className="mt-0.5 block text-xs sm:text-sm font-bold text-red-400 tabular-nums">
-                  {formatPointsBrl(ibovData.dayLow)} pts
+                  {hasValidIbov ? `${formatPointsBrl(ibovData!.dayLow)} pts` : '-'}
                 </strong>
               </div>
               <div className="rounded-xl border border-zinc-800/70 bg-zinc-950/60 px-3 py-2">
@@ -511,15 +352,17 @@ export function IbovMarketOverview() {
                   Fech. Anterior
                 </span>
                 <strong className="mt-0.5 block text-xs sm:text-sm font-bold text-zinc-200 tabular-nums">
-                  {formatPointsBrl(ibovData.previousClose)} pts
+                  {hasValidIbov
+                    ? `${formatPointsBrl(ibovData!.previousClose)} pts`
+                    : '-'}
                 </strong>
               </div>
               <div className="rounded-xl border border-zinc-800/70 bg-zinc-950/60 px-3 py-2">
                 <span className="block text-[10px] font-semibold uppercase tracking-wider text-zinc-500">
-                  Volume Financeiro
+                  Volume Reportado
                 </span>
                 <strong className="mt-0.5 block text-xs sm:text-sm font-bold text-zinc-200 tabular-nums">
-                  R$ {volumeBil} Bi
+                  {volumeDisplay}
                 </strong>
               </div>
             </div>
@@ -530,10 +373,10 @@ export function IbovMarketOverview() {
             className="relative mt-5 h-72 w-full"
             aria-label="Gráfico interativo de desempenho do IBOVESPA"
           >
-            {mounted ? (
+            {mounted && hasValidIbov ? (
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart
-                  data={ibovData.points}
+                  data={ibovData!.points}
                   margin={{ top: 10, right: 8, left: 4, bottom: 0 }}
                 >
                   <defs>
@@ -580,7 +423,7 @@ export function IbovMarketOverview() {
                   />
                   <Tooltip content={<IbovCustomTooltip />} />
                   <ReferenceLine
-                    y={ibovData.previousClose}
+                    y={ibovData!.previousClose}
                     stroke="#52525b"
                     strokeDasharray="4 4"
                   />
@@ -603,18 +446,23 @@ export function IbovMarketOverview() {
             ) : (
               <div className="flex h-full w-full items-center justify-center rounded-xl border border-zinc-800/60 bg-zinc-950/40 text-xs text-zinc-400">
                 <Activity className="mr-2 h-4 w-4 animate-pulse text-emerald-400" />
-                Carregando série histórica oficial do Ibovespa...
+                {isLoading
+                  ? 'Carregando série histórica oficial do Ibovespa (^BVSP)...'
+                  : 'Série histórica indisponível no momento (-)'}
               </div>
             )}
           </div>
 
           <div className="mt-3 flex flex-wrap items-center justify-between gap-2 border-t border-zinc-800/70 pt-3 text-[11px] text-zinc-400">
             <span>
-              Fonte: <strong className="text-zinc-300">{ibovData.source}</strong>
+              Fonte:{' '}
+              <strong className="text-zinc-300">
+                {ibovData?.source || '-'}
+              </strong>
             </span>
             <span>
               Passe o cursor sobre o gráfico para inspecionar abertura, máxima e
-              mínima de cada candle
+              mínima reais de cada candle
             </span>
           </div>
         </div>
@@ -639,7 +487,7 @@ export function IbovMarketOverview() {
                 </div>
               </div>
               <Link
-                href="/terminal"
+                href="/terminal?preset=maiores_altas"
                 className="text-[11px] font-bold text-emerald-400 hover:text-emerald-300 transition-colors"
               >
                 Ver Ranking &rarr;
@@ -647,48 +495,56 @@ export function IbovMarketOverview() {
             </div>
 
             <div className="mt-2 divide-y divide-zinc-800/60">
-              {topGainers.slice(0, 5).map((stock) => (
-                <Link
-                  href={`/terminal?search=${encodeURIComponent(stock.ticker)}`}
-                  key={stock.ticker}
-                  className="flex items-center justify-between py-2.5 px-2 text-xs transition-all hover:bg-zinc-800/50 rounded-lg group"
-                >
-                  <div className="flex items-center gap-3 min-w-0">
-                    <CompanyLogo
-                      ticker={stock.ticker}
-                      companyName={stock.companyName}
-                      logoUrl={stock.logoUrl}
-                      size="sm"
-                    />
-                    <div className="min-w-0">
-                      <div className="flex items-center gap-1.5">
-                        <span className="font-extrabold text-zinc-100 group-hover:text-emerald-300 transition-colors">
-                          {stock.ticker}
-                        </span>
-                        <span className="truncate rounded bg-zinc-800/80 px-1.5 py-0.5 text-[9px] font-medium text-zinc-400 max-w-[115px]">
-                          {stock.sector}
-                        </span>
-                      </div>
-                      <div className="text-[11px] text-zinc-400 truncate max-w-[165px]">
-                        {stock.companyName}
+              {topGainers.length === 0 ? (
+                <div className="py-6 text-center text-xs text-zinc-500">
+                  {isLoading ? 'Carregando maiores altas da API...' : '-'}
+                </div>
+              ) : (
+                topGainers.slice(0, 5).map((stock) => (
+                  <Link
+                    href={`/terminal?search=${encodeURIComponent(stock.ticker)}`}
+                    key={stock.ticker}
+                    className="flex items-center justify-between py-2.5 px-2 text-xs transition-all hover:bg-zinc-800/50 rounded-lg group"
+                  >
+                    <div className="flex items-center gap-3 min-w-0">
+                      <CompanyLogo
+                        ticker={stock.ticker}
+                        companyName={stock.companyName}
+                        logoUrl={stock.logoUrl}
+                        size="sm"
+                      />
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-1.5">
+                          <span className="font-extrabold text-zinc-100 group-hover:text-emerald-300 transition-colors">
+                            {stock.ticker}
+                          </span>
+                          <span className="truncate rounded bg-zinc-800/80 px-1.5 py-0.5 text-[9px] font-medium text-zinc-400 max-w-[115px]">
+                            {stock.sector}
+                          </span>
+                        </div>
+                        <div className="text-[11px] text-zinc-400 truncate max-w-[165px]">
+                          {stock.companyName}
+                        </div>
                       </div>
                     </div>
-                  </div>
 
-                  <div className="text-right shrink-0">
-                    <div className="font-bold text-zinc-100 tabular-nums">
-                      {stock.price.toLocaleString('pt-BR', {
-                        style: 'currency',
-                        currency: 'BRL',
-                      })}
+                    <div className="text-right shrink-0">
+                      <div className="font-bold text-zinc-100 tabular-nums">
+                        {stock.price > 0
+                          ? stock.price.toLocaleString('pt-BR', {
+                              style: 'currency',
+                              currency: 'BRL',
+                            })
+                          : '-'}
+                      </div>
+                      <span className="inline-flex items-center text-[11px] font-bold text-emerald-400 tabular-nums">
+                        <ArrowUp className="mr-0.5 h-3 w-3" />+
+                        {Math.abs(stock.change24h).toFixed(2).replace('.', ',')}%
+                      </span>
                     </div>
-                    <span className="inline-flex items-center text-[11px] font-bold text-emerald-400 tabular-nums">
-                      <ArrowUp className="mr-0.5 h-3 w-3" />+
-                      {Math.abs(stock.change24h).toFixed(2).replace('.', ',')}%
-                    </span>
-                  </div>
-                </Link>
-              ))}
+                  </Link>
+                ))
+              )}
             </div>
           </div>
 
@@ -711,7 +567,7 @@ export function IbovMarketOverview() {
                 </div>
               </div>
               <Link
-                href="/terminal"
+                href="/terminal?preset=maiores_baixas"
                 className="text-[11px] font-bold text-zinc-400 hover:text-zinc-200 transition-colors"
               >
                 Ver Ranking &rarr;
@@ -719,48 +575,56 @@ export function IbovMarketOverview() {
             </div>
 
             <div className="mt-2 divide-y divide-zinc-800/60">
-              {topLosers.slice(0, 5).map((stock) => (
-                <Link
-                  href={`/terminal?search=${encodeURIComponent(stock.ticker)}`}
-                  key={stock.ticker}
-                  className="flex items-center justify-between py-2.5 px-2 text-xs transition-all hover:bg-zinc-800/50 rounded-lg group"
-                >
-                  <div className="flex items-center gap-3 min-w-0">
-                    <CompanyLogo
-                      ticker={stock.ticker}
-                      companyName={stock.companyName}
-                      logoUrl={stock.logoUrl}
-                      size="sm"
-                    />
-                    <div className="min-w-0">
-                      <div className="flex items-center gap-1.5">
-                        <span className="font-extrabold text-zinc-100 group-hover:text-red-300 transition-colors">
-                          {stock.ticker}
-                        </span>
-                        <span className="truncate rounded bg-zinc-800/80 px-1.5 py-0.5 text-[9px] font-medium text-zinc-400 max-w-[115px]">
-                          {stock.sector}
-                        </span>
-                      </div>
-                      <div className="text-[11px] text-zinc-400 truncate max-w-[165px]">
-                        {stock.companyName}
+              {topLosers.length === 0 ? (
+                <div className="py-6 text-center text-xs text-zinc-500">
+                  {isLoading ? 'Carregando maiores baixas da API...' : '-'}
+                </div>
+              ) : (
+                topLosers.slice(0, 5).map((stock) => (
+                  <Link
+                    href={`/terminal?search=${encodeURIComponent(stock.ticker)}`}
+                    key={stock.ticker}
+                    className="flex items-center justify-between py-2.5 px-2 text-xs transition-all hover:bg-zinc-800/50 rounded-lg group"
+                  >
+                    <div className="flex items-center gap-3 min-w-0">
+                      <CompanyLogo
+                        ticker={stock.ticker}
+                        companyName={stock.companyName}
+                        logoUrl={stock.logoUrl}
+                        size="sm"
+                      />
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-1.5">
+                          <span className="font-extrabold text-zinc-100 group-hover:text-red-300 transition-colors">
+                            {stock.ticker}
+                          </span>
+                          <span className="truncate rounded bg-zinc-800/80 px-1.5 py-0.5 text-[9px] font-medium text-zinc-400 max-w-[115px]">
+                            {stock.sector}
+                          </span>
+                        </div>
+                        <div className="text-[11px] text-zinc-400 truncate max-w-[165px]">
+                          {stock.companyName}
+                        </div>
                       </div>
                     </div>
-                  </div>
 
-                  <div className="text-right shrink-0">
-                    <div className="font-bold text-zinc-100 tabular-nums">
-                      {stock.price.toLocaleString('pt-BR', {
-                        style: 'currency',
-                        currency: 'BRL',
-                      })}
+                    <div className="text-right shrink-0">
+                      <div className="font-bold text-zinc-100 tabular-nums">
+                        {stock.price > 0
+                          ? stock.price.toLocaleString('pt-BR', {
+                              style: 'currency',
+                              currency: 'BRL',
+                            })
+                          : '-'}
+                      </div>
+                      <span className="inline-flex items-center text-[11px] font-bold text-red-400 tabular-nums">
+                        <ArrowDown className="mr-0.5 h-3 w-3" />-
+                        {Math.abs(stock.change24h).toFixed(2).replace('.', ',')}%
+                      </span>
                     </div>
-                    <span className="inline-flex items-center text-[11px] font-bold text-red-400 tabular-nums">
-                      <ArrowDown className="mr-0.5 h-3 w-3" />-
-                      {Math.abs(stock.change24h).toFixed(2).replace('.', ',')}%
-                    </span>
-                  </div>
-                </Link>
-              ))}
+                  </Link>
+                ))
+              )}
             </div>
           </div>
         </div>
