@@ -26,6 +26,23 @@ describe('StocksController', () => {
       categories: [],
       lastSync: null,
     }),
+    getMarketOverview: jest.fn().mockResolvedValue({
+      ibovespa: {
+        period: '1D',
+        currentPoints: 169186.42,
+        previousClose: 167765.62,
+        changePoints: 1420.8,
+        changePercent: 0.85,
+        high: 169840.1,
+        low: 168110.25,
+        volume: 24800000000,
+        source: 'Yahoo Finance (^BVSP Oficial)',
+        series: [],
+      },
+      topGainers: [{ ticker: 'PRIO3', change24h: 4.82 }],
+      topLosers: [{ ticker: 'BHIA3', change24h: -5.45 }],
+      tickerTape: [{ ticker: 'BBAS3', price: 16.06, change24h: -2.02 }],
+    }),
     syncAllB3Stocks: jest.fn().mockResolvedValue({
       totalSynced: 962,
       source: 'Fundamentus + Brapi',
@@ -63,10 +80,14 @@ describe('StocksController', () => {
     expect(mockStocksService.findAll).toHaveBeenCalledWith({ search: 'PETR4' });
   });
 
-  it('delegates getSummary to StocksService', async () => {
+  it('delegates getSummary and getMarketOverview to StocksService', async () => {
     const summary = await controller.getSummary();
     expect(summary.totalStocks).toBe(962);
     expect(mockStocksService.getMarketSummary).toHaveBeenCalled();
+
+    const overview = await controller.getMarketOverview('1M');
+    expect(overview.ibovespa.currentPoints).toBe(169186.42);
+    expect(mockStocksService.getMarketOverview).toHaveBeenCalledWith('1M');
   });
 
   it('delegates findOne and generateThesis to StocksService', async () => {

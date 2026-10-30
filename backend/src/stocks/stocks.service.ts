@@ -362,7 +362,7 @@ export class StocksService implements OnModuleInit {
     ];
 
     const [ibovespa, topGainers, topLosers, tickerTape] = await Promise.all([
-      this.marketDataService.fetchIbovespaHistory(period),
+      this.marketData.fetchIbovespaHistory(period),
       this.prisma.stock.findMany({
         where: { dailyLiquidity: { gte: 1_000_000 }, change24h: { gt: 0 } },
         orderBy: [{ change24h: 'desc' }, { dailyLiquidity: 'desc' }],
