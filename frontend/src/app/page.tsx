@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState } from 'react';
 import Link from 'next/link';
@@ -15,7 +15,7 @@ import {
   ArrowRight,
   Award,
   BarChart3,
-  Calculator,
+  Calculator,
   ChevronRight,
   Cpu,
   Flame,
@@ -214,12 +214,13 @@ export default function LandingHomePage() {
 
       <StockTickerCarousel />
 
-      <main className="relative z-10 flex-1 mx-auto w-full max-w-[1520px] space-y-24 px-4 py-10 sm:px-6 lg:px-8">
+      <main className="relative z-10 flex-1 w-full">
         <section
           data-testid="hero-landing-section"
-          className="relative overflow-hidden rounded-3xl border border-mist-700/80 bg-mist-800/90 p-6 sm:p-10 lg:p-14 shadow-2xl"
+          className="w-full bg-[#0a0d0f] py-16 sm:py-24 border-b border-[#1b2328]"
         >
-          <div className="relative grid grid-cols-1 gap-10 lg:grid-cols-12 lg:items-center">
+          <div className="mx-auto max-w-[1520px] px-4 sm:px-6 lg:px-8">
+            <div className="relative grid grid-cols-1 gap-10 lg:grid-cols-12 lg:items-center">
             <div className="space-y-6 lg:col-span-7">
 
               <h1 className="text-3xl sm:text-5xl lg:text-[54px] font-black tracking-tight text-stone-50 leading-[1.08]">
@@ -498,15 +499,23 @@ export default function LandingHomePage() {
               </div>
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        <div id="mercado" className="scroll-mt-24 rounded-3xl border border-mist-700/80 bg-mist-900/95 p-6 sm:p-8 lg:p-10 shadow-xl">
+      <div id="mercado" className="w-full bg-[#162026] py-16 sm:py-20 border-b border-[#26343e] scroll-mt-16">
+        <div className="mx-auto max-w-[1520px] px-4 sm:px-6 lg:px-8">
           <IbovMarketOverview />
         </div>
+      </div>
 
-        <LandingRankingsPreview />
+      <div id="rankings" className="w-full bg-[#0d1215] py-16 sm:py-20 border-b border-[#1c242a] scroll-mt-16">
+        <div className="mx-auto max-w-[1520px] px-4 sm:px-6 lg:px-8">
+          <LandingRankingsPreview />
+        </div>
+      </div>
 
-        <section id="metodologia" className="scroll-mt-24 rounded-3xl border border-mist-700/80 bg-mist-900/95 p-6 sm:p-10 shadow-xl space-y-8">
+        <section id="metodologia" className="w-full bg-[#18232a] py-16 sm:py-20 border-b border-[#283742] scroll-mt-16">
+        <div className="mx-auto max-w-[1520px] px-4 sm:px-6 lg:px-8 space-y-8">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div className="max-w-2xl space-y-2">
               <Badge
@@ -673,9 +682,11 @@ export default function LandingHomePage() {
               </div>
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        <section id="projeto" className="scroll-mt-24 rounded-3xl border border-mist-700/80 bg-mist-800/80 p-6 sm:p-10 shadow-xl space-y-8">
+        <section id="projeto" className="w-full bg-[#0c1013] py-16 sm:py-20 border-b border-[#1a2227] scroll-mt-16">
+        <div className="mx-auto max-w-[1520px] px-4 sm:px-6 lg:px-8 space-y-8">
           <div className="text-center max-w-3xl mx-auto space-y-2">
             <Badge
               variant="outline"
@@ -693,7 +704,7 @@ export default function LandingHomePage() {
           </div>
 
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-            <div className="rounded-2xl border border-mist-700 bg-mist-900/80 p-6 sm:p-7 space-y-4 shadow-lg">
+            <div className="rounded-2xl border border-[#24323a] bg-[#141c21] p-6 sm:p-7 space-y-4 shadow-lg">
               <div className="flex items-center gap-2.5 text-stone-100">
                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-mist-800/60 border border-mist-700">
                   <ShieldAlert className="h-4 w-4" />
@@ -734,7 +745,7 @@ export default function LandingHomePage() {
               </ul>
             </div>
 
-            <div className="rounded-2xl border border-mist-700 bg-mist-900/80 p-6 sm:p-7 space-y-4 shadow-lg">
+            <div className="rounded-2xl border border-[#24323a] bg-[#141c21] p-6 sm:p-7 space-y-4 shadow-lg">
               <div className="flex items-center gap-2.5 text-stone-100">
                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-mist-800/60 border border-mist-700">
                   <ShieldCheck className="h-4 w-4" />
@@ -775,11 +786,17 @@ export default function LandingHomePage() {
               </ul>
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        <MarketNewsSection />
+      <div id="noticias" className="w-full bg-[#1c2830] py-16 sm:py-20 border-b border-[#2d3f4b] scroll-mt-16">
+        <div className="mx-auto max-w-[1520px] px-4 sm:px-6 lg:px-8">
+          <MarketNewsSection />
+        </div>
+      </div>
 
-        <section id="faq" className="scroll-mt-24 space-y-6">
+      <section id="faq" className="w-full bg-[#0d1215] py-16 sm:py-20 border-b border-[#1b2329] scroll-mt-16">
+        <div className="mx-auto max-w-[1520px] px-4 sm:px-6 lg:px-8 space-y-8">
           <div className="text-center max-w-2xl mx-auto space-y-2">
             <Badge
               variant="outline"
@@ -796,7 +813,7 @@ export default function LandingHomePage() {
             {FAQ_ITEMS.map((item, index) => (
               <div
                 key={index}
-                className="rounded-2xl border border-mist-800/90 bg-mist-900/75 p-6 space-y-2.5 shadow-md"
+                className="rounded-2xl border border-[#24323a] bg-[#141c21] p-6 space-y-2.5 shadow-md"
               >
                 <div className="flex items-center gap-2.5 font-extrabold text-sm text-stone-100">
                   <HelpCircle className="h-4 w-4 text-stone-100 shrink-0" />
@@ -808,9 +825,11 @@ export default function LandingHomePage() {
               </div>
             ))}
           </div>
-        </section>
+        </div>
+      </section>
 
-        <section className="relative overflow-hidden rounded-3xl border border-mist-700 bg-mist-900/80 p-8 sm:p-14 text-center space-y-6 shadow-2xl">
+      <section className="w-full bg-[#24333c] py-16 sm:py-24 border-b border-[#384c59]">
+        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center space-y-6">
           <div className="max-w-2xl mx-auto space-y-3">
             <Badge
               variant="outline"
@@ -839,7 +858,8 @@ export default function LandingHomePage() {
               </Button>
             </Link>
           </div>
-        </section>
+        </div>
+      </section>
       </main>
 
       <footer className="relative z-10 mt-16 border-t border-mist-800/80 bg-mist-950/90 py-10">
