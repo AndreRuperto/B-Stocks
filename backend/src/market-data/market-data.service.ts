@@ -44,16 +44,13 @@ export class MarketDataService {
     if (isFinancial) {
       return 0;
     }
-    if (evEbitda > 0 && evEbit > 0 && pEbit > 0) {
-      const ratio = evEbitda * (1 - pEbit / evEbit);
-      if (Number.isFinite(ratio) && ratio >= -10 && ratio <= 25) {
-        return Number(ratio.toFixed(2));
+      if (evEbitda > 0 && evEbit > 0 && pEbit > 0) {
+        const ratio = evEbitda * (1 - pEbit / evEbit);
+        if (Number.isFinite(ratio) && ratio >= -10 && ratio <= 25) {
+          return Number(ratio.toFixed(2));
+        }
       }
-    }
-    if (grossDebtToEquity > 0) {
-      return Number(Math.min(15, grossDebtToEquity * 1.35).toFixed(2));
-    }
-    return 0;
+      return 0;
   }
 
   buildSyntheticCloses(
@@ -109,7 +106,12 @@ export class MarketDataService {
       const subsector = extMeta?.subsector || catalogMeta.subsector || sector;
       const segment = extMeta?.segment || catalogMeta.segment || resolveGovernanceSegment(ticker);
 
-      const price = this.parseBrazilianNumber($(cells[1]).text());
+      const rawPrice = this.parseBrazilianNumber($(cells[1]).text());
+      const brapiPrice =
+        typeof extMeta?.price === 'number' && extMeta.price > 0
+          ? Number(extMeta.price.toFixed(2))
+          : 0;
+      const price = brapiPrice > 0 ? brapiPrice : rawPrice;
       if (price <= 0) return;
 
       const pl = this.parseBrazilianNumber($(cells[2]).text());
@@ -132,35 +134,26 @@ export class MarketDataService {
       const logoUrl =
         extMeta?.logoUrl || resolveCanonicalLogoUrl(ticker);
 
-      const equity = Math.max(0, rawEquity);
+      const equity = rawEquity > 0 ? Number(rawEquity.toFixed(2)) : 0;
       const isLiquidActive = dailyLiquidity > 0;
-      const marketCap = !isLiquidActive
-        ? Number((price * 1000).toFixed(2))
-        : equity > 0 && pvp > 0
-          ? Number((equity * Math.min(pvp, 60)).toFixed(2))
-          : Number((dailyLiquidity * 145).toFixed(2));
-
-      const clampedPsr = Math.max(-100, Math.min(200, psr));
-      const clampedPl = Math.max(-500, Math.min(500, pl));
-      const clampedNetMargin = Math.max(-200, Math.min(300, netMargin));
+      const brapiMarketCap =
+        typeof extMeta?.marketCap === 'number' && extMeta.marketCap > 0
+          ? Number(extMeta.marketCap.toFixed(2))
+          : 0;
+      const marketCap =
+        brapiMarketCap > 0
+          ? brapiMarketCap
+          : isLiquidActive && equity > 0 && pvp > 0
+            ? Number((equity * pvp).toFixed(2))
+            : 0;
 
       const revenue =
-        clampedPsr > 0.05 && marketCap > 0
-          ? Number((marketCap / clampedPsr).toFixed(2))
-          : Number((marketCap * 0.55).toFixed(2));
+        psr > 0 && marketCap > 0 ? Number((marketCap / psr).toFixed(2)) : 0;
 
       const netIncome =
-        Math.abs(clampedPl) >= 0.4 && marketCap > 0
-          ? Number((marketCap / clampedPl).toFixed(2))
-          : Number(((revenue * clampedNetMargin) / 100).toFixed(2));
+        pl !== 0 && marketCap > 0 ? Number((marketCap / pl).toFixed(2)) : 0;
 
-      const clampedDy = Math.max(0, Math.min(60, dy));
-      const clampedRoe = Math.max(-200, Math.min(200, roe));
-      const clampedGrowth = Math.max(-100, Math.min(300, revenueGrowth5y));
-
-      const dy5y = Number(
-        Math.max(0, Math.min(45, clampedDy * 0.91 + (clampedRoe > 12 ? 0.45 : 0))).toFixed(2),
-      );
+      const dy5y = 0;
 
       const netDebtToEbitda = this.deriveNetDebtToEbitda(
         evEbitda,
@@ -178,19 +171,14 @@ export class MarketDataService {
         pl,
       );
 
-      const seedOffset = ((ticker.charCodeAt(0) * 7 + ticker.charCodeAt(ticker.length - 1) * 13) % 41) - 20;
-      const change24h = Number(
-        Math.max(-15, Math.min(18, (clampedRoe * 0.05) + (seedOffset * 0.14))).toFixed(2),
-      );
-      const change30d = Number(
-        Math.max(-35, Math.min(45, change24h * 2.6 + (clampedGrowth * 0.08))).toFixed(2),
-      );
-      const change12m = Number(
-        Math.max(-75, Math.min(180, (clampedRoe * 0.65) + (clampedDy * 0.5) + seedOffset * 0.7)).toFixed(2),
-      );
-      const change5y = Number(
-        Math.max(-95, Math.min(450, change12m * 2.4 + clampedGrowth * 1.35)).toFixed(2),
-      );
+      const change24h =
+        typeof extMeta?.change24h === 'number' &&
+        Number.isFinite(extMeta.change24h)
+          ? Number(extMeta.change24h.toFixed(2))
+          : 0;
+      const change30d = 0;
+      const change12m = 0;
+      const change5y = 0;
 
       const candidate = {
         ticker,
@@ -204,19 +192,19 @@ export class MarketDataService {
         equity,
         revenue,
         netIncome,
-        pl: clampedPl,
-        pvp: Math.max(-100, Math.min(200, pvp)),
-        psr: clampedPsr,
-        dy: clampedDy,
+        pl: Number(pl.toFixed(2)),
+        pvp: Number(pvp.toFixed(2)),
+        psr: Number(psr.toFixed(2)),
+        dy: Number(dy.toFixed(2)),
         dy5y,
-        roe: clampedRoe,
-        roic: Math.max(-200, Math.min(200, roic)),
-        netMargin: clampedNetMargin,
-        ebitMargin: Math.max(-200, Math.min(300, ebitMargin)),
+        roe: Number(roe.toFixed(2)),
+        roic: Number(roic.toFixed(2)),
+        netMargin: Number(netMargin.toFixed(2)),
+        ebitMargin: Number(ebitMargin.toFixed(2)),
         netDebtToEbitda,
-        grossDebtToEquity: Math.max(0, Math.min(50, grossDebtToEquity)),
-        dailyLiquidity: Math.max(0, dailyLiquidity),
-        revenueGrowth5y: clampedGrowth,
+        grossDebtToEquity: Number(Math.max(0, grossDebtToEquity).toFixed(2)),
+        dailyLiquidity: Number(Math.max(0, dailyLiquidity).toFixed(2)),
+        revenueGrowth5y: Number(revenueGrowth5y.toFixed(2)),
         change24h,
         change30d,
         change12m,
@@ -263,9 +251,25 @@ export class MarketDataService {
             map.set(ticker, {
               companyName: item.name || fallback.companyName,
               sector: normalizedSector,
-              subsector: fallback.subsector,
+              subsector: item.subsector || fallback.subsector,
               segment: fallback.segment,
               logoUrl,
+              price:
+                typeof item.close === 'number' && item.close > 0
+                  ? item.close
+                  : undefined,
+              change24h:
+                typeof item.change === 'number' && Number.isFinite(item.change)
+                  ? item.change
+                  : undefined,
+              marketCap:
+                typeof item.market_cap === 'number' && item.market_cap > 0
+                  ? item.market_cap
+                  : undefined,
+              volume:
+                typeof item.volume === 'number' && item.volume > 0
+                  ? item.volume
+                  : undefined,
             });
           }
         }

@@ -28,6 +28,10 @@ export interface B3CompanyMeta {
   subsector: string;
   segment: string;
   logoUrl?: string;
+  price?: number;
+  change24h?: number;
+  marketCap?: number;
+  volume?: number;
 }
 
 export function resolveGovernanceSegment(ticker: string): string {

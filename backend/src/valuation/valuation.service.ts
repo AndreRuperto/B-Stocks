@@ -382,31 +382,29 @@ export class ValuationService {
     const marketCap =
       raw.marketCap && raw.marketCap > 0
         ? Number(raw.marketCap.toFixed(2))
-        : raw.dailyLiquidity > 0
-          ? Number((raw.dailyLiquidity * 145).toFixed(2))
-          : Number((raw.price * 45_000_000).toFixed(2));
+        : raw.dailyLiquidity > 0 && raw.equity > 0 && raw.pvp > 0
+          ? Number((raw.equity * raw.pvp).toFixed(2))
+          : 0;
     const equity =
       raw.equity && raw.equity > 0
         ? Number(raw.equity.toFixed(2))
-        : raw.pvp > 0
+        : marketCap > 0 && raw.pvp > 0
           ? Number((marketCap / raw.pvp).toFixed(2))
           : 0;
     const revenue =
       raw.revenue && raw.revenue > 0
         ? Number(raw.revenue.toFixed(2))
-        : raw.psr > 0.05
+        : marketCap > 0 && raw.psr > 0
           ? Number((marketCap / raw.psr).toFixed(2))
-          : Number((marketCap * 0.55).toFixed(2));
+          : 0;
     const netIncome =
       raw.netIncome !== undefined && raw.netIncome !== 0
         ? Number(raw.netIncome.toFixed(2))
-        : Math.abs(raw.pl) >= 0.4
+        : marketCap > 0 && raw.pl !== 0
           ? Number((marketCap / raw.pl).toFixed(2))
-          : Number(((revenue * raw.netMargin) / 100).toFixed(2));
+          : 0;
     const dy5y =
-      raw.dy5y !== undefined && raw.dy5y > 0
-        ? Number(raw.dy5y.toFixed(2))
-        : Number(Math.max(0, Math.min(45, raw.dy * 0.91)).toFixed(2));
+      raw.dy5y !== undefined && raw.dy5y > 0 ? Number(raw.dy5y.toFixed(2)) : 0;
 
     return {
       ticker: raw.ticker.toUpperCase(),
