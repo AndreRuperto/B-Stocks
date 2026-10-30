@@ -87,12 +87,7 @@ function buildCandidateLogoUrls(ticker: string, providedUrl?: string): string[] 
 }
 
 const BADGE_PALETTES = [
-  { bg: '#064e3b', border: '#059669', text: '#a7f3d0' },
-  { bg: '#1e3a8a', border: '#2563eb', text: '#bfdbfe' },
-  { bg: '#3b0764', border: '#7c3aed', text: '#ddd6fe' },
-  { bg: '#7c2d12', border: '#ea580c', text: '#fed7aa' },
-  { bg: '#134e4a', border: '#0d9488', text: '#99f6e4' },
-  { bg: '#312e81', border: '#4f46e5', text: '#c7d2fe' },
+  { bg: '#27272a', border: '#3f3f46', text: '#e4e4e7' },
 ];
 
 export function CompanyLogo({

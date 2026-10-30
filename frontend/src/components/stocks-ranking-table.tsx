@@ -690,7 +690,7 @@ export function StocksRankingTable({
         return stock.netIncome !== 0 ? (
           <span
             className={`font-semibold tabular-nums ${
-              stock.netIncome >= 0 ? 'text-zinc-200' : 'text-red-400'
+              stock.netIncome >= 0 ? 'text-zinc-200' : 'text-zinc-100'
             }`}
           >
             {formatCompactCurrency(stock.netIncome)}

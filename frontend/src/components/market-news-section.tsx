@@ -41,9 +41,9 @@ export function MarketNewsSection() {
           <div className="flex items-center gap-2">
             <Badge
               variant="outline"
-              className="border-emerald-500/30 bg-emerald-500/10 text-emerald-300 text-[10px] uppercase font-bold tracking-wider"
+              className="border-zinc-700 bg-zinc-800/60 text-zinc-100 text-[10px] uppercase font-bold tracking-wider"
             >
-              <Newspaper className="mr-1.5 h-3 w-3 text-emerald-400" />
+              <Newspaper className="mr-1.5 h-3 w-3 text-zinc-100" />
               Feed em Tempo Real • Exclusivo Bolsa &amp; B3
             </Badge>
           </div>
@@ -97,7 +97,7 @@ export function MarketNewsSection() {
                 target="_blank"
                 rel="noopener noreferrer"
                 data-testid="market-news-card"
-                className="group flex flex-col justify-between overflow-hidden rounded-2xl border border-zinc-800/90 bg-zinc-900/75 shadow-xl backdrop-blur-xl transition-all hover:-translate-y-1 hover:border-emerald-500/50 hover:bg-zinc-900"
+                className="group flex flex-col justify-between overflow-hidden rounded-2xl border border-zinc-800/90 bg-zinc-900/75 shadow-xl backdrop-blur-xl transition-all hover:-translate-y-1 hover:border-zinc-700 hover:bg-zinc-900"
               >
                 <div>
                   <div className="relative h-48 w-full overflow-hidden bg-zinc-950">
@@ -110,7 +110,7 @@ export function MarketNewsSection() {
                     <div className="absolute left-3 top-3">
                       <Badge
                         variant="outline"
-                        className="border-zinc-700/90 bg-zinc-950/90 text-[10px] font-bold text-emerald-300 backdrop-blur-md"
+                        className="border-zinc-700/90 bg-zinc-950/90 text-[10px] font-bold text-zinc-100 backdrop-blur-md"
                       >
                         {article.source}
                       </Badge>
@@ -118,7 +118,7 @@ export function MarketNewsSection() {
                   </div>
 
                   <div className="p-5 space-y-2.5">
-                    <h3 className="text-sm sm:text-base font-extrabold text-zinc-100 leading-snug line-clamp-2 group-hover:text-emerald-300 transition-colors">
+                    <h3 className="text-sm sm:text-base font-extrabold text-zinc-100 leading-snug line-clamp-2 group-hover:text-zinc-100 transition-colors">
                       {article.title}
                     </h3>
                     <p className="text-xs text-zinc-400 leading-relaxed line-clamp-3">
@@ -132,7 +132,7 @@ export function MarketNewsSection() {
                     <Calendar className="h-3.5 w-3.5 text-zinc-500" />
                     {formattedDate}
                   </span>
-                  <span className="inline-flex items-center gap-1 text-emerald-400 group-hover:text-emerald-300">
+                  <span className="inline-flex items-center gap-1 text-zinc-100 group-hover:text-zinc-100">
                     Ler matéria completa
                     <ExternalLink className="h-3.5 w-3.5" />
                   </span>

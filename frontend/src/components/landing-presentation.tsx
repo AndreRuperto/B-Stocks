@@ -45,7 +45,7 @@ export function LandingPresentation({
       <section className="relative rounded-2xl border border-zinc-800 bg-zinc-900/90 p-6 sm:p-10 lg:p-12 shadow-sm">
         <div className="mx-auto max-w-4xl text-center">
           <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-zinc-700 bg-zinc-950/80 px-3.5 py-1 text-xs font-semibold text-zinc-300">
-            <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="flex h-2 w-2 rounded-full bg-zinc-100 animate-pulse" />
             Terminal Quantitativo 100% Gratuito no MVP
             <span className="text-zinc-600">•</span>
             <span className="text-zinc-400">Dados Reais da B3</span>

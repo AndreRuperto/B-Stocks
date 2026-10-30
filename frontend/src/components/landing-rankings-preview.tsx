@@ -80,8 +80,8 @@ export function LandingRankingsPreview() {
       subtitle: 'Top 5 ativos com maior liquidez e valor na B3',
       href: '/terminal?headerPreset=todas',
       icon: BarChart3,
-      accentColor: 'text-emerald-400',
-      badgeBg: 'border-emerald-500/30 bg-emerald-500/15 text-emerald-400',
+      accentColor: 'text-zinc-100',
+      badgeBg: 'border-zinc-700 bg-zinc-800/60 text-zinc-100',
       items: allStocks,
       renderMetric: (stock: StockItem) => ({
         primary:
@@ -96,8 +96,8 @@ export function LandingRankingsPreview() {
       subtitle: 'Top 5 companhias por receita operacional líquida',
       href: '/terminal?headerPreset=maiores_receitas',
       icon: TrendingUp,
-      accentColor: 'text-cyan-400',
-      badgeBg: 'border-cyan-500/30 bg-cyan-500/15 text-cyan-400',
+      accentColor: 'text-zinc-100',
+      badgeBg: 'border-zinc-700 bg-zinc-800/60 text-zinc-100',
       items: topRevenue,
       renderMetric: (stock: StockItem) => ({
         primary:
@@ -115,8 +115,8 @@ export function LandingRankingsPreview() {
       subtitle: 'Top 5 empresas mais valiosas listadas na B3',
       href: '/terminal?headerPreset=maiores_valor_mercado',
       icon: Building2,
-      accentColor: 'text-amber-400',
-      badgeBg: 'border-amber-500/30 bg-amber-500/15 text-amber-400',
+      accentColor: 'text-zinc-100',
+      badgeBg: 'border-zinc-700 bg-zinc-800/60 text-zinc-100',
       items: topMarketCap,
       renderMetric: (stock: StockItem) => ({
         primary:
@@ -141,7 +141,7 @@ export function LandingRankingsPreview() {
           <div className="flex items-center gap-2">
             <Badge
               variant="outline"
-              className="border-emerald-500/30 bg-emerald-500/10 text-emerald-300 text-[10px] uppercase font-bold tracking-wider"
+              className="border-zinc-700 bg-zinc-800/60 text-zinc-100 text-[10px] uppercase font-bold tracking-wider"
             >
               Rankings Oficiais do Terminal
             </Badge>
@@ -160,10 +160,10 @@ export function LandingRankingsPreview() {
             type="button"
             variant="outline"
             size="sm"
-            className="rounded-xl border-zinc-700/80 bg-zinc-900/90 px-4 py-2 text-xs font-bold text-zinc-100 hover:border-emerald-500/50 hover:bg-zinc-800 gap-2 transition-all"
+            className="rounded-xl border-zinc-700/80 bg-zinc-900/90 px-4 py-2 text-xs font-bold text-zinc-100 hover:border-zinc-700 hover:bg-zinc-800 gap-2 transition-all"
           >
             Ver Todos os 11 Rankings no Terminal
-            <ArrowRight className="h-3.5 w-3.5 text-emerald-400" />
+            <ArrowRight className="h-3.5 w-3.5 text-zinc-100" />
           </Button>
         </Link>
       </div>
@@ -226,7 +226,7 @@ export function LandingRankingsPreview() {
                             />
                             <div className="min-w-0">
                               <div className="flex items-center gap-1.5">
-                                <span className="text-xs font-extrabold text-zinc-100 group-hover:text-emerald-300 transition-colors">
+                                <span className="text-xs font-extrabold text-zinc-100 group-hover:text-zinc-100 transition-colors">
                                   {stock.ticker}
                                 </span>
                                 <span className="truncate rounded bg-zinc-800/80 px-1.5 py-0.5 text-[9px] font-medium text-zinc-400 max-w-[100px]">
@@ -261,10 +261,10 @@ export function LandingRankingsPreview() {
                     variant="outline"
                     size="sm"
                     data-testid={`ver-ranking-btn-${card.id}`}
-                    className="w-full rounded-xl border-zinc-700/80 bg-zinc-950/90 text-xs font-bold text-zinc-100 hover:border-emerald-500/50 hover:bg-zinc-800 gap-1.5 transition-all"
+                    className="w-full rounded-xl border-zinc-700/80 bg-zinc-950/90 text-xs font-bold text-zinc-100 hover:border-zinc-700 hover:bg-zinc-800 gap-1.5 transition-all"
                   >
                     Ver Ranking
-                    <ArrowRight className="h-3.5 w-3.5 text-emerald-400" />
+                    <ArrowRight className="h-3.5 w-3.5 text-zinc-100" />
                   </Button>
                 </Link>
               </div>
