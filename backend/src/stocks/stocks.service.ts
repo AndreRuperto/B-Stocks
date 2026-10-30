@@ -387,6 +387,14 @@ export class StocksService implements OnModuleInit {
     };
   }
 
+  async getMarketNews() {
+    const items = await this.marketData.fetchB3MarketNews();
+    return {
+      items,
+      updatedAt: new Date().toISOString(),
+    };
+  }
+
   async findByTicker(ticker: string) {
     const clean = ticker.toUpperCase().trim();
     const stock = await this.prisma.stock.findUnique({

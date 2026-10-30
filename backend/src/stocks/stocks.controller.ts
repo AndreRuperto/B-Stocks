@@ -27,6 +27,11 @@ export class StocksController {
     return this.stocksService.getMarketOverview(period);
   }
 
+  @Get('news')
+  getMarketNews() {
+    return this.stocksService.getMarketNews();
+  }
+
   @Post('sync')
   syncStocks() {
     return this.stocksService.syncAllB3Stocks();

@@ -426,62 +426,232 @@ export class MarketDataService {
         );
 
         return {
+          symbol: '^BVSP',
           period,
           currentPoints,
           previousClose,
           changePoints,
           changePercent,
-          high,
-          low,
-          volume: Number(meta.regularMarketVolume || 24_800_000_000),
+          dayHigh: high,
+          dayLow: low,
+          volumeBrl: Number(meta.regularMarketVolume || 0),
+          updatedAt: new Date().toISOString(),
           source: 'Yahoo Finance (^BVSP Oficial)',
-          series,
+          points: series.map((pt) => ({
+            ...pt,
+            fullDate: pt.label,
+          })),
         };
       }
     } catch {
-      this.logger.warn('Yahoo Finance ^BVSP fetch skipped, using real baseline series');
+      this.logger.warn('Yahoo Finance ^BVSP fetch failed');
     }
 
-    const basePoints = 169186.42;
-    const prevPoints = 167765.62;
-    const fallbackSeries = Array.from({ length: 28 }).map((_, idx) => {
-      const progress = idx / 27;
-      const wave = Math.sin(idx * 0.45) * 420 + Math.cos(idx * 0.25) * 260;
-      const close =
-        idx === 27
-          ? basePoints
-          : Number(
-              (prevPoints + (basePoints - prevPoints) * progress + wave).toFixed(
-                2,
-              ),
-            );
-      const hour = 10 + Math.floor((idx * 8) / 28);
-      const min = ((idx * 15) % 60).toString().padStart(2, '0');
-      return {
-        timestamp: Date.now() - (27 - idx) * 900_000,
-        label: `${hour.toString().padStart(2, '0')}:${min}`,
-        open: Number((close - 95).toFixed(2)),
-        high: Number((close + 185).toFixed(2)),
-        low: Number((close - 160).toFixed(2)),
-        close,
-        volume: 850_000_000,
-      };
-    });
-
     return {
+      symbol: '^BVSP',
       period,
-      currentPoints: basePoints,
-      previousClose: prevPoints,
-      changePoints: Number((basePoints - prevPoints).toFixed(2)),
-      changePercent: Number(
-        (((basePoints - prevPoints) / prevPoints) * 100).toFixed(2),
-      ),
-      high: Number(Math.max(...fallbackSeries.map((s) => s.high)).toFixed(2)),
-      low: Number(Math.min(...fallbackSeries.map((s) => s.low)).toFixed(2)),
-      volume: 24_800_000_000,
-      source: 'B3 Benchmark (^BVSP)',
-      series: fallbackSeries,
+      currentPoints: 0,
+      previousClose: 0,
+      changePoints: 0,
+      changePercent: 0,
+      dayHigh: 0,
+      dayLow: 0,
+      volumeBrl: 0,
+      updatedAt: new Date().toISOString(),
+      source: 'Indisponível',
+      points: [],
     };
+  }
+
+  private cleanHtmlText(raw: string): string {
+    if (!raw) return '';
+    const $ = cheerio.load(`<div>${raw}</div>`);
+    return $('div')
+      .text()
+      .replace(/\s+/g, ' ')
+      .replace(/\[…\]|\[\.\.\.\]/g, '...')
+      .trim();
+  }
+
+  async fetchB3MarketNews() {
+    const articles: Array<{
+      id: string;
+      title: string;
+      summary: string;
+      url: string;
+      imageUrl: string;
+      source: string;
+      publishedAt: string;
+    }> = [];
+    const seenUrls = new Set<string>();
+
+    const isStockMarketArticle = (title: string, summary: string, link: string): boolean => {
+      const text = `${title} ${summary} ${link}`.toLowerCase();
+      const keywords = [
+        'ibovespa',
+        'b3',
+        'ações',
+        'acoes',
+        'ação',
+        'bolsa',
+        'dividend',
+        'provento',
+        'jcp',
+        'lucro',
+        'balanço',
+        'resultado',
+        'petrobras',
+        'petr4',
+        'petr3',
+        'vale',
+        'vale3',
+        'itaú',
+        'itau',
+        'itub4',
+        'bradesco',
+        'bbdc4',
+        'banco do brasil',
+        'bbas3',
+        'weg',
+        'wege3',
+        'btg',
+        'bpac11',
+        'prio',
+        'prio3',
+        'sabesp',
+        'sbsp3',
+        'eletrobras',
+        'elet3',
+        'suzano',
+        'suzb3',
+        'ambev',
+        'abev3',
+        'localiza',
+        'rent3',
+        'magazine luiza',
+        'mglu3',
+        'embraer',
+        'embr3',
+        'gerdau',
+        'ggbr4',
+        'mercado',
+        'pregão',
+        'cotação',
+        'investidor',
+      ];
+      const hasTickerPattern = /\b[a-z]{4}(?:3|4|5|6|11)\b/i.test(`${title} ${summary}`);
+      return hasTickerPattern || keywords.some((kw) => text.includes(kw));
+    };
+
+    const endpoints = [
+      {
+        source: 'InfoMoney Mercados',
+        url: 'https://www.infomoney.com.br/wp-json/wp/v2/posts?per_page=15&search=ibovespa',
+      },
+      {
+        source: 'Money Times',
+        url: 'https://www.moneytimes.com.br/wp-json/wp/v2/posts?per_page=15&search=ibovespa',
+      },
+    ];
+
+    await Promise.all(
+      endpoints.map(async (endpoint) => {
+        try {
+          const response = await axios.get(endpoint.url, {
+            timeout: 8000,
+            headers: {
+              'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
+            },
+          });
+          if (!Array.isArray(response.data)) return;
+
+          for (const post of response.data) {
+            const url = typeof post?.link === 'string' ? post.link.trim() : '';
+            if (!url || seenUrls.has(url)) continue;
+
+            const title = this.cleanHtmlText(post?.title?.rendered || '');
+            const summary = this.cleanHtmlText(
+              post?.excerpt?.rendered || post?.yoast_head_json?.description || '',
+            );
+            const imageUrl =
+              post?.jetpack_featured_media_url ||
+              post?.yoast_head_json?.og_image?.[0]?.url ||
+              '';
+
+            if (!title || !summary || !imageUrl) continue;
+            if (!isStockMarketArticle(title, summary, url)) continue;
+
+            seenUrls.add(url);
+            articles.push({
+              id: String(post?.id || url),
+              title,
+              summary:
+                summary.length > 180 ? `${summary.slice(0, 177).trim()}...` : summary,
+              url,
+              imageUrl,
+              source: endpoint.source,
+              publishedAt: post?.date_gmt
+                ? new Date(`${post.date_gmt}Z`).toISOString()
+                : post?.date
+                  ? new Date(post.date).toISOString()
+                  : new Date().toISOString(),
+            });
+          }
+        } catch {
+          this.logger.warn(`Market news fetch skipped for ${endpoint.source}`);
+        }
+      }),
+    );
+
+    if (articles.length < 6) {
+      try {
+        const yahooRes = await axios.get(
+          'https://query1.finance.yahoo.com/v1/finance/search?q=ibovespa%20b3&newsCount=10',
+          {
+            timeout: 8000,
+            headers: {
+              'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
+            },
+          },
+        );
+        const newsList = yahooRes.data?.news;
+        if (Array.isArray(newsList)) {
+          for (const item of newsList) {
+            const url = typeof item?.link === 'string' ? item.link.trim() : '';
+            const title = typeof item?.title === 'string' ? item.title.trim() : '';
+            const imageUrl =
+              item?.thumbnail?.resolutions?.[0]?.url ||
+              item?.thumbnail?.resolutions?.[1]?.url ||
+              '';
+            if (!url || !title || !imageUrl || seenUrls.has(url)) continue;
+            seenUrls.add(url);
+            const tickers = Array.isArray(item?.relatedTickers)
+              ? item.relatedTickers.join(', ')
+              : 'B3 / Ibovespa';
+            articles.push({
+              id: String(item?.uuid || url),
+              title,
+              summary: `Cobertura internacional sobre o mercado brasileiro de ações e ativos relacionados (${tickers}).`,
+              url,
+              imageUrl,
+              source: item?.publisher || 'Yahoo Finance',
+              publishedAt: item?.providerPublishTime
+                ? new Date(item.providerPublishTime * 1000).toISOString()
+                : new Date().toISOString(),
+            });
+          }
+        }
+      } catch {
+        this.logger.warn('Yahoo Finance news fetch skipped');
+      }
+    }
+
+    return articles
+      .sort(
+        (a, b) =>
+          new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime(),
+      )
+      .slice(0, 9);
   }
 
   async fetchAllB3Stocks(): Promise<{

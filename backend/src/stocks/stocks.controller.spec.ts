@@ -28,20 +28,36 @@ describe('StocksController', () => {
     }),
     getMarketOverview: jest.fn().mockResolvedValue({
       ibovespa: {
+        symbol: '^BVSP',
         period: '1D',
-        currentPoints: 169186.42,
-        previousClose: 167765.62,
-        changePoints: 1420.8,
-        changePercent: 0.85,
-        high: 169840.1,
-        low: 168110.25,
-        volume: 24800000000,
+        currentPoints: 168566.45,
+        previousClose: 169186.42,
+        changePoints: -619.97,
+        changePercent: -0.37,
+        dayHigh: 169184.59,
+        dayLow: 167007.56,
+        volumeBrl: 24800000000,
+        updatedAt: new Date().toISOString(),
         source: 'Yahoo Finance (^BVSP Oficial)',
-        series: [],
+        points: [],
       },
       topGainers: [{ ticker: 'PRIO3', change24h: 4.82 }],
       topLosers: [{ ticker: 'BHIA3', change24h: -5.45 }],
       tickerTape: [{ ticker: 'BBAS3', price: 16.06, change24h: -2.02 }],
+    }),
+    getMarketNews: jest.fn().mockResolvedValue({
+      items: [
+        {
+          id: 'news-1',
+          title: 'Ibovespa opera com foco em resultados corporativos da B3',
+          summary: 'Ações de commodities e bancos lideram volume no pregão.',
+          url: 'https://www.infomoney.com.br/mercados/',
+          imageUrl: 'https://www.infomoney.com.br/logo.png',
+          source: 'InfoMoney Mercados',
+          publishedAt: new Date().toISOString(),
+        },
+      ],
+      updatedAt: new Date().toISOString(),
     }),
     syncAllB3Stocks: jest.fn().mockResolvedValue({
       totalSynced: 962,
@@ -86,8 +102,12 @@ describe('StocksController', () => {
     expect(mockStocksService.getMarketSummary).toHaveBeenCalled();
 
     const overview = await controller.getMarketOverview('1M');
-    expect(overview.ibovespa.currentPoints).toBe(169186.42);
+    expect(overview.ibovespa.currentPoints).toBe(168566.45);
     expect(mockStocksService.getMarketOverview).toHaveBeenCalledWith('1M');
+
+    const news = await controller.getMarketNews();
+    expect(news.items).toHaveLength(1);
+    expect(mockStocksService.getMarketNews).toHaveBeenCalled();
   });
 
   it('delegates findOne and generateThesis to StocksService', async () => {
