@@ -57,6 +57,8 @@ test.describe('B3 Stocks Ranking Table, Dark Theme and Indicator Tooltips', () =
     const petrRow = page.getByTestId('stock-row-PETR4');
     await expect(petrRow).toBeVisible({ timeout: 10000 });
     await expect(petrRow).toContainText('PETR4');
+    await expect(petrRow).toHaveClass(/h-16/);
+    await expect(petrRow).not.toContainText('x');
 
     const companyLogo = page.getByTestId('company-logo-PETR4');
     await expect(companyLogo.first()).toBeVisible();
