@@ -2,6 +2,8 @@ import axios from 'axios';
 import {
   FilterParams,
   FilterParamsSchema,
+  MarketOverviewResponse,
+  MarketOverviewResponseSchema,
   MarketSummary,
   MarketSummarySchema,
   PaginatedStocksResponse,
@@ -23,6 +25,15 @@ const http = axios.create({
 export async function fetchMarketSummary(): Promise<MarketSummary> {
   const response = await http.get('/stocks/summary');
   return MarketSummarySchema.parse(response.data);
+}
+
+export async function fetchMarketOverview(
+  period: '1D' | '5D' | '1M' | '6M' | '1A' = '1D',
+): Promise<MarketOverviewResponse> {
+  const response = await http.get('/stocks/market-overview', {
+    params: { period },
+  });
+  return MarketOverviewResponseSchema.parse(response.data);
 }
 
 export async function fetchStocks(

@@ -195,3 +195,44 @@ export type FilterParams = z.infer<typeof FilterParamsSchema>;
 export const BazinCustomSimSchema = z.object({
   targetYieldPercent: z.number().min(2).max(25),
 });
+
+export const IbovespaHistoryPointSchema = z.object({
+  timestamp: z.number(),
+  label: z.string(),
+  fullDate: z.string(),
+  close: z.number(),
+  open: z.number(),
+  high: z.number(),
+  low: z.number(),
+  volume: z.number(),
+});
+
+export type IbovespaHistoryPoint = z.infer<typeof IbovespaHistoryPointSchema>;
+
+export const IbovespaOverviewSchema = z.object({
+  symbol: z.string(),
+  period: z.string(),
+  currentPoints: z.number(),
+  previousClose: z.number(),
+  changePercent: z.number(),
+  changePoints: z.number(),
+  dayHigh: z.number(),
+  dayLow: z.number(),
+  volumeBrl: z.number(),
+  updatedAt: z.string(),
+  source: z.string(),
+  points: z.array(IbovespaHistoryPointSchema),
+});
+
+export type IbovespaOverview = z.infer<typeof IbovespaOverviewSchema>;
+
+export const MarketOverviewResponseSchema = z.object({
+  ibovespa: IbovespaOverviewSchema,
+  topGainers: z.array(StockItemSchema),
+  topLosers: z.array(StockItemSchema),
+  tickerTape: z.array(StockItemSchema),
+});
+
+export type MarketOverviewResponse = z.infer<
+  typeof MarketOverviewResponseSchema
+>;
