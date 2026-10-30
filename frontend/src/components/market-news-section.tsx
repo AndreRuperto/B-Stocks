@@ -33,7 +33,7 @@ export function MarketNewsSection() {
     <section
       id="noticias"
       data-testid="market-news-section"
-      className="scroll-mt-24 space-y-6"
+      className="scroll-mt-24 rounded-3xl border border-mist-700/80 bg-mist-900/95 p-6 sm:p-8 lg:p-10 shadow-xl space-y-8"
       aria-label="Notícias da Bolsa de Valores B3 e Ibovespa"
     >
       <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
@@ -97,7 +97,7 @@ export function MarketNewsSection() {
                 target="_blank"
                 rel="noopener noreferrer"
                 data-testid="market-news-card"
-                className="group flex flex-col justify-between overflow-hidden rounded-2xl border border-mist-800/90 bg-mist-900/75 shadow-xl backdrop-blur-xl transition-all hover:-translate-y-1 hover:border-mist-700 hover:bg-mist-900"
+                className="group flex flex-col justify-between overflow-hidden rounded-2xl border border-mist-700/70 bg-mist-800/80 shadow-xl backdrop-blur-xl transition-all hover:-translate-y-1 hover:border-mist-600 hover:bg-mist-800"
               >
                 <div>
                   <div className="relative h-48 w-full overflow-hidden bg-mist-950">

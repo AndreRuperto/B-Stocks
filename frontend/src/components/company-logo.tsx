@@ -113,15 +113,9 @@ export function CompanyLogo({
   }, [ticker, logoUrl]);
 
   const sizeClasses = {
-    sm: 'h-6 w-6 text-[10px]',
-    md: 'h-8 w-8 text-xs',
-    lg: 'h-11 w-11 text-sm',
-  };
-
-  const imageSizes = {
-    sm: 'h-4 w-4',
-    md: 'h-6 w-6',
-    lg: 'h-8 w-8',
+    sm: 'h-7 w-7 text-xs',
+    md: 'h-10 w-10 text-xs',
+    lg: 'h-14 w-14 text-sm',
   };
 
   const cleanTicker = ticker.toUpperCase().trim();
@@ -157,7 +151,7 @@ export function CompanyLogo({
           src={currentUrl}
           alt={companyName || ticker}
           loading="lazy"
-          className={cn('object-contain', imageSizes[size])}
+          className="h-full w-full object-cover"
           onError={() => setUrlIndex((prev) => prev + 1)}
         />
       ) : (

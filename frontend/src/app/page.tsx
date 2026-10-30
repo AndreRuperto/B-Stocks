@@ -201,7 +201,7 @@ export default function LandingHomePage() {
               <Button
                 type="button"
                 size="sm"
-                className="h-9 rounded-xl bg-mist-700 px-4 text-xs font-extrabold text-stone-50 border border-mist-600 hover:bg-mist-600 gap-1.5 shadow-lg transition-all"
+                className="h-9 rounded-xl bg-stone-700 px-4 text-xs font-bold text-stone-100 border border-stone-600 hover:bg-stone-600 gap-1.5 shadow-md transition-all"
               >
                 <Terminal className="h-3.5 w-3.5" />
                 Acessar Terminal
@@ -217,7 +217,7 @@ export default function LandingHomePage() {
       <main className="relative z-10 flex-1 mx-auto w-full max-w-[1520px] space-y-24 px-4 py-10 sm:px-6 lg:px-8">
         <section
           data-testid="hero-landing-section"
-          className="relative overflow-hidden rounded-3xl border border-mist-800/90 bg-mist-900/80 p-6 sm:p-10 lg:p-14 shadow-2xl"
+          className="relative overflow-hidden rounded-3xl border border-mist-700/80 bg-mist-800/90 p-6 sm:p-10 lg:p-14 shadow-2xl"
         >
           <div className="relative grid grid-cols-1 gap-10 lg:grid-cols-12 lg:items-center">
             <div className="space-y-6 lg:col-span-7">
@@ -249,7 +249,7 @@ export default function LandingHomePage() {
                     type="button"
                     size="lg"
                     data-testid="hero-explore-button"
-                    className="h-12 rounded-xl bg-mist-700 px-7 text-sm font-black text-stone-50 border border-mist-600 hover:bg-mist-600 gap-2 shadow-xl transition-all"
+                    className="h-12 rounded-xl bg-stone-700 px-7 text-sm font-black text-stone-100 border border-stone-600 hover:bg-stone-600 gap-2 shadow-lg transition-all"
                   >
                     Abrir Terminal de Ações Completo
                     <ArrowRight className="h-4 w-4" />
@@ -297,11 +297,7 @@ export default function LandingHomePage() {
                             : 'border-mist-800 bg-mist-950/70 text-stone-400 hover:border-mist-700 hover:text-stone-200'
                         }`}
                       >
-                        <CompanyLogo
-                          ticker={item.ticker}
-                          size="sm"
-                          className="h-4 w-4 border-0 bg-transparent"
-                        />
+                        <CompanyLogo ticker={item.ticker} size="sm" className="h-5 w-5 rounded-md border-0 bg-transparent" />
                         <span>{item.ticker}</span>
                       </button>
                     );
@@ -466,7 +462,7 @@ export default function LandingHomePage() {
           </div>
 
           <div className="relative mt-12 grid grid-cols-2 gap-4 sm:grid-cols-4 border-t border-mist-800/80 pt-8">
-            <div className="rounded-2xl border border-mist-800/80 bg-mist-900/60 p-4 text-center backdrop-blur-md">
+            <div className="rounded-2xl border border-mist-700/80 bg-mist-700/50 p-4 text-center backdrop-blur-md">
               <div className="text-2xl sm:text-3xl font-black text-stone-50 tabular-nums">
                 962
               </div>
@@ -475,7 +471,7 @@ export default function LandingHomePage() {
               </div>
             </div>
 
-            <div className="rounded-2xl border border-mist-800/80 bg-mist-900/60 p-4 text-center backdrop-blur-md">
+            <div className="rounded-2xl border border-mist-700/80 bg-mist-700/50 p-4 text-center backdrop-blur-md">
               <div className="text-2xl sm:text-3xl font-black text-stone-50 tabular-nums">
                 17
               </div>
@@ -484,7 +480,7 @@ export default function LandingHomePage() {
               </div>
             </div>
 
-            <div className="rounded-2xl border border-mist-800/80 bg-mist-900/60 p-4 text-center backdrop-blur-md">
+            <div className="rounded-2xl border border-mist-700/80 bg-mist-700/50 p-4 text-center backdrop-blur-md">
               <div className="text-2xl sm:text-3xl font-black text-stone-100 tabular-nums">
                 11
               </div>
@@ -493,7 +489,7 @@ export default function LandingHomePage() {
               </div>
             </div>
 
-            <div className="rounded-2xl border border-mist-800/80 bg-mist-900/60 p-4 text-center backdrop-blur-md">
+            <div className="rounded-2xl border border-mist-700/80 bg-mist-700/50 p-4 text-center backdrop-blur-md">
               <div className="text-2xl sm:text-3xl font-black text-stone-100 tabular-nums">
                 100%
               </div>
@@ -504,13 +500,13 @@ export default function LandingHomePage() {
           </div>
         </section>
 
-        <div id="mercado" className="scroll-mt-24">
+        <div id="mercado" className="scroll-mt-24 rounded-3xl border border-mist-700/80 bg-mist-900/95 p-6 sm:p-8 lg:p-10 shadow-xl">
           <IbovMarketOverview />
         </div>
 
         <LandingRankingsPreview />
 
-        <section id="metodologia" className="scroll-mt-24 space-y-8">
+        <section id="metodologia" className="scroll-mt-24 rounded-3xl border border-mist-700/80 bg-mist-900/95 p-6 sm:p-10 shadow-xl space-y-8">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div className="max-w-2xl space-y-2">
               <Badge
@@ -543,7 +539,7 @@ export default function LandingHomePage() {
           </div>
 
           <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-12">
-            <div className="group relative overflow-hidden rounded-2xl border border-mist-800/90 bg-mist-900/80 p-6 shadow-xl lg:col-span-6 flex flex-col justify-between">
+            <div className="group relative overflow-hidden rounded-2xl border border-mist-700/70 bg-mist-800/80 p-6 shadow-xl lg:col-span-6 flex flex-col justify-between">
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-mist-700 bg-mist-800/60 text-stone-100">
@@ -573,7 +569,7 @@ export default function LandingHomePage() {
               </div>
             </div>
 
-            <div className="group relative overflow-hidden rounded-2xl border border-mist-800/90 bg-mist-900/80 p-6 shadow-xl lg:col-span-6 flex flex-col justify-between">
+            <div className="group relative overflow-hidden rounded-2xl border border-mist-700/70 bg-mist-800/80 p-6 shadow-xl lg:col-span-6 flex flex-col justify-between">
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-mist-700 bg-mist-800/60 text-stone-100">
@@ -602,7 +598,7 @@ export default function LandingHomePage() {
               </div>
             </div>
 
-            <div className="rounded-2xl border border-mist-800/90 bg-mist-900/75 p-5 shadow-lg lg:col-span-3 flex flex-col justify-between space-y-4">
+            <div className="rounded-2xl border border-mist-700/70 bg-mist-800/70 p-5 shadow-lg lg:col-span-3 flex flex-col justify-between space-y-4">
               <div className="space-y-2.5">
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-mist-700 bg-mist-950 text-stone-100">
                   <Award className="h-5 w-5" />
@@ -621,7 +617,7 @@ export default function LandingHomePage() {
               </div>
             </div>
 
-            <div className="rounded-2xl border border-mist-800/90 bg-mist-900/75 p-5 shadow-lg lg:col-span-3 flex flex-col justify-between space-y-4">
+            <div className="rounded-2xl border border-mist-700/70 bg-mist-800/70 p-5 shadow-lg lg:col-span-3 flex flex-col justify-between space-y-4">
               <div className="space-y-2.5">
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-mist-700 bg-mist-950 text-stone-100">
                   <ShieldCheck className="h-5 w-5" />
@@ -639,7 +635,7 @@ export default function LandingHomePage() {
               </div>
             </div>
 
-            <div className="rounded-2xl border border-mist-800/90 bg-mist-900/75 p-5 shadow-lg lg:col-span-3 flex flex-col justify-between space-y-4">
+            <div className="rounded-2xl border border-mist-700/70 bg-mist-800/70 p-5 shadow-lg lg:col-span-3 flex flex-col justify-between space-y-4">
               <div className="space-y-2.5">
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-mist-700 bg-mist-950 text-stone-100">
                   <LineChart className="h-5 w-5" />
@@ -658,7 +654,7 @@ export default function LandingHomePage() {
               </div>
             </div>
 
-            <div className="rounded-2xl border border-mist-800/90 bg-mist-900/75 p-5 shadow-lg lg:col-span-3 flex flex-col justify-between space-y-4">
+            <div className="rounded-2xl border border-mist-700/70 bg-mist-800/70 p-5 shadow-lg lg:col-span-3 flex flex-col justify-between space-y-4">
               <div className="space-y-2.5">
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-mist-700 bg-mist-950 text-stone-100">
                   <Sparkles className="h-5 w-5" />
@@ -679,7 +675,7 @@ export default function LandingHomePage() {
           </div>
         </section>
 
-        <section id="projeto" className="scroll-mt-24 space-y-8">
+        <section id="projeto" className="scroll-mt-24 rounded-3xl border border-mist-700/80 bg-mist-800/80 p-6 sm:p-10 shadow-xl space-y-8">
           <div className="text-center max-w-3xl mx-auto space-y-2">
             <Badge
               variant="outline"
@@ -836,7 +832,7 @@ export default function LandingHomePage() {
               <Button
                 type="button"
                 size="lg"
-                className="h-12 rounded-xl bg-mist-700 px-8 text-sm font-black text-stone-50 border border-mist-600 hover:bg-mist-600 gap-2 shadow-xl"
+                className="h-12 rounded-xl bg-stone-700 px-8 text-sm font-black text-stone-100 border border-stone-600 hover:bg-stone-600 gap-2 shadow-lg transition-all"
               >
                 Acessar Terminal B-Stocks Agora
                 <ArrowRight className="h-4 w-4" />

@@ -133,7 +133,7 @@ export function LandingRankingsPreview() {
     <section
       id="rankings"
       data-testid="landing-rankings-section"
-      className="scroll-mt-24 space-y-6"
+      className="scroll-mt-24 rounded-3xl border border-mist-700/80 bg-mist-800/80 p-6 sm:p-8 lg:p-10 shadow-xl space-y-8"
       aria-label="Ranking dos Ativos da B3"
     >
       <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
@@ -160,7 +160,7 @@ export function LandingRankingsPreview() {
             type="button"
             variant="outline"
             size="sm"
-            className="rounded-xl border-mist-700/80 bg-mist-900/90 px-4 py-2 text-xs font-bold text-stone-100 hover:border-mist-700 hover:bg-mist-800 gap-2 transition-all"
+            className="rounded-xl border border-stone-600 bg-stone-700 px-4 py-2 text-xs font-bold text-stone-100 hover:border-stone-500 hover:bg-stone-600 gap-2 transition-all shadow-md"
           >
             Ver Todos os 11 Rankings no Terminal
             <ArrowRight className="h-3.5 w-3.5 text-stone-200" />
@@ -175,7 +175,7 @@ export function LandingRankingsPreview() {
             <div
               key={card.id}
               data-testid={card.testId}
-              className="flex flex-col justify-between rounded-2xl border border-mist-800/90 bg-mist-900/80 p-5 shadow-xl backdrop-blur-xl"
+              className="flex flex-col justify-between rounded-2xl border border-mist-700/80 bg-mist-900/90 p-5 shadow-xl backdrop-blur-xl"
             >
               <div>
                 <div className="flex items-start justify-between gap-3 border-b border-mist-800/80 pb-3.5">

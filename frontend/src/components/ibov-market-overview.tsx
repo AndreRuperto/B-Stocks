@@ -248,7 +248,7 @@ export function IbovMarketOverview() {
             type="button"
             variant="outline"
             size="sm"
-            className="rounded-xl border-mist-700/80 bg-mist-900/90 px-4 py-2 text-xs font-bold text-stone-100 hover:border-mist-700 hover:bg-mist-800 gap-2 transition-all"
+            className="rounded-xl border border-stone-600 bg-stone-700 px-4 py-2 text-xs font-bold text-stone-100 hover:border-stone-500 hover:bg-stone-600 gap-2 transition-all shadow-md"
           >
             Explorar Todos os Ativos no Terminal
             <ArrowRight className="h-3.5 w-3.5 text-stone-200" />

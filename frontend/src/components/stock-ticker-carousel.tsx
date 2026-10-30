@@ -115,7 +115,7 @@ export function StockTickerCarousel({ stocks }: StockTickerCarouselProps) {
                 ticker={item.ticker}
                 logoUrl={item.logoUrl}
                 size="sm"
-                className="h-4 w-4 rounded-sm border-0 bg-transparent"
+                className="h-5 w-5 rounded-md border-0 bg-transparent"
               />
               <span className="font-extrabold text-stone-100 group-hover:text-stone-200 transition-colors">
                 {item.ticker}
