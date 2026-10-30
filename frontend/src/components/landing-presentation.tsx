@@ -51,9 +51,9 @@ export function LandingPresentation({
             <span className="text-zinc-400">Dados Reais da B3</span>
           </div>
 
-          <h1 className="text-3xl font-extrabold tracking-tight text-zinc-100 sm:text-4xl lg:text-5xl leading-tight sm:leading-none">
+          <h2 className="text-3xl font-extrabold tracking-tight text-zinc-100 sm:text-4xl lg:text-5xl leading-tight sm:leading-none">
             Análise Fundamentalista &amp; Matemática de Ações na B3
-          </h1>
+          </h2>
 
           <p className="mx-auto mt-4 max-w-2xl text-sm sm:text-base leading-relaxed text-zinc-300">
             Encontre ativos subavaliados com margem de segurança real. Aplicamos os modelos de <strong>Décio Bazin (DY 6%)</strong>, <strong>Benjamin Graham</strong>, métricas de alavancagem, momento técnico e teses sintéticas com Inteligência Artificial.
