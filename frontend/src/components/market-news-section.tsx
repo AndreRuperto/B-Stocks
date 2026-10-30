@@ -97,7 +97,7 @@ export function MarketNewsSection() {
                 target="_blank"
                 rel="noopener noreferrer"
                 data-testid="market-news-card"
-                className="group flex flex-col justify-between overflow-hidden rounded-2xl border border-[#2c3d48] bg-[#11171b] shadow-xl transition-all hover:-translate-y-1 hover:border-[#384f5c] hover:bg-[#141c21]"
+                className="group flex flex-col justify-between overflow-hidden rounded-2xl border border-[#3c5160] bg-[#18232a] shadow-2xl transition-all hover:-translate-y-1 hover:border-[#4d6677] hover:bg-[#1c2830]"
               >
                 <div>
                   <div className="relative h-48 w-full overflow-hidden bg-mist-950">

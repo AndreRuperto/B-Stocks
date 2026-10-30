@@ -175,7 +175,7 @@ export function LandingRankingsPreview() {
             <div
               key={card.id}
               data-testid={card.testId}
-              className="flex flex-col justify-between rounded-3xl border border-[#273742] bg-[#162127] p-8 shadow-xl"
+              className="flex flex-col justify-between rounded-3xl border border-[#3b505e] bg-[#18232a] p-8 shadow-2xl"
             >
               <div>
                 <div className="flex items-start justify-between gap-3 border-b border-mist-800/80 pb-5">

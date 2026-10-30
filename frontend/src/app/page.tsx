@@ -490,13 +490,13 @@ export default function LandingHomePage() {
         </div>
       </section>
 
-      <div id="mercado" className="w-full bg-gradient-to-b from-[#162026] via-[#162026] to-[#0d1215] py-16 sm:py-20 scroll-mt-16">
+      <div id="mercado" className="w-full bg-[#162026] py-16 sm:py-20 scroll-mt-16">
         <div className="mx-auto max-w-[1520px] px-4 sm:px-6 lg:px-8">
           <IbovMarketOverview />
         </div>
       </div>
 
-      <div id="rankings" className="w-full bg-[#0d1215] py-16 sm:py-20 border-b border-[#1c242a] scroll-mt-16">
+      <div id="rankings" className="w-full bg-[#24333c] py-16 sm:py-20 border-y border-[#384c59] scroll-mt-16">
         <div className="mx-auto max-w-[1520px] px-4 sm:px-6 lg:px-8">
           <LandingRankingsPreview />
         </div>
@@ -673,7 +673,7 @@ export default function LandingHomePage() {
         </div>
       </section>
 
-        <section id="projeto" className="w-full bg-gradient-to-b from-[#141b20] via-[#11171b] to-[#1c2830] py-16 sm:py-20 scroll-mt-16">
+        <section id="projeto" className="w-full bg-[#141b20] py-16 sm:py-20 scroll-mt-16">
         <div className="mx-auto max-w-[1520px] px-4 sm:px-6 lg:px-8 space-y-8">
           <div className="text-center max-w-3xl mx-auto space-y-2">
             <Badge
@@ -777,7 +777,7 @@ export default function LandingHomePage() {
         </div>
       </section>
 
-      <div id="noticias" className="w-full bg-[#1c2830] py-16 sm:py-20 border-b border-[#2d3f4b] scroll-mt-16">
+      <div id="noticias" className="w-full bg-[#273742] py-16 sm:py-20 border-y border-[#3a4f5d] scroll-mt-16">
         <div className="mx-auto max-w-[1520px] px-4 sm:px-6 lg:px-8">
           <MarketNewsSection />
         </div>
