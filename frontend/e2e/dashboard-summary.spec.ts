@@ -17,8 +17,15 @@ test.describe('Landing Page and Terminal Market Summary UI', () => {
     const ibovOverview = page.getByTestId('ibov-market-overview');
     await expect(ibovOverview).toBeVisible();
     await expect(ibovOverview).toContainText('IBOVESPA');
+    await expect(ibovOverview).toContainText('169.186,42');
     await expect(ibovOverview).toContainText('Maiores Altas (24h)');
     await expect(ibovOverview).toContainText('Maiores Baixas (24h)');
+
+    const prioLogo = ibovOverview.getByTestId('company-logo-PRIO3');
+    await expect(prioLogo.first()).toBeVisible();
+
+    const bbasLogo = ibovOverview.getByTestId('company-logo-BBAS3');
+    await expect(bbasLogo.first()).toBeVisible();
 
     const heroExplore = page.getByTestId('hero-explore-button');
     await expect(heroExplore).toBeVisible();
