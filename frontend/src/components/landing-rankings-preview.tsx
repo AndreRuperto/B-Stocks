@@ -168,35 +168,35 @@ export function LandingRankingsPreview() {
         </Link>
       </div>
 
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
         {cards.map((card) => {
           const IconComponent = card.icon;
           return (
             <div
               key={card.id}
               data-testid={card.testId}
-              className="flex flex-col justify-between rounded-2xl border border-[#273742] bg-[#162127] p-6 shadow-xl"
+              className="flex flex-col justify-between rounded-3xl border border-[#273742] bg-[#162127] p-8 shadow-xl"
             >
               <div>
-                <div className="flex items-start justify-between gap-3 border-b border-mist-800/80 pb-3.5">
+                <div className="flex items-start justify-between gap-3 border-b border-mist-800/80 pb-5">
                   <div className="flex items-center gap-3">
                     <div
-                      className={`flex h-9 w-9 items-center justify-center rounded-xl border ${card.badgeBg}`}
+                      className={`flex h-12 w-12 items-center justify-center rounded-xl border ${card.badgeBg}`}
                     >
-                      <IconComponent className="h-4 w-4" />
+                      <IconComponent className="h-5 w-5" />
                     </div>
                     <div>
-                      <h3 className="text-sm font-extrabold text-stone-100">
+                      <h3 className="text-lg font-extrabold text-stone-100">
                         {card.title}
                       </h3>
-                      <p className="text-[11px] text-stone-400">
+                      <p className="text-xs text-stone-400">
                         {card.subtitle}
                       </p>
                     </div>
                   </div>
                 </div>
 
-                <div className="mt-3 divide-y divide-mist-800/60">
+                <div className="mt-4 divide-y divide-mist-800/60">
                   {loading && card.items.length === 0 ? (
                     <div className="py-8 text-center text-xs text-stone-500">
                       Carregando top 5 ativos da API...
@@ -212,38 +212,38 @@ export function LandingRankingsPreview() {
                         <Link
                           key={stock.ticker}
                           href={`/terminal?search=${encodeURIComponent(stock.ticker)}`}
-                          className="group flex items-center justify-between py-3 px-2 rounded-lg transition-colors hover:bg-mist-800/50"
+                          className="group flex items-center justify-between py-5 px-3 rounded-lg transition-colors hover:bg-mist-800/50"
                         >
-                          <div className="flex items-center gap-3 min-w-0">
-                            <span className="w-5 text-xs font-black text-stone-500 tabular-nums">
+                          <div className="flex items-center gap-4 min-w-0">
+                            <span className="w-6 text-sm font-black text-stone-500 tabular-nums">
                               {idx + 1}º
                             </span>
                             <CompanyLogo
                               ticker={stock.ticker}
                               companyName={stock.companyName}
                               logoUrl={stock.logoUrl}
-                              size="sm"
+                              size="md"
                             />
                             <div className="min-w-0">
                               <div className="flex items-center gap-1.5">
-                                <span className="text-xs font-extrabold text-stone-100 group-hover:text-stone-200 transition-colors">
+                                <span className="text-base font-extrabold text-stone-100 group-hover:text-stone-200 transition-colors">
                                   {stock.ticker}
                                 </span>
-                                <span className="truncate rounded bg-mist-800/80 px-1.5 py-0.5 text-[9px] font-medium text-stone-400 max-w-[100px]">
+                                <span className="truncate rounded bg-mist-800/80 px-2 py-0.5 text-[10px] font-medium text-stone-400 max-w-[130px]">
                                   {stock.sector}
                                 </span>
                               </div>
-                              <div className="text-[11px] text-stone-400 truncate max-w-[155px]">
+                              <div className="text-xs text-stone-400 truncate max-w-[200px]">
                                 {stock.companyName}
                               </div>
                             </div>
                           </div>
 
                           <div className="text-right shrink-0">
-                            <div className="text-xs font-extrabold text-stone-100 tabular-nums">
+                            <div className="text-base font-extrabold text-stone-100 tabular-nums">
                               {metrics.primary}
                             </div>
-                            <div className="text-[10px] font-medium text-stone-400 tabular-nums">
+                            <div className="text-xs font-medium text-stone-400 tabular-nums">
                               {metrics.secondary}
                             </div>
                           </div>
@@ -254,14 +254,14 @@ export function LandingRankingsPreview() {
                 </div>
               </div>
 
-              <div className="mt-4 border-t border-mist-800/80 pt-3.5">
+              <div className="mt-6 border-t border-mist-800/80 pt-5">
                 <Link href={card.href} className="block w-full">
                   <Button
                     type="button"
                     variant="outline"
-                    size="sm"
+                    size="lg"
                     data-testid={`ver-ranking-btn-${card.id}`}
-                    className="w-full rounded-xl border-mist-700/80 bg-mist-950/90 text-xs font-bold text-stone-100 hover:border-mist-700 hover:bg-mist-800 gap-1.5 transition-all"
+                    className="h-11 w-full rounded-xl border-mist-700/80 bg-mist-950/90 text-xs font-bold text-stone-100 hover:border-mist-700 hover:bg-mist-800 gap-1.5 transition-all"
                   >
                     Ver Ranking
                     <ArrowRight className="h-3.5 w-3.5 text-stone-200" />
