@@ -23,6 +23,7 @@ import { CompanyLogo } from '@/components/company-logo';
 import {
   formatCompactCurrency,
   formatCurrency,
+  formatMultiple,
   formatPercent,
 } from '@/lib/utils';
 
@@ -186,18 +187,22 @@ export function StockDetailDialog({
                     >
                       {detailedStock.bazinCeilingPrice > 0
                         ? formatCurrency(detailedStock.bazinCeilingPrice)
-                        : 'N/A'}
+                        : '-'}
                     </span>
                   </div>
                   <div className="flex justify-between py-1.5">
                     <span className="text-zinc-400">Margem de Segurança Bazin:</span>
-                    <Badge
-                      variant={
-                        detailedStock.bazinMargin >= 0 ? 'positive' : 'negative'
-                      }
-                    >
-                      {formatPercent(detailedStock.bazinMargin, true)}
-                    </Badge>
+                    {detailedStock.bazinCeilingPrice > 0 ? (
+                      <Badge
+                        variant={
+                          detailedStock.bazinMargin >= 0 ? 'positive' : 'negative'
+                        }
+                      >
+                        {formatPercent(detailedStock.bazinMargin, true)}
+                      </Badge>
+                    ) : (
+                      <span className="text-zinc-500">-</span>
+                    )}
                   </div>
                   <p className="pt-1 text-[11px] font-medium text-zinc-400">
                     {detailedStock.bazinMargin >= 0
@@ -231,18 +236,22 @@ export function StockDetailDialog({
                     >
                       {detailedStock.grahamFairPrice > 0
                         ? formatCurrency(detailedStock.grahamFairPrice)
-                        : 'N/A (LPA/VPA negativo)'}
+                        : '-'}
                     </span>
                   </div>
                   <div className="flex justify-between py-1.5">
                     <span className="text-zinc-400">Margem de Segurança Graham:</span>
-                    <Badge
-                      variant={
-                        detailedStock.grahamMargin >= 0 ? 'positive' : 'negative'
-                      }
-                    >
-                      {formatPercent(detailedStock.grahamMargin, true)}
-                    </Badge>
+                    {detailedStock.grahamFairPrice > 0 ? (
+                      <Badge
+                        variant={
+                          detailedStock.grahamMargin >= 0 ? 'positive' : 'negative'
+                        }
+                      >
+                        {formatPercent(detailedStock.grahamMargin, true)}
+                      </Badge>
+                    ) : (
+                      <span className="text-zinc-500">-</span>
+                    )}
                   </div>
                   <p className="pt-1 text-[11px] font-medium text-zinc-400">
                     {detailedStock.grahamMargin >= 0
@@ -320,25 +329,25 @@ export function StockDetailDialog({
               <div className="rounded-lg border border-zinc-800 bg-zinc-950/80 p-3">
                 <div className="text-[11px] text-zinc-400">P/L &amp; P/VP</div>
                 <div className="mt-1 text-sm font-bold text-zinc-100 tabular-nums">
-                  {detailedStock.pl.toFixed(2)}x / {detailedStock.pvp.toFixed(2)}x
+                  {formatMultiple(detailedStock.pl)} / {formatMultiple(detailedStock.pvp)}
                 </div>
               </div>
               <div className="rounded-lg border border-zinc-800 bg-zinc-950/80 p-3">
                 <div className="text-[11px] text-zinc-400">ROE &amp; ROIC</div>
                 <div className="mt-1 text-sm font-bold text-zinc-100 tabular-nums">
-                  {formatPercent(detailedStock.roe)} / {formatPercent(detailedStock.roic)}
+                  {detailedStock.roe !== 0 ? formatPercent(detailedStock.roe) : '-'} / {detailedStock.roic !== 0 ? formatPercent(detailedStock.roic) : '-'}
                 </div>
               </div>
               <div className="rounded-lg border border-zinc-800 bg-zinc-950/80 p-3">
                 <div className="text-[11px] text-zinc-400">Margem Líquida / EBIT</div>
                 <div className="mt-1 text-sm font-bold text-zinc-100 tabular-nums">
-                  {formatPercent(detailedStock.netMargin)} / {formatPercent(detailedStock.ebitMargin)}
+                  {detailedStock.netMargin !== 0 ? formatPercent(detailedStock.netMargin) : '-'} / {detailedStock.ebitMargin !== 0 ? formatPercent(detailedStock.ebitMargin) : '-'}
                 </div>
               </div>
               <div className="rounded-lg border border-zinc-800 bg-zinc-950/80 p-3">
                 <div className="text-[11px] text-zinc-400">Liquidez Diária / Dív.EBITDA</div>
                 <div className="mt-1 text-sm font-bold text-zinc-100 tabular-nums">
-                  {formatCompactCurrency(detailedStock.dailyLiquidity)} ({detailedStock.netDebtToEbitda.toFixed(2)}x)
+                  {detailedStock.dailyLiquidity > 0 ? formatCompactCurrency(detailedStock.dailyLiquidity) : '-'} ({detailedStock.netDebtToEbitda !== 0 ? formatMultiple(detailedStock.netDebtToEbitda) : '-'})
                 </div>
               </div>
             </div>

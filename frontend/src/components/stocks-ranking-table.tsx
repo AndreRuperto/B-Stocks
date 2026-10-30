@@ -24,6 +24,7 @@ import { CompanyLogo } from '@/components/company-logo';
 import {
   formatCompactCurrency,
   formatCurrency,
+  formatMultiple,
   formatPercent,
 } from '@/lib/utils';
 import {
@@ -563,57 +564,62 @@ export function StocksRankingTable({
       case 'marketCap':
         return (
           <span className="font-semibold text-zinc-200 tabular-nums">
-            {formatCompactCurrency(stock.marketCap)}
+            {stock.marketCap > 0 ? formatCompactCurrency(stock.marketCap) : '-'}
           </span>
         );
       case 'pl':
         return (
           <span className="font-medium text-zinc-200 tabular-nums">
-            {stock.pl.toFixed(2)}x
+            {formatMultiple(stock.pl)}
           </span>
         );
       case 'pvp':
         return (
           <span className="font-medium text-zinc-200 tabular-nums">
-            {stock.pvp.toFixed(2)}x
+            {formatMultiple(stock.pvp)}
           </span>
         );
       case 'dy':
         return (
           <span className="font-semibold text-zinc-200 tabular-nums">
-            {formatPercent(stock.dy)}
+            {stock.dy > 0 ? formatPercent(stock.dy) : '-'}
           </span>
         );
       case 'dy5y':
         return (
           <span className="font-medium text-zinc-300 tabular-nums">
-            {formatPercent(stock.dy5y)}
+            {stock.dy5y > 0 ? formatPercent(stock.dy5y) : '-'}
           </span>
         );
       case 'netMargin':
         return (
           <span className="font-medium text-zinc-200 tabular-nums">
-            {formatPercent(stock.netMargin)}
+            {stock.netMargin !== 0 ? formatPercent(stock.netMargin) : '-'}
           </span>
         );
       case 'sector':
         return (
           <Badge variant="secondary" className="text-[11px] font-medium">
-            {stock.sector}
+            {stock.sector || '-'}
           </Badge>
         );
       case 'subsector':
-        return <span className="text-xs text-zinc-400">{stock.subsector}</span>;
+        return (
+          <span className="text-xs text-zinc-400">{stock.subsector || '-'}</span>
+        );
       case 'segment':
         return (
-          <Badge variant="outline" className="text-[11px] text-zinc-300 border-zinc-700">
-            {stock.segment}
+          <Badge
+            variant="outline"
+            className="text-[11px] text-zinc-300 border-zinc-700"
+          >
+            {stock.segment || '-'}
           </Badge>
         );
       case 'price':
         return (
           <span className="font-semibold text-zinc-200 tabular-nums">
-            {formatCurrency(stock.price)}
+            {stock.price > 0 ? formatCurrency(stock.price) : '-'}
           </span>
         );
       case 'grahamFairPrice':
@@ -621,7 +627,7 @@ export function StocksRankingTable({
           <span className="font-medium text-zinc-200 tabular-nums">
             {stock.grahamFairPrice > 0
               ? formatCurrency(stock.grahamFairPrice)
-              : 'N/A'}
+              : '-'}
           </span>
         );
       case 'grahamMargin':
@@ -633,14 +639,14 @@ export function StocksRankingTable({
             {formatPercent(stock.grahamMargin, true)}
           </Badge>
         ) : (
-          <span className="text-xs text-zinc-500">N/A</span>
+          <span className="text-xs text-zinc-500">-</span>
         );
       case 'bazinCeilingPrice':
         return (
           <span className="font-medium text-zinc-200 tabular-nums">
             {stock.bazinCeilingPrice > 0
               ? formatCurrency(stock.bazinCeilingPrice)
-              : 'N/A'}
+              : '-'}
           </span>
         );
       case 'bazinMargin':
@@ -652,7 +658,7 @@ export function StocksRankingTable({
             {formatPercent(stock.bazinMargin, true)}
           </Badge>
         ) : (
-          <span className="text-xs text-zinc-500">Sem DY</span>
+          <span className="text-xs text-zinc-500">-</span>
         );
       case 'scoreTotal':
         return (
@@ -663,23 +669,25 @@ export function StocksRankingTable({
             )}
             className="text-xs font-bold tabular-nums"
           >
-            {stock.scoreTotal.toFixed(1)} / 100
+            {stock.scoreTotal.toFixed(1).replace('.', ',')} / 100
           </Badge>
         );
       case 'dailyLiquidity':
         return (
           <span className="font-semibold text-zinc-200 tabular-nums">
-            {formatCompactCurrency(stock.dailyLiquidity)}
+            {stock.dailyLiquidity > 0
+              ? formatCompactCurrency(stock.dailyLiquidity)
+              : '-'}
           </span>
         );
       case 'revenue':
         return (
           <span className="font-semibold text-zinc-200 tabular-nums">
-            {formatCompactCurrency(stock.revenue)}
+            {stock.revenue > 0 ? formatCompactCurrency(stock.revenue) : '-'}
           </span>
         );
       case 'netIncome':
-        return (
+        return stock.netIncome !== 0 ? (
           <span
             className={`font-semibold tabular-nums ${
               stock.netIncome >= 0 ? 'text-zinc-200' : 'text-red-400'
@@ -687,60 +695,72 @@ export function StocksRankingTable({
           >
             {formatCompactCurrency(stock.netIncome)}
           </span>
+        ) : (
+          <span className="text-zinc-500">-</span>
         );
       case 'equity':
         return (
           <span className="font-medium text-zinc-200 tabular-nums">
-            {formatCompactCurrency(stock.equity)}
+            {stock.equity > 0 ? formatCompactCurrency(stock.equity) : '-'}
           </span>
         );
       case 'grossDebtToEquity':
         return (
           <span className="font-medium text-zinc-300 tabular-nums">
-            {stock.grossDebtToEquity.toFixed(2)}x
+            {stock.grossDebtToEquity > 0
+              ? formatMultiple(stock.grossDebtToEquity)
+              : '-'}
           </span>
         );
       case 'roe':
         return (
           <span className="font-medium text-zinc-200 tabular-nums">
-            {formatPercent(stock.roe)}
+            {stock.roe !== 0 ? formatPercent(stock.roe) : '-'}
           </span>
         );
       case 'change24h':
-        return (
+        return stock.change24h !== 0 ? (
           <Badge
             variant={getMarginBadgeVariant(stock.change24h)}
             className="px-1.5 py-0.5 text-xs tabular-nums"
           >
             {formatPercent(stock.change24h, true)}
           </Badge>
+        ) : (
+          <span className="text-xs text-zinc-500">-</span>
         );
       case 'change30d':
-        return (
+        return stock.change30d !== 0 ? (
           <Badge
             variant={getMarginBadgeVariant(stock.change30d)}
             className="px-1.5 py-0.5 text-xs tabular-nums"
           >
             {formatPercent(stock.change30d, true)}
           </Badge>
+        ) : (
+          <span className="text-xs text-zinc-500">-</span>
         );
       case 'change12m':
-        return (
+        return stock.change12m !== 0 ? (
           <Badge
             variant={getMarginBadgeVariant(stock.change12m)}
             className="px-1.5 py-0.5 text-xs tabular-nums"
           >
             {formatPercent(stock.change12m, true)}
           </Badge>
+        ) : (
+          <span className="text-xs text-zinc-500">-</span>
         );
       case 'change5y':
-        return (
+        return stock.change5y !== 0 ? (
           <Badge
             variant={getMarginBadgeVariant(stock.change5y)}
             className="px-1.5 py-0.5 text-xs tabular-nums"
           >
             {formatPercent(stock.change5y, true)}
           </Badge>
+        ) : (
+          <span className="text-xs text-zinc-500">-</span>
         );
       default:
         return null;
@@ -1111,21 +1131,21 @@ export function StocksRankingTable({
                   <TableRow
                     key={stock.ticker}
                     data-testid={`stock-row-${stock.ticker}`}
-                    className="cursor-pointer border-zinc-800/80 hover:bg-zinc-850"
+                    className="h-16 cursor-pointer border-zinc-800/80 hover:bg-zinc-850"
                     onClick={() => onSelectStock(stock)}
                   >
-                    <TableCell className="text-xs font-medium text-zinc-500">
+                    <TableCell className="py-4 text-xs font-medium text-zinc-500">
                       {rankNumber}
                     </TableCell>
-                    <TableCell>
-                      <div className="flex items-center gap-3">
+                    <TableCell className="py-4">
+                      <div className="flex items-center gap-3.5">
                         <CompanyLogo
                           ticker={stock.ticker}
                           logoUrl={stock.logoUrl}
                           companyName={stock.companyName}
                           size="md"
                         />
-                        <div className="flex flex-col">
+                        <div className="flex flex-col gap-0.5">
                           <div className="flex items-center gap-1.5">
                             <span className="font-bold text-sm text-zinc-100">
                               {stock.ticker}
@@ -1139,18 +1159,18 @@ export function StocksRankingTable({
                               </Badge>
                             )}
                           </div>
-                          <span className="text-xs text-zinc-400 truncate max-w-[170px]">
+                          <span className="text-xs text-zinc-400 truncate max-w-[180px]">
                             {stock.companyName}
                           </span>
                         </div>
                       </div>
                     </TableCell>
                     {activeColumns.map((col) => (
-                      <TableCell key={col.key}>
+                      <TableCell key={col.key} className="py-4">
                         {renderCellValue(stock, col.key)}
                       </TableCell>
                     ))}
-                    <TableCell className="text-right">
+                    <TableCell className="py-4 text-right">
                       <Button
                         type="button"
                         size="sm"

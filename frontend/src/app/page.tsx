@@ -479,7 +479,7 @@ export default function LandingHomePage() {
                         P/L
                       </span>
                       <strong className="font-bold text-zinc-200 tabular-nums">
-                        {selectedShowcase.pl.toFixed(2).replace('.', ',')}x
+                        {selectedShowcase.pl.toFixed(1).replace('.', ',')}
                       </strong>
                     </div>
                     <div>
@@ -487,7 +487,7 @@ export default function LandingHomePage() {
                         P/VP
                       </span>
                       <strong className="font-bold text-zinc-200 tabular-nums">
-                        {selectedShowcase.pvp.toFixed(2).replace('.', ',')}x
+                        {selectedShowcase.pvp.toFixed(1).replace('.', ',')}
                       </strong>
                     </div>
                     <div>

@@ -15,15 +15,17 @@ export function formatCurrency(value: number): string {
 }
 
 export function formatCompactCurrency(value: number): string {
-  if (!value || value <= 0) return 'R$ 0';
-  if (value >= 1_000_000_000) {
-    return `R$ ${(value / 1_000_000_000).toFixed(2)}B`;
+  if (!value || !Number.isFinite(value) || value === 0) return '-';
+  const sign = value < 0 ? '-' : '';
+  const abs = Math.abs(value);
+  if (abs >= 1_000_000_000) {
+    return `${sign}R$ ${(abs / 1_000_000_000).toFixed(2).replace('.', ',')}B`;
   }
-  if (value >= 1_000_000) {
-    return `R$ ${(value / 1_000_000).toFixed(2)}M`;
+  if (abs >= 1_000_000) {
+    return `${sign}R$ ${(abs / 1_000_000).toFixed(2).replace('.', ',')}M`;
   }
-  if (value >= 1_000) {
-    return `R$ ${(value / 1_000).toFixed(1)}K`;
+  if (abs >= 1_000) {
+    return `${sign}R$ ${(abs / 1_000).toFixed(1).replace('.', ',')}K`;
   }
   return formatCurrency(value);
 }
@@ -31,6 +33,14 @@ export function formatCompactCurrency(value: number): string {
 export function formatPercent(value: number, showSign = false): string {
   const num = Number.isFinite(value) ? value : 0;
   const prefix = showSign && num > 0 ? '+' : '';
-  return `${prefix}${num.toFixed(2)}%`;
+  return `${prefix}${num.toFixed(2).replace('.', ',')}%`;
+}
+
+export function formatMultiple(value: number): string {
+  if (!Number.isFinite(value) || value === 0) return '-';
+  return value.toLocaleString('pt-BR', {
+    minimumFractionDigits: 1,
+    maximumFractionDigits: 1,
+  });
 }
 
