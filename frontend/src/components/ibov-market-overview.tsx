@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { CompanyLogo } from '@/components/company-logo';
 import {
   Activity,
   ArrowDown,
@@ -112,11 +113,11 @@ const PERIOD_DATA: Record<
   }
 > = {
   '1D': {
-    points: '131.845',
-    change: '+1.072 pts',
-    changePercent: 0.82,
-    high: '132.210',
-    low: '130.650',
+    points: '169.186,42',
+    change: '+1.420,80 pts',
+    changePercent: 0.85,
+    high: '169.840,10',
+    low: '168.110,25',
     svgPath:
       'M 0 140 C 40 135, 70 150, 110 130 C 150 110, 190 125, 230 100 C 270 75, 310 95, 350 80 C 390 65, 430 70, 470 50 C 510 30, 560 45, 600 25',
     areaPath:
@@ -124,11 +125,11 @@ const PERIOD_DATA: Record<
     xLabels: ['10:00', '12:00', '14:00', '16:00', '17:55'],
   },
   '5D': {
-    points: '131.845',
-    change: '+2.410 pts',
-    changePercent: 1.86,
-    high: '132.500',
-    low: '129.200',
+    points: '169.186,42',
+    change: '+3.180,50 pts',
+    changePercent: 1.92,
+    high: '170.150,00',
+    low: '165.400,00',
     svgPath:
       'M 0 160 C 50 170, 90 130, 150 120 C 210 110, 260 140, 310 90 C 360 40, 420 80, 480 60 C 540 40, 570 30, 600 20',
     areaPath:
@@ -136,11 +137,11 @@ const PERIOD_DATA: Record<
     xLabels: ['Seg', 'Ter', 'Qua', 'Qui', 'Sex'],
   },
   '1M': {
-    points: '131.845',
-    change: '+4.120 pts',
-    changePercent: 3.22,
-    high: '133.100',
-    low: '126.800',
+    points: '169.186,42',
+    change: '+5.430,20 pts',
+    changePercent: 3.32,
+    high: '171.200,00',
+    low: '162.800,00',
     svgPath:
       'M 0 150 C 60 165, 120 180, 180 140 C 240 100, 300 130, 360 90 C 420 50, 480 75, 540 40 C 570 20, 590 35, 600 25',
     areaPath:
@@ -148,11 +149,11 @@ const PERIOD_DATA: Record<
     xLabels: ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4'],
   },
   '6M': {
-    points: '131.845',
-    change: '+8.950 pts',
-    changePercent: 7.28,
-    high: '134.500',
-    low: '121.300',
+    points: '169.186,42',
+    change: '+12.850,00 pts',
+    changePercent: 8.22,
+    high: '172.900,00',
+    low: '154.300,00',
     svgPath:
       'M 0 170 C 80 180, 160 130, 240 140 C 320 150, 400 90, 460 70 C 520 50, 570 30, 600 20',
     areaPath:
@@ -160,11 +161,11 @@ const PERIOD_DATA: Record<
     xLabels: ['Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out'],
   },
   '1A': {
-    points: '131.845',
-    change: '+14.620 pts',
-    changePercent: 12.47,
-    high: '137.400',
-    low: '115.800',
+    points: '169.186,42',
+    change: '+21.640,00 pts',
+    changePercent: 14.67,
+    high: '175.400,00',
+    low: '145.200,00',
     svgPath:
       'M 0 180 C 100 160, 180 140, 270 120 C 360 100, 430 80, 500 50 C 550 30, 580 40, 600 25',
     areaPath:
@@ -206,7 +207,7 @@ export function IbovMarketOverview() {
             type="button"
             variant="outline"
             size="sm"
-            className="rounded-lg border-zinc-800 bg-zinc-900 text-xs font-semibold text-zinc-200 hover:bg-zinc-800 hover:text-zinc-100 gap-1.5"
+            className="rounded-lg border-zinc-800 bg-zinc-900 text-xs font-semibold text-zinc-200 hover:bg-zinc-850 hover:text-zinc-100 gap-1.5"
           >
             Abrir Terminal de Ações
             <ArrowRight className="h-3.5 w-3.5" />
@@ -378,13 +379,20 @@ export function IbovMarketOverview() {
                   key={stock.ticker}
                   className="flex items-center justify-between py-2.5 text-xs transition-colors hover:bg-zinc-850/60 rounded px-1"
                 >
-                  <div>
-                    <div className="flex items-center gap-1.5">
-                      <span className="font-bold text-zinc-100">{stock.ticker}</span>
-                      <span className="text-[10px] text-zinc-500">{stock.sector}</span>
-                    </div>
-                    <div className="text-[11px] text-zinc-400 truncate max-w-[150px]">
-                      {stock.name}
+                  <div className="flex items-center gap-2.5">
+                    <CompanyLogo
+                      ticker={stock.ticker}
+                      companyName={stock.name}
+                      size="sm"
+                    />
+                    <div>
+                      <div className="flex items-center gap-1.5">
+                        <span className="font-bold text-zinc-100">{stock.ticker}</span>
+                        <span className="text-[10px] text-zinc-500">{stock.sector}</span>
+                      </div>
+                      <div className="text-[11px] text-zinc-400 truncate max-w-[140px]">
+                        {stock.name}
+                      </div>
                     </div>
                   </div>
 
@@ -429,13 +437,20 @@ export function IbovMarketOverview() {
                   key={stock.ticker}
                   className="flex items-center justify-between py-2.5 text-xs transition-colors hover:bg-zinc-850/60 rounded px-1"
                 >
-                  <div>
-                    <div className="flex items-center gap-1.5">
-                      <span className="font-bold text-zinc-100">{stock.ticker}</span>
-                      <span className="text-[10px] text-zinc-500">{stock.sector}</span>
-                    </div>
-                    <div className="text-[11px] text-zinc-400 truncate max-w-[150px]">
-                      {stock.name}
+                  <div className="flex items-center gap-2.5">
+                    <CompanyLogo
+                      ticker={stock.ticker}
+                      companyName={stock.name}
+                      size="sm"
+                    />
+                    <div>
+                      <div className="flex items-center gap-1.5">
+                        <span className="font-bold text-zinc-100">{stock.ticker}</span>
+                        <span className="text-[10px] text-zinc-500">{stock.sector}</span>
+                      </div>
+                      <div className="text-[11px] text-zinc-400 truncate max-w-[140px]">
+                        {stock.name}
+                      </div>
                     </div>
                   </div>
 
