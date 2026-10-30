@@ -11,6 +11,7 @@ import {
   FALLBACK_B3_STOCKS,
   normalizeToB3Category,
   resolveB3CompanyMeta,
+  resolveCanonicalLogoUrl,
   resolveGovernanceSegment,
 } from './b3-catalog';
 
@@ -129,15 +130,15 @@ export class MarketDataService {
 
       const companyName = extMeta?.companyName || catalogMeta.companyName;
       const logoUrl =
-        extMeta?.logoUrl || `https://icons.brapi.dev/icons/${ticker}.svg`;
+        extMeta?.logoUrl || resolveCanonicalLogoUrl(ticker);
 
       const equity = Math.max(0, rawEquity);
-      const marketCap =
-        equity > 0 && pvp > 0
+      const isLiquidActive = dailyLiquidity > 0;
+      const marketCap = !isLiquidActive
+        ? Number((price * 1000).toFixed(2))
+        : equity > 0 && pvp > 0
           ? Number((equity * Math.min(pvp, 60)).toFixed(2))
-          : dailyLiquidity > 0
-            ? Number((dailyLiquidity * 145).toFixed(2))
-            : Number((price * 45_000_000).toFixed(2));
+          : Number((dailyLiquidity * 145).toFixed(2));
 
       const clampedPsr = Math.max(-100, Math.min(200, psr));
       const clampedPl = Math.max(-500, Math.min(500, pl));

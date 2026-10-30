@@ -402,12 +402,100 @@ export const B3_PREFIX_CATALOG: Record<string, Omit<B3CompanyMeta, 'segment'>> =
   BRST: { companyName: 'Brisanet', sector: 'Telecomunicações', subsector: 'Telecomunicações' },
   DESK: { companyName: 'Desktop Telecom', sector: 'Telecomunicações', subsector: 'Telecomunicações' },
   OIBR: { companyName: 'Oi S.A.', sector: 'Telecomunicações', subsector: 'Telecomunicações' },
+  NATU: { companyName: 'Natura &Co', sector: 'Consumo Não Cíclico', subsector: 'Produtos de Uso Pessoal e Limpeza' },
+  AUAU: { companyName: 'União Pet (Petz & Cobasi)', sector: 'Consumo Cíclico', subsector: 'Varejo Pet' },
+  TOKY: { companyName: 'Grupo Toky (Mobly)', sector: 'Consumo Cíclico', subsector: 'Móveis e Decoração' },
+  FASA: { companyName: 'Ferbasa', sector: 'Materiais Básicos', subsector: 'Metalurgia e Siderurgia' },
+  EQPA: { companyName: 'Equatorial Pará', sector: 'Energia Elétrica', subsector: 'Distribuição de Energia' },
+  CEED: { companyName: 'CEEE-D Equatorial', sector: 'Energia Elétrica', subsector: 'Distribuição de Energia' },
+  CTKA: { companyName: 'Karsten S.A.', sector: 'Consumo Cíclico', subsector: 'Fios e Tecidos' },
+  CEDO: { companyName: 'Cedro Têxtil', sector: 'Consumo Cíclico', subsector: 'Fios e Tecidos' },
+  CASN: { companyName: 'Casan Saneamento', sector: 'Água e Saneamento', subsector: 'Água e Saneamento Básico' },
+  MSPA: { companyName: 'Melhoramentos', sector: 'Materiais Básicos', subsector: 'Papel e Celulose' },
 };
+
+const TICKER_ICON_ALIAS: Record<string, string> = {
+  NATU: 'NTCO3',
+  AUAU: 'PETZ3',
+  TOKY: 'MBLY3',
+  FASA: 'FESA4',
+  EQPA: 'EQPA3',
+  CEED: 'EQTL3',
+  CTKA: 'CTKA4',
+  CEDO: 'CEDO4',
+  AMBV: 'ABEV3',
+  AXIA: 'ELET3',
+  ELET: 'ELET3',
+  TRPL: 'ISAE4',
+  VIIA: 'BHIA3',
+  VVAR: 'BHIA3',
+  ALSO: 'ALOS3',
+  GUAR: 'RIAA3',
+  CESP: 'AURE3',
+  BRDT: 'VBBR3',
+  OMGE: 'SRNA3',
+  RRRP: 'BRAV3',
+  ENAT: 'BRAV3',
+  LCAM: 'RENT3',
+  SOMA: 'AZZA3',
+  ARZZ: 'AZZA3',
+  PRGA: 'BRFS3',
+  WIZS: 'WIZC3',
+  CARD: 'CSUD3',
+  BTOW: 'AMER3',
+  LAME: 'AMER3',
+  GNDI: 'HAPV3',
+  SULA: 'RDOR3',
+  VIVT: 'VIVT3',
+  VALE: 'VALE3',
+  WEGE: 'WEGE3',
+  KLBN: 'KLBN11',
+  TAEE: 'TAEE11',
+  SAPR: 'SAPR11',
+  ALUP: 'ALUP11',
+  GGBR: 'GGBR4',
+  GOAU: 'GOAU4',
+  USIM: 'USIM5',
+  CMIG: 'CMIG4',
+  CPLE: 'CPLE6',
+};
+
+const FINTZ_PNG_TICKERS: Record<string, string> = {
+  IGBR3: 'IGBR3',
+  MWET4: 'MWET4',
+  MWET3: 'MWET3',
+  BAUH4: 'BAUH4',
+  CEGR3: 'CEGR3',
+  JOPA3: 'JOPA3',
+  JOPA4: 'JOPA4',
+  MAPT3: 'MAPT3',
+  FIGE3: 'FIGE3',
+  CALI3: 'CALI3',
+  ADHM3: 'ADHM3',
+  MSPA4: 'MSPA4',
+  MSPA3: 'MSPA4',
+  CASN3: 'CASN3',
+  CASN4: 'CASN3',
+};
+
+export function resolveCanonicalLogoUrl(ticker: string): string {
+  const clean = ticker.toUpperCase().trim();
+  if (FINTZ_PNG_TICKERS[clean]) {
+    return `https://raw.githubusercontent.com/thefintz/icones-b3/main/icones/${FINTZ_PNG_TICKERS[clean]}.png`;
+  }
+  const prefix = clean.replace(/[0-9A-Z]*$/, (match) =>
+    /^[0-9]/.test(match) ? '' : match,
+  ).slice(0, 4);
+  if (TICKER_ICON_ALIAS[prefix]) {
+    return `https://icons.brapi.dev/icons/${TICKER_ICON_ALIAS[prefix]}.svg`;
+  }
+  return `https://icons.brapi.dev/icons/${clean}.svg`;
+}
 
 export function resolveB3CompanyMeta(ticker: string): B3CompanyMeta {
   const clean = ticker.toUpperCase().trim();
   const prefix = clean.replace(/[0-9]+$/, '');
-  const logoUrl = `https://icons.brapi.dev/icons/${clean}.svg`;
+  const logoUrl = resolveCanonicalLogoUrl(clean);
   const segment = resolveGovernanceSegment(clean);
   if (B3_PREFIX_CATALOG[prefix]) {
     const meta = B3_PREFIX_CATALOG[prefix];
