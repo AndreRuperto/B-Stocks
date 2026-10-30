@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { ArrowDown, ArrowUp } from 'lucide-react';
+import { CompanyLogo } from '@/components/company-logo';
 
 export interface TickerStockItem {
   ticker: string;
@@ -57,6 +58,11 @@ export function StockTickerCarousel({ stocks = FAMOUS_STOCKS }: StockTickerCarou
               key={`${item.ticker}-${index}`}
               className="inline-flex items-center gap-2 rounded-md border border-zinc-800/80 bg-zinc-900/90 px-3 py-1 text-xs font-semibold tracking-wide text-zinc-200 transition-colors hover:border-zinc-700"
             >
+              <CompanyLogo
+                ticker={item.ticker}
+                size="sm"
+                className="h-4 w-4 rounded-sm border-0 bg-transparent"
+              />
               <span className="font-extrabold text-zinc-100">{item.ticker}</span>
               <span className="tabular-nums text-zinc-300">{formattedPrice}</span>
               <span
