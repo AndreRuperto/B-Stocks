@@ -217,7 +217,7 @@ export default function LandingHomePage() {
       <main className="relative z-10 flex-1 w-full">
         <section
           data-testid="hero-landing-section"
-          className="w-full bg-[#0a0d0f] py-16 sm:py-24 border-b border-[#1b2328]"
+          className="w-full bg-gradient-to-b from-[#0a0d0f] via-[#0a0d0f] to-[#162026] py-16 sm:py-24"
         >
           <div className="mx-auto max-w-[1520px] px-4 sm:px-6 lg:px-8">
             <div className="relative grid grid-cols-1 gap-10 lg:grid-cols-12 lg:items-center">
@@ -272,18 +272,6 @@ export default function LandingHomePage() {
 
             <div className="lg:col-span-5">
               <div className="rounded-2xl border border-mist-700/80 bg-mist-900/90 p-5 shadow-2xl backdrop-blur-xl">
-                <div className="flex items-center justify-between border-b border-mist-800 pb-3.5">
-                  <div className="flex items-center gap-2">
-                    <span className="h-2.5 w-2.5 rounded-full bg-mist-500" />
-                    <span className="text-xs font-extrabold uppercase tracking-wider text-stone-200">
-                      Simulador Rápido de Valuation
-                    </span>
-                  </div>
-                  <span className="text-[11px] font-semibold text-stone-400">
-                    Clique em um ativo
-                  </span>
-                </div>
-
                 <div className="mt-3 grid grid-cols-4 gap-1.5">
                   {SHOWCASE_STOCKS.map((item) => {
                     const active = item.ticker === selectedShowcase.ticker;
@@ -502,7 +490,7 @@ export default function LandingHomePage() {
         </div>
       </section>
 
-      <div id="mercado" className="w-full bg-[#162026] py-16 sm:py-20 border-b border-[#26343e] scroll-mt-16">
+      <div id="mercado" className="w-full bg-gradient-to-b from-[#162026] via-[#162026] to-[#0d1215] py-16 sm:py-20 scroll-mt-16">
         <div className="mx-auto max-w-[1520px] px-4 sm:px-6 lg:px-8">
           <IbovMarketOverview />
         </div>
@@ -514,7 +502,7 @@ export default function LandingHomePage() {
         </div>
       </div>
 
-        <section id="metodologia" className="w-full bg-[#18232a] py-16 sm:py-20 border-b border-[#283742] scroll-mt-16">
+        <section id="metodologia" className="w-full bg-gradient-to-b from-[#18232a] via-[#18232a] to-[#141b20] py-16 sm:py-20 scroll-mt-16">
         <div className="mx-auto max-w-[1520px] px-4 sm:px-6 lg:px-8 space-y-8">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div className="max-w-2xl space-y-2">
@@ -685,7 +673,7 @@ export default function LandingHomePage() {
         </div>
       </section>
 
-        <section id="projeto" className="w-full bg-[#0c1013] py-16 sm:py-20 border-b border-[#1a2227] scroll-mt-16">
+        <section id="projeto" className="w-full bg-gradient-to-b from-[#141b20] via-[#11171b] to-[#1c2830] py-16 sm:py-20 scroll-mt-16">
         <div className="mx-auto max-w-[1520px] px-4 sm:px-6 lg:px-8 space-y-8">
           <div className="text-center max-w-3xl mx-auto space-y-2">
             <Badge
@@ -795,7 +783,7 @@ export default function LandingHomePage() {
         </div>
       </div>
 
-      <section id="faq" className="w-full bg-[#0d1215] py-16 sm:py-20 border-b border-[#1b2329] scroll-mt-16">
+      <section id="faq" className="w-full bg-gradient-to-b from-[#0d1215] via-[#0d1215] to-mist-950 py-16 sm:py-20 scroll-mt-16">
         <div className="mx-auto max-w-[1520px] px-4 sm:px-6 lg:px-8 space-y-8">
           <div className="text-center max-w-2xl mx-auto space-y-2">
             <Badge
@@ -828,38 +816,7 @@ export default function LandingHomePage() {
         </div>
       </section>
 
-      <section className="w-full bg-[#24333c] py-16 sm:py-24 border-b border-[#384c59]">
-        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center space-y-6">
-          <div className="max-w-2xl mx-auto space-y-3">
-            <Badge
-              variant="outline"
-              className="border-mist-700 bg-mist-800/60 text-stone-100 text-[10px] uppercase font-bold"
-            >
-              Acesso Imediato • Sem Cadastro Obrigatório
-            </Badge>
-            <h2 className="text-2xl sm:text-4xl font-black text-stone-50 tracking-tight">
-              Pronto para encontrar as ações mais descontadas da B3?
-            </h2>
-            <p className="text-xs sm:text-base text-stone-300 leading-relaxed">
-              Abra o terminal completo agora mesmo, alterne entre os 11 rankings
-              quantitativos e simule seu próprio Preço-Teto de Bazin.
-            </p>
-          </div>
 
-          <div className="flex flex-wrap items-center justify-center gap-4">
-            <Link href="/terminal">
-              <Button
-                type="button"
-                size="lg"
-                className="h-12 rounded-xl bg-stone-700 px-8 text-sm font-black text-stone-100 border border-stone-600 hover:bg-stone-600 gap-2 shadow-lg transition-all"
-              >
-                Acessar Terminal B-Stocks Agora
-                <ArrowRight className="h-4 w-4" />
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </section>
       </main>
 
       <footer className="relative z-10 mt-16 border-t border-mist-800/80 bg-mist-950/90 py-10">
