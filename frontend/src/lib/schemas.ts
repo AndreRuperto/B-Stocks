@@ -236,3 +236,22 @@ export const MarketOverviewResponseSchema = z.object({
 export type MarketOverviewResponse = z.infer<
   typeof MarketOverviewResponseSchema
 >;
+
+export const MarketNewsArticleSchema = z.object({
+  id: z.string(),
+  title: z.string(),
+  summary: z.string(),
+  url: z.string(),
+  imageUrl: z.string(),
+  source: z.string(),
+  publishedAt: z.string(),
+});
+
+export type MarketNewsArticle = z.infer<typeof MarketNewsArticleSchema>;
+
+export const MarketNewsResponseSchema = z.object({
+  items: z.array(MarketNewsArticleSchema),
+  updatedAt: z.string(),
+});
+
+export type MarketNewsResponse = z.infer<typeof MarketNewsResponseSchema>;

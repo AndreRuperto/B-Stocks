@@ -2,6 +2,8 @@ import axios from 'axios';
 import {
   FilterParams,
   FilterParamsSchema,
+  MarketNewsResponse,
+  MarketNewsResponseSchema,
   MarketOverviewResponse,
   MarketOverviewResponseSchema,
   MarketSummary,
@@ -34,6 +36,11 @@ export async function fetchMarketOverview(
     params: { period },
   });
   return MarketOverviewResponseSchema.parse(response.data);
+}
+
+export async function fetchMarketNews(): Promise<MarketNewsResponse> {
+  const response = await http.get('/stocks/news');
+  return MarketNewsResponseSchema.parse(response.data);
 }
 
 export async function fetchStocks(
