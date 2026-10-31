@@ -1,0 +1,61 @@
+services:
+  # -------------------------------------------------------------
+  # Backend NestJS Web Service
+  # -------------------------------------------------------------
+  - type: web
+    name: b-stocks-backend
+    runtime: node
+    plan: free
+    region: ohio
+    rootDir: backend
+    buildCommand: npm install && npm run build && npx prisma db push --accept-data-loss
+    startCommand: npm run start:prod
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: DATABASE_URL
+        fromDatabase:
+          name: b-stocks-db
+          property: connectionString
+      - key: CORS_ORIGIN
+        value: "*"
+      - key: BRAPI_TOKEN
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GROQ_API_KEY
+        sync: false
+
+  # -------------------------------------------------------------
+  # Frontend Next.js Web Service (Opção 100% no Render)
+  # -------------------------------------------------------------
+  - type: web
+    name: b-stocks-frontend
+    runtime: node
+    plan: free
+    region: ohio
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    startCommand: npm run start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NEXT_PUBLIC_API_URL
+        fromService:
+          type: web
+          name: b-stocks-backend
+          property: host
+          path: /api
+
+databases:
+  # -------------------------------------------------------------
+  # Managed PostgreSQL Database
+  # -------------------------------------------------------------
+  - name: b-stocks-db
+    databaseName: bstocks
+    user: bstocks_user
+    plan: free
+    region: ohio

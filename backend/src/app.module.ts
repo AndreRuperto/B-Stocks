@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { AppController } from './app.controller';
 import { AiModule } from './ai/ai.module';
 import { MarketDataModule } from './market-data/market-data.module';
 import { PrismaModule } from './prisma/prisma.module';
@@ -15,5 +16,6 @@ import { ValuationModule } from './valuation/valuation.module';
     AiModule,
     StocksModule,
   ],
+  controllers: [AppController],
 })
 export class AppModule {}

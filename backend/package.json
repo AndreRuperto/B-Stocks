@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "nest build",
+    "build": "prisma generate && nest build",
+    "postinstall": "prisma generate",
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:prod": "node dist/main",
@@ -13,7 +14,9 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "prisma:generate": "prisma generate",
     "prisma:push": "prisma db push",
-    "seed": "ts-node src/seed.ts"
+    "prisma:deploy": "prisma db push --accept-data-loss",
+    "seed": "ts-node src/seed.ts",
+    "seed:prod": "node dist/seed.js"
   },
   "dependencies": {
     "@nestjs/common": "^10.4.15",
@@ -64,4 +67,3 @@
     "testEnvironment": "node"
   }
 }
-
