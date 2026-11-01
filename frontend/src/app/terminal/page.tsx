@@ -34,6 +34,7 @@ export default function TerminalPage() {
   const [totalPages, setTotalPages] = useState<number>(1);
   const [sectors, setSectors] = useState<string[]>([...B3_STANDARD_CATEGORIES]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [syncing, setSyncing] = useState<boolean>(false);
   const [selectedStock, setSelectedStock] = useState<StockItem | null>(null);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
@@ -61,18 +62,32 @@ export default function TerminalPage() {
 
   const loadData = useCallback(async (currentFilters: FilterParams) => {
     setLoading(true);
+    setLoadError(null);
     try {
-      const [summaryRes, stocksRes] = await Promise.all([
+      const [summaryResult, stocksResult] = await Promise.allSettled([
         fetchMarketSummary(),
         fetchStocks(currentFilters),
       ]);
-      setSummary(summaryRes);
-      setStocks(stocksRes.items);
-      setTotal(stocksRes.total);
-      setTotalPages(stocksRes.totalPages);
-      if (stocksRes.sectors && stocksRes.sectors.length > 0) {
-        setSectors(stocksRes.sectors);
+
+      if (summaryResult.status === 'fulfilled') {
+        setSummary(summaryResult.value);
       }
+
+      if (stocksResult.status === 'fulfilled') {
+        const stocksRes = stocksResult.value;
+        setStocks(stocksRes.items);
+        setTotal(stocksRes.total);
+        setTotalPages(stocksRes.totalPages);
+        if (stocksRes.sectors && stocksRes.sectors.length > 0) {
+          setSectors(stocksRes.sectors);
+        }
+      } else if (stocksResult.status === 'rejected') {
+        setLoadError(
+          'O servidor demorou para responder (comum na primeira conexão no plano gratuito do Render). Clique abaixo para tentar novamente.',
+        );
+      }
+    } catch {
+      setLoadError('Erro ao carregar dados do terminal.');
     } finally {
       setLoading(false);
     }
@@ -413,6 +428,22 @@ export default function TerminalPage() {
             })}
           </div>
         </section>
+
+        {loadError && stocks.length === 0 && (
+          <div className="flex flex-col items-center justify-center rounded-xl border border-amber-800/60 bg-amber-950/40 p-6 text-center space-y-3">
+            <p className="text-sm font-semibold text-amber-200">{loadError}</p>
+            <Button
+              type="button"
+              size="sm"
+              variant="outline"
+              onClick={() => loadData(filters)}
+              className="border-amber-700 bg-amber-900/60 text-stone-100 hover:bg-amber-800 gap-1.5"
+            >
+              <RefreshCw className="h-3.5 w-3.5" />
+              Tentar Novamente
+            </Button>
+          </div>
+        )}
 
         <div id="ranking-table-section">
           <StocksRankingTable

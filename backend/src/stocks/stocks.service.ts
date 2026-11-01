@@ -15,6 +15,10 @@ import { ValuationService } from '../valuation/valuation.service';
 @Injectable()
 export class StocksService implements OnModuleInit {
   private readonly logger = new Logger(StocksService.name);
+  private summaryCache: { data: unknown; expiresAt: number } | null = null;
+  private overviewCache = new Map<string, { data: unknown; expiresAt: number }>();
+  private newsCache: { data: unknown; expiresAt: number } | null = null;
+  private stocksCache = new Map<string, { data: unknown; expiresAt: number }>();
 
   constructor(
     private readonly prisma: PrismaService,
@@ -23,13 +27,22 @@ export class StocksService implements OnModuleInit {
     private readonly aiService: AiService,
   ) {}
 
+  private clearCache(): void {
+    this.summaryCache = null;
+    this.overviewCache.clear();
+    this.newsCache = null;
+    this.stocksCache.clear();
+  }
+
   async onModuleInit(): Promise<void> {
     if (process.env.NODE_ENV === 'test') {
       return;
     }
     const count = await this.prisma.stock.count();
     if (count === 0) {
-      await this.syncAllB3Stocks();
+      this.syncAllB3Stocks().catch((err) => {
+        this.logger.error('Background B3 sync failed', err);
+      });
     }
   }
 
@@ -117,6 +130,7 @@ export class StocksService implements OnModuleInit {
       },
     });
 
+    this.clearCache();
     this.logger.log(`Synchronized ${evaluatedList.length} B3 stocks from ${source}`);
 
     return {
@@ -128,6 +142,13 @@ export class StocksService implements OnModuleInit {
 
   async findAll(rawQuery: Record<string, unknown>) {
     const query = StockFilterQuerySchema.parse(rawQuery);
+    const cacheKey = JSON.stringify(query);
+    const now = Date.now();
+    const cached = this.stocksCache.get(cacheKey);
+    if (cached && cached.expiresAt > now) {
+      return cached.data as any;
+    }
+
     const where: Prisma.StockWhereInput = {};
 
     if (query.search && query.search.trim().length > 0) {
@@ -225,7 +246,7 @@ export class StocksService implements OnModuleInit {
         new Set([...B3_CATEGORIES, ...distinctSectors]),
       );
 
-      return {
+      const response = {
         items: pagedItems,
         total,
         page: query.page,
@@ -233,6 +254,16 @@ export class StocksService implements OnModuleInit {
         totalPages: Math.max(1, Math.ceil(total / query.limit)),
         sectors: mergedSectors,
       };
+
+      if (this.stocksCache.size > 200) {
+        this.stocksCache.clear();
+      }
+      this.stocksCache.set(cacheKey, {
+        data: response,
+        expiresAt: now + 30_000,
+      });
+
+      return response;
     }
 
     const [items, total, sectorGroups] = await Promise.all([
@@ -255,7 +286,7 @@ export class StocksService implements OnModuleInit {
       new Set([...B3_CATEGORIES, ...distinctSectors]),
     );
 
-    return {
+    const response = {
       items,
       total,
       page: query.page,
@@ -263,9 +294,24 @@ export class StocksService implements OnModuleInit {
       totalPages: Math.max(1, Math.ceil(total / query.limit)),
       sectors: mergedSectors,
     };
+
+    if (this.stocksCache.size > 200) {
+      this.stocksCache.clear();
+    }
+    this.stocksCache.set(cacheKey, {
+      data: response,
+      expiresAt: now + 30_000,
+    });
+
+    return response;
   }
 
   async getMarketSummary() {
+    const now = Date.now();
+    if (this.summaryCache && this.summaryCache.expiresAt > now) {
+      return this.summaryCache.data as any;
+    }
+
     const [
       totalStocks,
       passedCutCount,
@@ -306,7 +352,7 @@ export class StocksService implements OnModuleInit {
       }),
     ]);
 
-    return {
+    const result = {
       totalStocks,
       passedCutCount,
       bazinOpportunities,
@@ -327,6 +373,13 @@ export class StocksService implements OnModuleInit {
           }
         : null,
     };
+
+    this.summaryCache = {
+      data: result,
+      expiresAt: now + 120_000,
+    };
+
+    return result;
   }
 
   async getMarketOverview(periodParam?: string) {
@@ -337,6 +390,12 @@ export class StocksService implements OnModuleInit {
     ).includes(normalized)
       ? (normalized as '1D' | '5D' | '1M' | '6M' | '1A')
       : '1D';
+
+    const now = Date.now();
+    const cached = this.overviewCache.get(period);
+    if (cached && cached.expiresAt > now) {
+      return cached.data as any;
+    }
 
     const famousTickers = [
       'BBAS3',
@@ -379,20 +438,39 @@ export class StocksService implements OnModuleInit {
       }),
     ]);
 
-    return {
+    const result = {
       ibovespa,
       topGainers,
       topLosers,
       tickerTape,
     };
+
+    this.overviewCache.set(period, {
+      data: result,
+      expiresAt: now + 60_000,
+    });
+
+    return result;
   }
 
   async getMarketNews() {
+    const now = Date.now();
+    if (this.newsCache && this.newsCache.expiresAt > now) {
+      return this.newsCache.data as any;
+    }
+
     const items = await this.marketData.fetchB3MarketNews();
-    return {
+    const result = {
       items,
       updatedAt: new Date().toISOString(),
     };
+
+    this.newsCache = {
+      data: result,
+      expiresAt: now + 300_000,
+    };
+
+    return result;
   }
 
   async findByTicker(ticker: string) {

@@ -21,8 +21,23 @@ const API_BASE_URL =
 
 const http = axios.create({
   baseURL: API_BASE_URL,
-  timeout: 20000,
+  timeout: 60000,
 });
+
+http.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const config = error?.config;
+    if (!config || config._hasRetried) {
+      return Promise.reject(error);
+    }
+    if (error.code === 'ECONNABORTED' || !error.response) {
+      config._hasRetried = true;
+      return http(config);
+    }
+    return Promise.reject(error);
+  },
+);
 
 export async function fetchMarketSummary(): Promise<MarketSummary> {
   const response = await http.get('/stocks/summary');
