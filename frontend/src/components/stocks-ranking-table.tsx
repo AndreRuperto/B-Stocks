@@ -38,6 +38,7 @@ import {
   ArrowDown,
   ArrowUp,
   ArrowUpDown,
+  Check,
   ChevronLeft,
   ChevronRight,
   Search,
@@ -291,6 +292,26 @@ const GENERAL_DATA_COLUMNS: ColumnKey[] = [
   'subsector',
   'segment',
 ];
+
+function ThemedCheckbox({
+  className,
+  ...props
+}: Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type'>) {
+  return (
+    <span className="relative inline-flex h-4 w-4 shrink-0">
+      <input
+        type="checkbox"
+        className={`peer h-4 w-4 cursor-pointer appearance-none rounded-[5px] border border-mist-700 bg-mist-950 transition-colors group-hover/check:border-mist-500 checked:border-emerald-500 checked:bg-emerald-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/40 disabled:cursor-not-allowed disabled:border-mist-700 disabled:bg-mist-800 ${className ?? ''}`}
+        {...props}
+      />
+      <Check
+        aria-hidden
+        strokeWidth={3}
+        className="pointer-events-none absolute inset-0 m-auto h-3 w-3 text-mist-950 opacity-0 transition-opacity peer-checked:opacity-100 peer-disabled:text-stone-500"
+      />
+    </span>
+  );
+}
 
 const PRESET_CONFIG: Record<
   RankingPreset,
@@ -957,10 +978,9 @@ export function StocksRankingTable({
                 <h4 className="mb-2.5 text-xs font-bold uppercase tracking-wider text-stone-200">
                   Configurações
                 </h4>
-                <div className="space-y-2.5">
-                  <label className="flex cursor-pointer items-center gap-2 text-xs font-medium text-stone-300 hover:text-stone-100">
-                    <input
-                      type="checkbox"
+                <div className="space-y-0.5">
+                  <label className="group/check -mx-2 flex cursor-pointer items-center gap-2.5 rounded-lg px-2 py-1.5 text-xs font-medium text-stone-300 transition-colors hover:bg-mist-900 hover:text-stone-100 has-[:disabled]:cursor-default has-[:disabled]:hover:bg-transparent">
+                    <ThemedCheckbox
                       data-testid="config-small-caps"
                       checked={filters.onlySmallCaps}
                       onChange={(e) =>
@@ -969,13 +989,11 @@ export function StocksRankingTable({
                           page: 1,
                         })
                       }
-                      className="h-4 w-4 rounded border-mist-700 bg-mist-800 text-stone-100 accent-mist-500"
                     />
                     Apenas Small Caps
                   </label>
-                  <label className="flex cursor-pointer items-center gap-2 text-xs font-medium text-stone-300 hover:text-stone-100">
-                    <input
-                      type="checkbox"
+                  <label className="group/check -mx-2 flex cursor-pointer items-center gap-2.5 rounded-lg px-2 py-1.5 text-xs font-medium text-stone-300 transition-colors hover:bg-mist-900 hover:text-stone-100 has-[:disabled]:cursor-default has-[:disabled]:hover:bg-transparent">
+                    <ThemedCheckbox
                       data-testid="config-one-per-company"
                       checked={filters.oneStockPerCompany}
                       onChange={(e) =>
@@ -984,7 +1002,6 @@ export function StocksRankingTable({
                           page: 1,
                         })
                       }
-                      className="h-4 w-4 rounded border-mist-700 bg-mist-800 text-stone-100 accent-mist-500"
                     />
                     Uma Ação por empresa
                   </label>
@@ -1000,21 +1017,19 @@ export function StocksRankingTable({
                     PRO
                   </Badge>
                 </div>
-                <div className="space-y-2">
+                <div className="space-y-0.5">
                   {ADVANCED_PRO_COLUMNS.map((colKey) => {
                     const col = ALL_COLUMNS_MAP[colKey];
                     const checked = customColumns.includes(colKey);
                     return (
                       <label
                         key={colKey}
-                        className="flex cursor-pointer items-center gap-2 text-xs font-medium text-stone-300 hover:text-stone-100"
+                        className="group/check -mx-2 flex cursor-pointer items-center gap-2.5 rounded-lg px-2 py-1.5 text-xs font-medium text-stone-300 transition-colors hover:bg-mist-900 hover:text-stone-100 has-[:disabled]:cursor-default has-[:disabled]:hover:bg-transparent"
                       >
-                        <input
-                          type="checkbox"
+                        <ThemedCheckbox
                           data-testid={`custom-col-${colKey}`}
                           checked={checked}
                           onChange={() => handleToggleCustomColumn(colKey)}
-                          className="h-4 w-4 rounded border-mist-700 bg-mist-800 text-stone-100 accent-mist-500"
                         />
                         <span>{col.label}</span>
                         <Badge
@@ -1033,7 +1048,7 @@ export function StocksRankingTable({
                 <h4 className="mb-2.5 text-xs font-bold uppercase tracking-wider text-stone-200">
                   Dados Gerais
                 </h4>
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-2 gap-x-4 gap-y-0.5">
                   {GENERAL_DATA_COLUMNS.map((colKey) => {
                     const col = ALL_COLUMNS_MAP[colKey];
                     const isLocked = colKey === 'pl' || colKey === 'pvp';
@@ -1041,15 +1056,13 @@ export function StocksRankingTable({
                     return (
                       <label
                         key={colKey}
-                        className="flex cursor-pointer items-center gap-2 text-xs font-medium text-stone-300 hover:text-stone-100"
+                        className="group/check -mx-2 flex cursor-pointer items-center gap-2.5 rounded-lg px-2 py-1.5 text-xs font-medium text-stone-300 transition-colors hover:bg-mist-900 hover:text-stone-100 has-[:disabled]:cursor-default has-[:disabled]:hover:bg-transparent"
                       >
-                        <input
-                          type="checkbox"
+                        <ThemedCheckbox
                           data-testid={`custom-col-${colKey}`}
                           checked={checked}
                           disabled={isLocked}
                           onChange={() => handleToggleCustomColumn(colKey)}
-                          className="h-4 w-4 rounded border-mist-700 bg-mist-800 text-stone-100 accent-mist-500"
                         />
                         <span>{col.label}</span>
                       </label>
