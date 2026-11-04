@@ -74,7 +74,7 @@ export default function TerminalPage() {
     sortBy: 'marketCap',
     sortOrder: 'desc',
     page: 1,
-    limit: 50,
+    limit: 20,
   });
 
   const loadData = useCallback(async (currentFilters: FilterParams) => {

@@ -930,7 +930,7 @@ export function StocksRankingTable({
                 </span>
               </SelectTrigger>
               <SelectContent align="end">
-                {[25, 50, 100, 200].map((size) => (
+                {[20, 50, 100, 200].map((size) => (
                   <SelectItem key={size} value={String(size)}>
                     {size} / pág
                   </SelectItem>
