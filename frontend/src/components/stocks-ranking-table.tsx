@@ -19,6 +19,13 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { CompanyLogo } from '@/components/company-logo';
 import {
@@ -823,20 +830,44 @@ export function StocksRankingTable({
           </div>
 
           <div>
-            <select
-              data-testid="sort-select"
+            <Select
               value={filters.rankingPreset}
-              onChange={(e) =>
-                handleRankingPresetChange(e.target.value as RankingPreset)
+              onValueChange={(value) =>
+                handleRankingPresetChange(value as RankingPreset)
               }
-              className="flex h-9 w-full rounded-lg border border-mist-800 bg-mist-950 px-3 py-1 text-xs font-medium text-stone-200 focus:outline-none focus:ring-1 focus:ring-mist-600"
             >
-              {(Object.keys(PRESET_CONFIG) as RankingPreset[]).map((key) => (
-                <option key={key} value={key} className="bg-mist-900 text-stone-100">
-                  Ranking por: {PRESET_CONFIG[key].label}
-                </option>
-              ))}
-            </select>
+              <SelectTrigger data-testid="sort-select" aria-label="Ranking por">
+                <span className="flex min-w-0 items-center gap-1.5">
+                  <span className="shrink-0 text-stone-500">Ranking por</span>
+                  <span className="truncate font-semibold text-stone-100">
+                    <SelectValue />
+                  </span>
+                </span>
+              </SelectTrigger>
+              <SelectContent>
+                {(Object.keys(PRESET_CONFIG) as RankingPreset[]).map((key) => {
+                  const match = PRESET_CONFIG[key].label.match(/^(\d+)\.\s*(.*)$/);
+                  const number = match?.[1];
+                  const text = match?.[2] ?? PRESET_CONFIG[key].label;
+                  return (
+                    <SelectItem
+                      key={key}
+                      value={key}
+                      data-testid={`sort-option-${key}`}
+                      leading={
+                        number ? (
+                          <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md border border-mist-700 bg-mist-950 text-[10px] font-bold tabular-nums text-stone-400">
+                            {number}
+                          </span>
+                        ) : null
+                      }
+                    >
+                      {text}
+                    </SelectItem>
+                  );
+                })}
+              </SelectContent>
+            </Select>
           </div>
 
           <div className="flex items-center gap-2">
@@ -862,19 +893,29 @@ export function StocksRankingTable({
                 </>
               )}
             </Button>
-            <select
-              data-testid="limit-select"
-              value={filters.limit}
-              onChange={(e) =>
-                onUpdateFilters({ limit: Number(e.target.value), page: 1 })
+            <Select
+              value={String(filters.limit)}
+              onValueChange={(value) =>
+                onUpdateFilters({ limit: Number(value), page: 1 })
               }
-              className="flex h-9 rounded-lg border border-mist-800 bg-mist-950 px-2 py-1 text-xs font-medium text-stone-200 focus:outline-none"
             >
-              <option value={25} className="bg-mist-900 text-stone-100">25 / pág</option>
-              <option value={50} className="bg-mist-900 text-stone-100">50 / pág</option>
-              <option value={100} className="bg-mist-900 text-stone-100">100 / pág</option>
-              <option value={200} className="bg-mist-900 text-stone-100">200 / pág</option>
-            </select>
+              <SelectTrigger
+                data-testid="limit-select"
+                aria-label="Itens por página"
+                className="w-[104px] shrink-0"
+              >
+                <span className="font-semibold text-stone-100">
+                  <SelectValue />
+                </span>
+              </SelectTrigger>
+              <SelectContent align="end">
+                {[25, 50, 100, 200].map((size) => (
+                  <SelectItem key={size} value={String(size)}>
+                    {size} / pág
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
         </div>
 
