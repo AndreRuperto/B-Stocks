@@ -34,6 +34,9 @@ const FAMOUS_STOCKS: TickerStockItem[] = [
   { ticker: 'SUZB3', price: 56.8, changePercent: -0.9 },
 ];
 
+// Keeps the scroll speed constant regardless of how many tickers the API returns.
+const SECONDS_PER_ITEM = 4;
+
 interface StockTickerCarouselProps {
   stocks?: TickerStockItem[];
 }
@@ -94,7 +97,12 @@ export function StockTickerCarousel({ stocks }: StockTickerCarouselProps) {
       <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r from-mist-950 to-transparent" />
       <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-mist-950 to-transparent" />
 
-      <div className="animate-ticker flex items-center gap-4">
+      <div
+        className="animate-ticker flex items-center gap-4"
+        style={{
+          animationDuration: `${Math.max(30, liveStocks.length * SECONDS_PER_ITEM)}s`,
+        }}
+      >
         {displayList.map((item, index) => {
           const isPositive = item.changePercent >= 0;
           const formattedPrice = item.price.toLocaleString('pt-BR', {
